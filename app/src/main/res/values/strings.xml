@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CBD Counter</string>
+    <string name="add_button">+ 1</string>
+    <string name="subtract_button">- 1</string>
+    <string name="reset_button">REINICIAR DÍA</string>
+    <string name="today_label">Hoy:</string>
+    <string name="history_title">📊 Historial (últimos 7 días)</string>
+    <string name="confirm_reset_title">Reiniciar contador</string>
+    <string name="confirm_reset_message">¿Estás seguro de que quieres reiniciar el contador de hoy?</string>
+    <string name="yes">Sí</string>
+    <string name="cancel">Cancelar</string>
+    <string name="cbd_added">CBD agregado</string>
+    <string name="cbd_subtracted">CBD restado</string>
+    <string name="counter_reset">Contador reiniciado</string>
+</resources>
