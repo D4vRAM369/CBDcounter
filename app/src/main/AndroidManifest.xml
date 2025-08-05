@@ -21,6 +21,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Widget - DEBE ESTAR DENTRO DE <application> -->
+        <receiver android:name=".CBDWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.d4vram.cbdcounter.ADD_CBD" />
+                <action android:name="com.d4vram.cbdcounter.RESET_CBD" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/cbd_widget_info" />
+        </receiver>
+
     </application>
 
 </manifest>

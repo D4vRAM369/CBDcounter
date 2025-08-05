@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CBD Counter</string>
+    <string name="widget_description">Contador rápido de CBD</string>
     <string name="add_button">+ 1</string>
     <string name="subtract_button">- 1</string>
     <string name="reset_button">REINICIAR DÍA</string>
