@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.CBDCounter" parent="Theme.Material3.DayNight">
+        <!-- Colores principales -->
+        <item name="colorPrimary">#4FC3F7</item>
+        <item name="colorOnPrimary">#000000</item>
+        <item name="colorPrimaryContainer">#BA68C8</item>
+        <item name="colorOnPrimaryContainer">#FFFFFF</item>
+
+        <!-- Colores secundarios -->
+        <item name="colorSecondary">#66BB6A</item>
+        <item name="colorOnSecondary">#000000</item>
+
+        <!-- Colores de superficie -->
+        <item name="colorSurface">#121212</item>
+        <item name="colorOnSurface">#E0E0E0</item>
+
+        <!-- Colores de fondo -->
+        <item name="android:colorBackground">#121212</item>
+        <item name="colorOnBackground">#E0E0E0</item>
+
+        <!-- Error -->
+        <item name="colorError">#EF5350</item>
+        <item name="colorOnError">#000000</item>
+
+        <!-- Barra de estado -->
+        <item name="android:statusBarColor">#1E1E1E</item>
+        <item name="android:navigationBarColor">#121212</item>
+    </style>
+</resources>

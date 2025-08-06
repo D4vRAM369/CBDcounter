@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colores principales para modo oscuro -->
+    <color name="primary_blue">#4FC3F7</color>
+    <color name="primary_purple">#BA68C8</color>
+
+    <!-- Botones más vibrantes -->
+    <color name="green_light">#66BB6A</color>
+    <color name="green_dark">#4CAF50</color>
+    <color name="red_light">#EF5350</color>
+    <color name="red_dark">#F44336</color>
+    <color name="orange_light">#FF9800</color>
+    <color name="orange_dark">#FF6F00</color>
+
+    <!-- Fondos y textos para modo oscuro -->
+    <color name="white">#FFFFFF</color>
+    <color name="text_primary">#E0E0E0</color>
+    <color name="text_secondary">#BDBDBD</color>
+    <color name="background_light">#2C2C2C</color>
+    <color name="card_background">#1E1E1E</color>
+    <color name="surface_color">#121212</color>
+</resources>

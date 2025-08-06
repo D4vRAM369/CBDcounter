@@ -13,7 +13,7 @@
         android:layout_weight="1"
         android:text="01/01/2024"
         android:textSize="16sp"
-        android:textColor="@color/text_primary" />
+        android:textColor="?attr/colorOnSurface" />
 
     <TextView
         android:id="@+id/historyCount"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:text="5 CBD"
         android:textSize="16sp"
-        android:textColor="@color/text_primary"
+        android:textColor="?attr/colorOnSurface"
         android:textStyle="bold" />
 
 </LinearLayout>

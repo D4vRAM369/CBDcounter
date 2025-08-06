@@ -12,6 +12,7 @@
         android:orientation="vertical"
         android:gravity="center">
 
+        <!-- Título con mejor contraste -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,13 +21,19 @@
             android:textColor="@color/white"
             android:textStyle="bold"
             android:layout_marginBottom="20dp"
-            android:gravity="center" />
+            android:gravity="center"
+            android:shadowColor="#000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="4" />
 
+        <!-- Card principal con fondo adaptativo -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
+            app:cardBackgroundColor="?attr/colorSurface"
             android:layout_marginBottom="20dp">
 
             <LinearLayout
@@ -36,17 +43,19 @@
                 android:padding="30dp"
                 android:gravity="center">
 
+                <!-- Fecha con colores adaptativos -->
                 <TextView
                     android:id="@+id/dateText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Hoy: ..."
                     android:textSize="16sp"
-                    android:textColor="@color/text_secondary"
+                    android:textColor="?attr/colorOnSurface"
                     android:background="@drawable/date_background"
                     android:padding="15dp"
                     android:layout_marginBottom="20dp" />
 
+                <!-- Contador principal más visible -->
                 <TextView
                     android:id="@+id/counterText"
                     android:layout_width="wrap_content"
@@ -55,16 +64,22 @@
                     android:textSize="64sp"
                     android:textColor="@color/primary_blue"
                     android:textStyle="bold"
-                    android:layout_marginBottom="10dp" />
+                    android:layout_marginBottom="10dp"
+                    android:shadowColor="#000000"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="2" />
 
+                <!-- Emoji más grande -->
                 <TextView
                     android:id="@+id/emojiText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="😌"
-                    android:textSize="32sp"
+                    android:textSize="40sp"
                     android:layout_marginBottom="20dp" />
 
+                <!-- Botones con mejor contraste -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -81,7 +96,8 @@
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:background="@drawable/add_button_background"
-                        android:layout_marginRight="10dp" />
+                        android:layout_marginRight="10dp"
+                        android:elevation="4dp" />
 
                     <Button
                         android:id="@+id/subtractButton"
@@ -93,11 +109,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:background="@drawable/subtract_button_background"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp" />
+                        android:layout_marginLeft="10dp"
+                        android:elevation="4dp" />
 
                 </LinearLayout>
 
+                <!-- Botón reset mejorado -->
                 <Button
                     android:id="@+id/resetButton"
                     android:layout_width="match_parent"
@@ -106,17 +123,20 @@
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:background="@drawable/reset_button_background" />
+                    android:background="@drawable/reset_button_background"
+                    android:elevation="4dp" />
 
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
+        <!-- Historial con mejor contraste -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="15dp"
-            app:cardElevation="5dp">
+            app:cardElevation="5dp"
+            app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -129,7 +149,7 @@
                     android:layout_height="wrap_content"
                     android:text="📊 Historial (últimos 7 días)"
                     android:textSize="18sp"
-                    android:textColor="@color/text_primary"
+                    android:textColor="?attr/colorOnSurface"
                     android:textStyle="bold"
                     android:layout_marginBottom="15dp" />
 
