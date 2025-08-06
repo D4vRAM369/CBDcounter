@@ -1,4 +1,4 @@
-// CBDWidgetProvider.kt
+// CBDWidgetProvider.kt - CORREGIDO
 package com.d4vram.cbdcounter
 
 import android.app.PendingIntent
@@ -16,6 +16,18 @@ class CBDWidgetProvider : AppWidgetProvider() {
     companion object {
         const val ACTION_ADD_CBD = "com.d4vram.cbdcounter.ADD_CBD"
         const val ACTION_RESET_CBD = "com.d4vram.cbdcounter.RESET_CBD"
+
+        // Método estático para actualizar widgets desde MainActivity
+        fun updateAllWidgets(context: Context) {
+            val intent = Intent(context, CBDWidgetProvider::class.java).apply {
+                action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+            }
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val componentName = ComponentName(context, CBDWidgetProvider::class.java)
+            val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds)
+            context.sendBroadcast(intent)
+        }
     }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
@@ -30,11 +42,18 @@ class CBDWidgetProvider : AppWidgetProvider() {
         when (intent.action) {
             ACTION_ADD_CBD -> {
                 addCBD(context)
-                updateAllWidgets(context)
+                updateAllWidgets(context) // CORREGIDO: usar updateAllWidgets en lugar de updateAllWidgetsInternal
             }
             ACTION_RESET_CBD -> {
                 resetCBD(context)
-                updateAllWidgets(context)
+                updateAllWidgets(context) // CORREGIDO: usar updateAllWidgets en lugar de updateAllWidgetsInternal
+            }
+            AppWidgetManager.ACTION_APPWIDGET_UPDATE -> {
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)
+                if (appWidgetIds != null) {
+                    onUpdate(context, appWidgetManager, appWidgetIds)
+                }
             }
         }
     }
@@ -61,7 +80,7 @@ class CBDWidgetProvider : AppWidgetProvider() {
         )
         views.setOnClickPendingIntent(R.id.widget_add_button, addPendingIntent)
 
-        // Configurar botón reset (presión larga)
+        // Configurar botón reset
         val resetIntent = Intent(context, CBDWidgetProvider::class.java).apply {
             action = ACTION_RESET_CBD
         }
@@ -70,7 +89,7 @@ class CBDWidgetProvider : AppWidgetProvider() {
         )
         views.setOnClickPendingIntent(R.id.widget_reset_button, resetPendingIntent)
 
-        // Configurar tap en el widget para abrir la app
+        // Configurar tap para abrir la app
         val mainIntent = Intent(context, MainActivity::class.java)
         val mainPendingIntent = PendingIntent.getActivity(
             context, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
@@ -121,17 +140,11 @@ class CBDWidgetProvider : AppWidgetProvider() {
             count <= 2 -> "🙂"
             count <= 4 -> "😊"
             count <= 6 -> "😁"
-            else -> "🤗"
-        }
-    }
-
-    private fun updateAllWidgets(context: Context) {
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-        val componentName = ComponentName(context, CBDWidgetProvider::class.java)
-        val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
-
-        for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
+            count <= 8 -> "🙄"
+            count <= 10 -> "😵‍💫"
+            count <= 12 -> "🤤"
+            count <= 15 -> "😵"
+            else -> "🛸"
         }
     }
 }

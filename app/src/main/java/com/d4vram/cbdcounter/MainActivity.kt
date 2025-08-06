@@ -112,6 +112,9 @@ class MainActivity : AppCompatActivity() {
             .apply()
 
         loadHistoryData() // Actualizar historial
+
+        // SINCRONIZAR WIDDGET DESPUÉS DE CADA CAMBIO
+        CBDWidgetProvider.updateAllWidgets(this)
     }
 
     private fun updateDisplay() {
@@ -124,7 +127,11 @@ class MainActivity : AppCompatActivity() {
             currentCount <= 2 -> "🙂"
             currentCount <= 4 -> "😊"
             currentCount <= 6 -> "😁"
-            else -> "🤗"
+            currentCount <= 8 -> "🙄"
+            currentCount <= 10 -> "😵‍"
+            currentCount <= 12 -> "🥴"
+            currentCount <= 15 -> "😵"
+            else -> "🛸"
         }
     }
 
