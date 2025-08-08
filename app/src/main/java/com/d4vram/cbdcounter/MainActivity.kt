@@ -11,56 +11,109 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.tabs.TabLayout
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
-    // Views
+    // Views principales
     private lateinit var counterText: TextView
     private lateinit var dateText: TextView
     private lateinit var emojiText: TextView
     private lateinit var addButton: Button
     private lateinit var subtractButton: Button
     private lateinit var resetButton: Button
+
+    // Views del historial mejorado
     private lateinit var historyRecyclerView: RecyclerView
-    private lateinit var historyAdapter: HistoryAdapter
+    private lateinit var historyAdapter: ImprovedHistoryAdapter
+    private lateinit var tabLayout: TabLayout
+    private lateinit var statsContainer: View
+    private lateinit var avgText: TextView
+    private lateinit var totalText: TextView
+    private lateinit var streakText: TextView
 
     // Data
     private lateinit var sharedPrefs: SharedPreferences
     private var currentCount = 0
-    private val historyList = ArrayList<HistoryItem>()
+    private val allHistoryData = ArrayList<HistoryItem>()
+    private val displayedHistoryData = ArrayList<HistoryItem>()
+    private var currentViewMode = ViewMode.WEEK
+
+    enum class ViewMode {
+        WEEK, MONTH, ALL
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main_improved)
 
         initViews()
         initSharedPreferences()
         loadTodayData()
-        loadHistoryData()
+        loadAllHistoryData()
+        setupTabLayout()
         setupClickListeners()
         updateDisplay()
+        updateHistoryView()
+        updateStats()
     }
 
     private fun initViews() {
+        // Views principales
         counterText = findViewById(R.id.counterText)
         dateText = findViewById(R.id.dateText)
         emojiText = findViewById(R.id.emojiText)
         addButton = findViewById(R.id.addButton)
         subtractButton = findViewById(R.id.subtractButton)
         resetButton = findViewById(R.id.resetButton)
-        historyRecyclerView = findViewById(R.id.historyRecyclerView)
 
-        historyAdapter = HistoryAdapter(historyList)
+        // Views del historial
+        historyRecyclerView = findViewById(R.id.historyRecyclerView)
+        tabLayout = findViewById(R.id.tabLayout)
+        statsContainer = findViewById(R.id.statsContainer)
+        avgText = findViewById(R.id.avgText)
+        totalText = findViewById(R.id.totalText)
+        streakText = findViewById(R.id.streakText)
+
+        // Configurar RecyclerView con más espacio
+        historyAdapter = ImprovedHistoryAdapter(displayedHistoryData)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
         historyRecyclerView.adapter = historyAdapter
+
+        // Añadir decoración para espaciado
+        historyRecyclerView.addItemDecoration(HistoryItemDecoration(16))
     }
 
     private fun initSharedPreferences() {
         sharedPrefs = getSharedPreferences("CBDCounter", Context.MODE_PRIVATE)
+    }
+
+    private fun setupTabLayout() {
+        tabLayout.addTab(tabLayout.newTab().setText("Semana"))
+        tabLayout.addTab(tabLayout.newTab().setText("Mes"))
+        tabLayout.addTab(tabLayout.newTab().setText("Todo"))
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                currentViewMode = when (tab?.position) {
+                    0 -> ViewMode.WEEK
+                    1 -> ViewMode.MONTH
+                    2 -> ViewMode.ALL
+                    else -> ViewMode.WEEK
+                }
+                updateHistoryView()
+                updateStats()
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
     }
 
     private fun getCurrentDateKey(): String {
@@ -70,7 +123,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun getCurrentDateDisplay(): String {
         val formatter = SimpleDateFormat("EEEE, dd 'de' MMMM 'de' yyyy", Locale("es", "ES"))
-        return formatter.format(Date())
+        return formatter.format(Date()).capitalize()
     }
 
     private fun loadTodayData() {
@@ -78,31 +131,99 @@ class MainActivity : AppCompatActivity() {
         currentCount = sharedPrefs.getInt("count_$today", 0)
     }
 
-    private fun loadHistoryData() {
-        historyList.clear()
+    private fun loadAllHistoryData() {
+        allHistoryData.clear()
         val allEntries = sharedPrefs.all
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
         allEntries.forEach { (key, value) ->
             if (key.startsWith("count_") && value is Int) {
-                val date = key.removePrefix("count_")
-                historyList.add(HistoryItem(date, value))
+                val dateString = key.removePrefix("count_")
+                try {
+                    val date = dateFormat.parse(dateString)
+                    if (date != null) {
+                        allHistoryData.add(HistoryItem(dateString, value, date))
+                    }
+                } catch (e: Exception) {
+                    // Ignorar fechas mal formateadas
+                }
             }
         }
 
-        // Ordenar por fecha descendente y tomar solo los últimos 7
-        historyList.sortByDescending {
-            try {
-                SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(it.date)
-            } catch (e: Exception) {
-                Date(0)
-            }
-        }
+        // Ordenar por fecha descendente (más reciente primero)
+        allHistoryData.sortByDescending { it.dateObject }
+    }
 
-        if (historyList.size > 7) {
-            historyList.subList(7, historyList.size).clear()
+    private fun updateHistoryView() {
+        displayedHistoryData.clear()
+        val calendar = Calendar.getInstance()
+        val today = calendar.time
+
+        when (currentViewMode) {
+            ViewMode.WEEK -> {
+                // Mostrar últimos 7 días
+                calendar.add(Calendar.DAY_OF_YEAR, -7)
+                val weekAgo = calendar.time
+                displayedHistoryData.addAll(
+                    allHistoryData.filter { it.dateObject >= weekAgo }
+                )
+            }
+            ViewMode.MONTH -> {
+                // Mostrar últimos 30 días
+                calendar.add(Calendar.DAY_OF_YEAR, -30)
+                val monthAgo = calendar.time
+                displayedHistoryData.addAll(
+                    allHistoryData.filter { it.dateObject >= monthAgo }
+                )
+            }
+            ViewMode.ALL -> {
+                // Mostrar todo el historial agrupado por meses
+                displayedHistoryData.addAll(allHistoryData)
+            }
         }
 
         historyAdapter.notifyDataSetChanged()
+
+        // Scroll suave al principio
+        if (displayedHistoryData.isNotEmpty()) {
+            historyRecyclerView.smoothScrollToPosition(0)
+        }
+    }
+
+    private fun updateStats() {
+        if (displayedHistoryData.isEmpty()) {
+            avgText.text = "Promedio: 0"
+            totalText.text = "Total: 0"
+            streakText.text = "Racha: 0 días"
+            return
+        }
+
+        // Calcular promedio
+        val average = displayedHistoryData.map { it.count }.average()
+        avgText.text = "Promedio: %.1f".format(average)
+
+        // Calcular total
+        val total = displayedHistoryData.sumOf { it.count }
+        totalText.text = "Total: $total"
+
+        // Calcular racha de días sin consumo (count = 0)
+        val streak = calculateCleanStreak()
+        streakText.text = "Racha limpia: $streak días"
+    }
+
+    private fun calculateCleanStreak(): Int {
+        var streak = 0
+        val sortedData = allHistoryData.sortedByDescending { it.dateObject }
+
+        for (item in sortedData) {
+            if (item.count == 0) {
+                streak++
+            } else {
+                break
+            }
+        }
+
+        return streak
     }
 
     private fun saveData() {
@@ -111,27 +232,55 @@ class MainActivity : AppCompatActivity() {
             .putInt("count_$today", currentCount)
             .apply()
 
-        loadHistoryData() // Actualizar historial
+        loadAllHistoryData()
+        updateHistoryView()
+        updateStats()
 
-        // SINCRONIZAR WIDDGET DESPUÉS DE CADA CAMBIO
+        // Sincronizar widget
         CBDWidgetProvider.updateAllWidgets(this)
     }
 
     private fun updateDisplay() {
         counterText.text = currentCount.toString()
-        dateText.text = "Hoy: ${getCurrentDateDisplay()}"
+        dateText.text = getCurrentDateDisplay()
 
-        // Actualizar emoji según el conteo
-        emojiText.text = when {
-            currentCount == 0 -> "😌"
-            currentCount <= 2 -> "🙂"
-            currentCount <= 4 -> "😊"
-            currentCount <= 6 -> "😁"
-            currentCount <= 8 -> "🙄"
-            currentCount <= 10 -> "😵‍"
-            currentCount <= 12 -> "🥴"
-            currentCount <= 15 -> "😵"
-            else -> "🛸"
+        // Actualizar emoji con animación
+        val newEmoji = getEmoji(currentCount)
+        if (emojiText.text != newEmoji) {
+            emojiText.animate()
+                .alpha(0f)
+                .setDuration(150)
+                .withEndAction {
+                    emojiText.text = newEmoji
+                    emojiText.animate()
+                        .alpha(1f)
+                        .setDuration(150)
+                        .start()
+                }
+                .start()
+        } else {
+            emojiText.text = newEmoji
+        }
+
+        // Cambiar color del contador según el nivel
+        val color = when {
+            currentCount == 0 -> R.color.green_safe
+            currentCount <= 3 -> R.color.yellow_warning
+            currentCount <= 6 -> R.color.orange_danger
+            else -> R.color.red_critical
+        }
+        counterText.setTextColor(ContextCompat.getColor(this, color))
+    }
+
+    private fun getEmoji(count: Int): String {
+        return when {
+            count == 0 -> "😌"
+            count <= 2 -> "🙂"
+            count <= 3 -> "🙄"
+            count <= 5 -> "😵‍💫"
+            count <= 6 -> "🥴"
+            count <= 7 -> "🛸"
+            else -> "❌"
         }
     }
 
@@ -141,7 +290,7 @@ class MainActivity : AppCompatActivity() {
             updateDisplay()
             saveData()
             animateCounter(1.1f)
-            Toast.makeText(this, "CBD agregado", Toast.LENGTH_SHORT).show()
+            showFeedback("CBD agregado", false)
         }
 
         subtractButton.setOnClickListener {
@@ -150,7 +299,7 @@ class MainActivity : AppCompatActivity() {
                 updateDisplay()
                 saveData()
                 animateCounter(0.9f)
-                Toast.makeText(this, "CBD restado", Toast.LENGTH_SHORT).show()
+                showFeedback("CBD restado", true)
             }
         }
 
@@ -162,11 +311,16 @@ class MainActivity : AppCompatActivity() {
                     currentCount = 0
                     updateDisplay()
                     saveData()
-                    Toast.makeText(this, "Contador reiniciado", Toast.LENGTH_SHORT).show()
+                    showFeedback("¡Día reiniciado! 💪", true)
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()
         }
+    }
+
+    private fun showFeedback(message: String, isPositive: Boolean) {
+        val toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
+        toast.show()
     }
 
     private fun animateCounter(scale: Float) {
@@ -185,32 +339,137 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-// Data class para el historial
+// Data class mejorada con objeto Date
 data class HistoryItem(
     val date: String,
-    val count: Int
+    val count: Int,
+    val dateObject: Date
 )
 
-// Adapter para el RecyclerView
-class HistoryAdapter(private val historyList: List<HistoryItem>) :
-    RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+// Adapter mejorado con agrupación visual
+class ImprovedHistoryAdapter(private val historyList: List<HistoryItem>) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    companion object {
+        const val TYPE_HEADER = 0
+        const val TYPE_ITEM = 1
+    }
+
+    private val groupedData = mutableListOf<Any>()
+
+    init {
+        groupData()
+    }
+
+    private fun groupData() {
+        groupedData.clear()
+        if (historyList.isEmpty()) return
+
+        val dateFormat = SimpleDateFormat("MMMM yyyy", Locale("es", "ES"))
+        var lastMonth = ""
+
+        historyList.forEach { item ->
+            val monthYear = dateFormat.format(item.dateObject).capitalize()
+            if (monthYear != lastMonth) {
+                groupedData.add(monthYear)
+                lastMonth = monthYear
+            }
+            groupedData.add(item)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (groupedData[position] is String) TYPE_HEADER else TYPE_ITEM
+    }
+
+    class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val dateText: TextView = itemView.findViewById(R.id.historyDate)
         val countText: TextView = itemView.findViewById(R.id.historyCount)
+        val emojiText: TextView = itemView.findViewById(R.id.historyEmoji)
+        val progressBar: View = itemView.findViewById(R.id.progressBar)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.history_item, parent, false)
-        return HistoryViewHolder(view)
+    class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val headerText: TextView = itemView.findViewById(R.id.headerText)
     }
 
-    override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
-        val item = historyList[position]
-        holder.dateText.text = item.date
-        holder.countText.text = "${item.count} CBD"
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == TYPE_HEADER) {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.history_header, parent, false)
+            HeaderViewHolder(view)
+        } else {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.history_item_improved, parent, false)
+            ItemViewHolder(view)
+        }
     }
 
-    override fun getItemCount(): Int = historyList.size
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is HeaderViewHolder -> {
+                holder.headerText.text = groupedData[position] as String
+            }
+            is ItemViewHolder -> {
+                val item = groupedData[position] as HistoryItem
+                val dayFormat = SimpleDateFormat("EEEE dd", Locale("es", "ES"))
+                holder.dateText.text = dayFormat.format(item.dateObject).capitalize()
+                holder.countText.text = "${item.count} CBD"
+
+                // Emoji según el conteo
+                holder.emojiText.text = when {
+                    item.count == 0 -> "😌"
+                    item.count <= 2 -> "🙂"
+                    item.count <= 3 -> "😄"
+                    item.count <= 5 -> "🤔"
+                    item.count <= 6 -> "🙄"
+                    item.count <= 7 -> "😶‍🌫️"
+                    item.count <= 8 -> "🫡"
+                    item.count <= 9 -> "🫥"
+                    item.count <= 11 -> "⛔️"
+                    else -> "💀"
+                }
+
+                // Barra de progreso visual
+                val maxWidth = holder.itemView.width
+                val progress = minOf(item.count / 10f, 1f)
+                val layoutParams = holder.progressBar.layoutParams
+                layoutParams.width = (maxWidth * progress).toInt()
+                holder.progressBar.layoutParams = layoutParams
+
+                // Color de la barra según el nivel
+                val color = when {
+                    item.count == 0 -> R.color.green_safe
+                    item.count <= 3 -> R.color.yellow_warning
+                    item.count <= 6 -> R.color.orange_danger
+                    else -> R.color.red_critical
+                }
+                holder.progressBar.setBackgroundColor(
+                    ContextCompat.getColor(holder.itemView.context, color)
+                )
+            }
+        }
+    }
+
+    override fun getItemCount(): Int = groupedData.size
+
+    override fun onDataSetChanged() {
+        groupData()
+        super.onDataSetChanged()
+    }
+}
+
+// Decoración para espaciado entre items
+class HistoryItemDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(
+        outRect: android.graphics.Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        outRect.bottom = spacing
+        if (parent.getChildAdapterPosition(view) == 0) {
+            outRect.top = spacing
+        }
+    }
 }

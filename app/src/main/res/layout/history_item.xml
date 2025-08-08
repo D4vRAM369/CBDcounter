@@ -1,27 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="10dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@android:color/white">
 
-    <TextView
-        android:id="@+id/historyDate"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="01/01/2024"
-        android:textSize="16sp"
-        android:textColor="?attr/colorOnSurface" />
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/historyCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="5 CBD"
-        android:textSize="16sp"
-        android:textColor="?attr/colorOnSurface"
-        android:textStyle="bold" />
+        <!-- Emoji indicador -->
+        <TextView
+            android:id="@+id/historyEmoji"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="😌"
+            android:textSize="24sp"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-</LinearLayout>
+        <!-- Fecha del registro -->
+        <TextView
+            android:id="@+id/historyDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Lunes 05"
+            android:textSize="16sp"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toEndOf="@id/historyEmoji"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/historyCount" />
+
+        <!-- Barra de progreso visual -->
+        <View
+            android:id="@+id/progressBar"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:background="@color/green_safe"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toEndOf="@id/historyEmoji"
+            app:layout_constraintTop_toBottomOf="@id/historyDate"
+            app:layout_constraintWidth_percent="0.5" />
+
+        <!-- Contador -->
+        <TextView
+            android:id="@+id/historyCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4 THC"
+            android:textSize="18sp"
+            android:textColor="@color/primary"
+            android:textStyle="bold"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+            android:background="@drawable/count_badge_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>

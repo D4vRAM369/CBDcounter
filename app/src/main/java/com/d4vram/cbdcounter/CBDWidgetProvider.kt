@@ -136,15 +136,15 @@ class CBDWidgetProvider : AppWidgetProvider() {
 
     private fun getEmoji(count: Int): String {
         return when {
-            count == 0 -> "😌"
-            count <= 2 -> "🙂"
-            count <= 4 -> "😊"
-            count <= 6 -> "😁"
-            count <= 8 -> "🙄"
-            count <= 10 -> "😵‍💫"
-            count <= 12 -> "🤤"
-            count <= 15 -> "😵"
-            else -> "🛸"
+            count== 0 -> "😌"
+            count<= 2 -> "🙂"
+            count<= 3 -> "😄"
+            count<= 5 -> "🤔"
+            count<= 6 -> "🙄"
+            count<= 7 -> "😶‍🌫️"
+            count<= 8 -> "🫡"
+            count<= 9 -> "🫥"
+            else -> "💀"
         }
     }
 }

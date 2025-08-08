@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Tus colores originales -->
     <color name="primary_blue">#667eea</color>
     <color name="primary_purple">#764ba2</color>
     <color name="green_light">#48bb78</color>
@@ -12,4 +13,28 @@
     <color name="text_primary">#2d3748</color>
     <color name="text_secondary">#4a5568</color>
     <color name="background_light">#f7fafc</color>
+
+    <!-- Colores nuevos necesarios para las mejoras -->
+    <color name="primary">#667eea</color> <!-- Usando tu primary_blue -->
+    <color name="primary_dark">#5a67d8</color>
+    <color name="primary_light">#9F7AEA</color>
+    <color name="accent">#48bb78</color> <!-- Usando tu green_light -->
+
+    <!-- Colores de fondo adicionales -->
+    <color name="background">#f7fafc</color> <!-- Usando tu background_light -->
+    <color name="surface">#ffffff</color>
+    <color name="stats_background">#F3F4F6</color>
+
+    <!-- Colores de estado (semáforo) para los niveles -->
+    <color name="green_safe">#48bb78</color> <!-- Usando tu green_light -->
+    <color name="yellow_warning">#F59E0B</color>
+    <color name="orange_danger">#ed8936</color> <!-- Usando tu orange_light -->
+    <color name="red_critical">#f56565</color> <!-- Usando tu red_light -->
+
+    <!-- Otros colores necesarios -->
+    <color name="divider_color">#E5E7EB</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Colores adicionales para el texto -->
+    <color name="text_light">#9CA3AF</color>
 </resources>
