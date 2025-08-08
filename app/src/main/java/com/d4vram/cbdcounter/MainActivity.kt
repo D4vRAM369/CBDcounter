@@ -276,11 +276,12 @@ class MainActivity : AppCompatActivity() {
         return when {
             count == 0 -> "😌"
             count <= 2 -> "🙂"
-            count <= 3 -> "🙄"
-            count <= 5 -> "😵‍💫"
-            count <= 6 -> "🥴"
-            count <= 7 -> "🛸"
-            else -> "❌"
+            count <= 3 -> "😄"
+            count <= 5 -> "🤔"
+            count <= 6 -> "🙄"
+            count <= 7 -> "😶‍🌫️"
+            count <= 8 -> "🫡"
+            else -> "💀"
         }
     }
 
