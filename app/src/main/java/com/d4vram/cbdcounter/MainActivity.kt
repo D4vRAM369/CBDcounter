@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_improved)
+        setContentView(R.layout.activity_main)
 
         initViews()
         initSharedPreferences()
@@ -182,7 +182,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        historyAdapter.notifyDataSetChanged()
+        historyAdapter.refresh()
 
         // Scroll suave al principio
         if (displayedHistoryData.isNotEmpty()) {
@@ -281,6 +281,8 @@ class MainActivity : AppCompatActivity() {
             count <= 6 -> "🙄"
             count <= 7 -> "😶‍🌫️"
             count <= 8 -> "🫡"
+            count <= 9 -> "🫥"
+            count <= 11 -> "⛔️"
             else -> "💀"
         }
     }
@@ -401,7 +403,7 @@ class ImprovedHistoryAdapter(private val historyList: List<HistoryItem>) :
             HeaderViewHolder(view)
         } else {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.history_item_improved, parent, false)
+                .inflate(R.layout.history_item, parent, false)
             ItemViewHolder(view)
         }
     }
@@ -411,6 +413,7 @@ class ImprovedHistoryAdapter(private val historyList: List<HistoryItem>) :
             is HeaderViewHolder -> {
                 holder.headerText.text = groupedData[position] as String
             }
+
             is ItemViewHolder -> {
                 val item = groupedData[position] as HistoryItem
                 val dayFormat = SimpleDateFormat("EEEE dd", Locale("es", "ES"))
@@ -454,23 +457,23 @@ class ImprovedHistoryAdapter(private val historyList: List<HistoryItem>) :
 
     override fun getItemCount(): Int = groupedData.size
 
-    override fun onDataSetChanged() {
+    fun refresh() {
         groupData()
-        super.onDataSetChanged()
+        notifyDataSetChanged()
     }
 }
 
-// Decoración para espaciado entre items
+    // Decoración para espaciado entre items
 class HistoryItemDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
-    override fun getItemOffsets(
-        outRect: android.graphics.Rect,
-        view: View,
-        parent: RecyclerView,
-        state: RecyclerView.State
-    ) {
-        outRect.bottom = spacing
-        if (parent.getChildAdapterPosition(view) == 0) {
-            outRect.top = spacing
+        override fun getItemOffsets(
+            outRect: android.graphics.Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+            outRect.bottom = spacing
+            if (parent.getChildAdapterPosition(view) == 0) {
+                outRect.top = spacing
+            }
         }
     }
-}
