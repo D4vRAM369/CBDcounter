@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.CBDCounter" parent="Theme.Material3.DayNight">
-        <item name="colorPrimary">@color/primary_blue</item>
+<resources>
+    <style name="Theme.CBDCounter" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimaryContainer">@color/primary_purple</item>
-        <item name="colorOnPrimaryContainer">@color/white</item>
-        <item name="colorSecondary">@color/green_light</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <item name="colorError">@color/red_light</item>
-        <item name="colorOnError">@color/white</item>
-        <item name="android:statusBarColor">@color/primary_blue</item>
+        <item name="colorPrimaryContainer">@color/primary_light</item>
+
+        <item name="colorSecondary">@color/accent</item>
+
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorOnBackground">@color/text_primary</item>
+
+        <item name="colorError">@color/red_critical</item>
+
+        <item name="android:statusBarColor">@color/primary_dark</item>
+        <item name="android:navigationBarColor">@color/surface</item>
     </style>
 </resources>

@@ -372,7 +372,7 @@ class ImprovedHistoryAdapter(private val historyList: List<HistoryItem>) :
         var lastMonth = ""
 
         historyList.forEach { item ->
-            val monthYear = dateFormat.format(item.dateObject).capitalize()
+            val monthYear = dateFormat.format(item.dateObject).capitalizarEs()
             if (monthYear != lastMonth) {
                 groupedData.add(monthYear)
                 lastMonth = monthYear
