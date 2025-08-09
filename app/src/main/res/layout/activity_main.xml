@@ -19,16 +19,17 @@
     <!-- Título de la app -->
     <TextView
         android:id="@+id/appTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="🌿 Contador CBD"
         android:textSize="24sp"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/themeSwitch" />
 
     <!-- Fecha actual -->
     <TextView
@@ -47,14 +48,20 @@
 
 
     <!-- Botón para cambiar tema -->
-    <Button
-        android:id="@+id/themeToggleButton"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/themeSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cambiar tema"
-        android:layout_margin="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:showText="false"
+        android:text=""
+        android:contentDescription="Cambiar tema"
+        app:useMaterialThemeColors="true"
+        app:layout_constraintTop_toTopOf="@id/appTitle"
+        app:layout_constraintBottom_toBottomOf="@id/appTitle"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
 
     <!-- Card del contador -->

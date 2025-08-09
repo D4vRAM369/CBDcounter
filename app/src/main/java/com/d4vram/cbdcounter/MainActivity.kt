@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.switchmaterial.SwitchMaterial
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -30,7 +31,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var addButton: Button
     private lateinit var subtractButton: Button
     private lateinit var resetButton: Button
-    private lateinit var themeToggleButton: Button // << NUEVO BOTÓN
+
+    // << NUEVO: Botón switch para cambiar el tema
+    private lateinit var themeSwitch: SwitchMaterial
 
     // Views del historial mejorado
     private lateinit var historyRecyclerView: RecyclerView
@@ -75,7 +78,22 @@ class MainActivity : AppCompatActivity() {
         addButton = findViewById(R.id.addButton)
         subtractButton = findViewById(R.id.subtractButton)
         resetButton = findViewById(R.id.resetButton)
-        themeToggleButton = findViewById(R.id.themeToggleButton) // << ENLAZAR BOTÓN XML
+        themeSwitch = findViewById(R.id.themeSwitch) // << ENLAZAR EL NUEVO SWITCH
+
+        // Enlazar el switch con el metodo de cambio de tema
+        themeSwitch = findViewById(R.id.themeSwitch)
+
+        // Estado inicial del switch según el tema actual
+        val isNight = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        themeSwitch.isChecked = isNight == Configuration.UI_MODE_NIGHT_YES
+
+        // Listener: al cambiar el switch, alternar el modo oscuro
+        themeSwitch.setOnCheckedChangeListener { _, checked ->
+            AppCompatDelegate.setDefaultNightMode(
+                if (checked) AppCompatDelegate.MODE_NIGHT_YES
+                else AppCompatDelegate.MODE_NIGHT_NO
+            )
+        }
 
         // Views del historial
         historyRecyclerView = findViewById(R.id.historyRecyclerView)
@@ -96,16 +114,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun initSharedPreferences() {
         sharedPrefs = getSharedPreferences("CBDCounter", Context.MODE_PRIVATE)
-    }
-
-    // MÉTODO PARA CAMBIAR TEMA
-    private fun toggleDarkMode() {
-        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }
     }
 
     private fun setupTabLayout() {
@@ -287,10 +295,6 @@ class MainActivity : AppCompatActivity() {
                 .show()
         }
 
-        // CLICK DEL BOTÓN DE MODO OSCURO/CLARO
-        themeToggleButton.setOnClickListener {
-            toggleDarkMode()
-        }
     }
 
     private fun showFeedback(message: String, isPositive: Boolean) {
