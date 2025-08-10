@@ -138,7 +138,7 @@ class CBDWidgetProvider : AppWidgetProvider() {
         return when {
             count == 0 -> "😌"
             count <= 2 -> "🙂"
-            count <= 3 -> "😄"
+            count <= 4 -> "😄"
             count <= 5 -> "🤔"
             count <= 6 -> "🙄"
             count <= 7 -> "😶‍🌫️"

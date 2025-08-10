@@ -253,7 +253,7 @@ class MainActivity : AppCompatActivity() {
         return when {
             count == 0 -> "😌"
             count <= 2 -> "🙂"
-            count <= 3 -> "😄"
+            count <= 4 -> "😄"
             count <= 5 -> "🤔"
             count <= 6 -> "🙄"
             count <= 7 -> "😶‍🌫️"
@@ -372,7 +372,7 @@ class ImprovedHistoryAdapter(private val historyList: List<HistoryItem>) :
                 holder.emojiText.text = when {
                     item.count == 0 -> "😌"
                     item.count <= 2 -> "🙂"
-                    item.count <= 3 -> "😄"
+                    item.count <= 4 -> "😄"
                     item.count <= 5 -> "🤔"
                     item.count <= 6 -> "🙄"
                     item.count <= 7 -> "😶‍🌫️"
