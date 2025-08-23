@@ -15,6 +15,13 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/countBarrier"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:barrierDirection="start"
+            app:constraint_referenced_ids="historyCount"/>
+
         <!-- Emoji indicador -->
         <TextView
             android:id="@+id/historyEmoji"
@@ -38,10 +45,9 @@
             android:textStyle="bold"
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toEndOf="@id/historyEmoji"
-            app:layout_constraintEnd_toStartOf="@id/historyCount"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <!-- Notas del registro y/o icono distintivo -->
+        <!-- Notas del registro/icono - @noteBadge -->
         <TextView
             android:id="@+id/noteBadge"
             android:layout_width="wrap_content"
@@ -52,10 +58,8 @@
             android:elevation="4dp"
             android:translationZ="4dp"
             android:contentDescription="Tiene nota"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="12dp"
-            app:layout_constraintStart_toEndOf="@id/progressBar"
-            app:layout_constraintEnd_toStartOf="@id/historyCount"
+            app:layout_constraintEnd_toStartOf="@id/countBarrier"
             app:layout_constraintBaseline_toBaselineOf="@id/historyDate"/>
 
         <!-- Barra de progreso visual -->
@@ -67,7 +71,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toEndOf="@id/historyEmoji"
-            app:layout_constraintEnd_toStartOf="@id/historyCount"
+            app:layout_constraintEnd_toStartOf="@id/countBarrier"
             app:layout_constraintTop_toBottomOf="@id/historyDate"/>
 
         <!-- Contador -->
@@ -85,6 +89,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
