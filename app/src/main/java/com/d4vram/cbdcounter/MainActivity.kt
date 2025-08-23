@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
 
     // Views principales
     private lateinit var counterText: TextView
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var subtractButton: Button
     private lateinit var resetButton: Button
 
-    // << NUEVO: Botón switch para cambiar el tema
+    // Botón switch para cambiar el tema
     private lateinit var themeSwitch: SwitchMaterial
 
     // Views del historial mejorado
@@ -51,9 +51,7 @@ class MainActivity : AppCompatActivity() {
     private val displayedHistoryData = ArrayList<HistoryItem>()
     private var currentViewMode = ViewMode.WEEK
 
-    enum class ViewMode {
-        WEEK, MONTH, ALL
-    }
+    enum class ViewMode { WEEK, MONTH, ALL }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,16 +76,13 @@ class MainActivity : AppCompatActivity() {
         addButton = findViewById(R.id.addButton)
         subtractButton = findViewById(R.id.subtractButton)
         resetButton = findViewById(R.id.resetButton)
-        themeSwitch = findViewById(R.id.themeSwitch) // << ENLAZAR EL NUEVO SWITCH
-
-        // Enlazar el switch con el metodo de cambio de tema
         themeSwitch = findViewById(R.id.themeSwitch)
 
         // Estado inicial del switch según el tema actual
         val isNight = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         themeSwitch.isChecked = isNight == Configuration.UI_MODE_NIGHT_YES
 
-        // Listener: al cambiar el switch, alternar el modo oscuro
+        // Listener: alternar modo oscuro
         themeSwitch.setOnCheckedChangeListener { _, checked ->
             AppCompatDelegate.setDefaultNightMode(
                 if (checked) AppCompatDelegate.MODE_NIGHT_YES
@@ -95,7 +90,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        // Views del historial
+        // Historial
         historyRecyclerView = findViewById(R.id.historyRecyclerView)
         tabLayout = findViewById(R.id.tabLayout)
         statsContainer = findViewById(R.id.statsContainer)
@@ -103,14 +98,22 @@ class MainActivity : AppCompatActivity() {
         totalText = findViewById(R.id.totalText)
         streakText = findViewById(R.id.streakText)
 
-        // Configurar RecyclerView con más espacio
-        historyAdapter = ImprovedHistoryAdapter(displayedHistoryData)
+        // Adapter con callback para abrir el modal de notas
+        historyAdapter = ImprovedHistoryAdapter(displayedHistoryData) { date ->
+            NoteBottomSheet.new(date).show(supportFragmentManager, "note_sheet")
+        }
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
         historyRecyclerView.adapter = historyAdapter
 
-        // Añadir decoración para espaciado
+        // Espaciado entre ítems
         historyRecyclerView.addItemDecoration(HistoryItemDecoration(16))
+    } // <-- CIERRE de initViews() AQUÍ
+
+    // Listener del BottomSheet: refresca el listado cuando cambia una nota
+    override fun onNoteChanged(date: String) {
+        historyAdapter.refresh()
     }
+
 
     private fun initSharedPreferences() {
         sharedPrefs = getSharedPreferences("CBDCounter", Context.MODE_PRIVATE)
@@ -313,12 +316,16 @@ class MainActivity : AppCompatActivity() {
 data class HistoryItem(val date: String, val count: Int, val dateObject: Date)
 
 // Adapter
-class ImprovedHistoryAdapter(private val historyList: List<HistoryItem>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ImprovedHistoryAdapter(
+    private val historyList: List<HistoryItem>,
+    private val onDayClick: (String) -> Unit
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
     companion object {
         const val TYPE_HEADER = 0
         const val TYPE_ITEM = 1
     }
+
     private val groupedData = mutableListOf<Any>()
 
     init { groupData() }
@@ -347,6 +354,7 @@ class ImprovedHistoryAdapter(private val historyList: List<HistoryItem>) :
         val countText: TextView = itemView.findViewById(R.id.historyCount)
         val emojiText: TextView = itemView.findViewById(R.id.historyEmoji)
         val progressBar: View = itemView.findViewById(R.id.progressBar)
+        val noteBadge: TextView? = itemView.findViewById(R.id.noteBadge) // puede no existir si no lo añadiste
     }
     class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val headerText: TextView = itemView.findViewById(R.id.headerText)
@@ -370,19 +378,22 @@ class ImprovedHistoryAdapter(private val historyList: List<HistoryItem>) :
                 holder.dateText.text = dayFormat.format(item.dateObject)
                     .replaceFirstChar { it.uppercase() }
                 holder.countText.text = "${item.count} CBD"
+
                 holder.emojiText.text = when {
                     item.count == 0 -> "😌"
                     item.count <= 2 -> "🙂"
                     item.count <= 4 -> "😄"
                     item.count <= 5 -> "🫠"
                     item.count <= 6 -> "🤔"
-                    item.count <= 7 -> "🙄"   
+                    item.count <= 7 -> "🙄"
                     item.count <= 8 -> "😶‍🌫️"
                     item.count <= 9 -> "🫡"
                     item.count <= 10 -> "🫥"
                     item.count <= 11 -> "⛔️"
                     else -> "💀"
                 }
+
+                // Barra de progreso (como ya tenías)
                 val maxWidth = holder.itemView.width
                 val progress = minOf(item.count / 10f, 1f)
                 val layoutParams = holder.progressBar.layoutParams
@@ -397,15 +408,27 @@ class ImprovedHistoryAdapter(private val historyList: List<HistoryItem>) :
                 holder.progressBar.setBackgroundColor(
                     ContextCompat.getColor(holder.itemView.context, color)
                 )
+
+                // --- NUEVO: badge de nota visible si existe nota para ese día
+                val ctx = holder.itemView.context
+                holder.noteBadge?.visibility =
+                    if (Prefs.hasNote(ctx, item.date)) View.VISIBLE else View.GONE
+
+                // --- NUEVO: clicks para abrir el modal
+                holder.itemView.setOnClickListener { onDayClick(item.date) }
+                holder.noteBadge?.setOnClickListener { onDayClick(item.date) }
             }
         }
     }
+
     override fun getItemCount() = groupedData.size
+
     fun refresh() {
         groupData()
         notifyDataSetChanged()
     }
 }
+
 
 // Decoración
 class HistoryItemDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {

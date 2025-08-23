@@ -41,6 +41,17 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@id/historyCount" />
 
+        <!-- Notas del registro y/o icono distintivo -->
+        <TextView
+            android:id="@+id/noteBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📝"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:contentDescription="Tiene nota"
+            android:layout_marginStart="8dp" />
+
         <!-- Barra de progreso visual -->
         <View
             android:id="@+id/progressBar"
