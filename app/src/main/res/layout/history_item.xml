@@ -52,8 +52,8 @@
             android:elevation="4dp"
             android:translationZ="4dp"
             android:contentDescription="Tiene nota"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="12dp"
             app:layout_constraintStart_toEndOf="@id/progressBar"
             app:layout_constraintEnd_toStartOf="@id/historyCount"
             app:layout_constraintBaseline_toBaselineOf="@id/historyDate"/>
