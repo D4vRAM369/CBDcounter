@@ -141,7 +141,14 @@
             android:layout_height="56dp"
             android:layout_weight="1"
             android:text="RESET"
-            android:textSize="14sp"
+            android:ellipsize="none"
+            android:singleLine="true"
+            android:includeFontPadding="false"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeMaxTextSize="18sp"
+            android:gravity="center"
+            android:paddingHorizontal="12dp"
             android:layout_marginStart="8dp"
             style="@style/Widget.Material3.Button.OutlinedButton" />
     </LinearLayout>
