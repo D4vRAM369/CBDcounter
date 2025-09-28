@@ -45,7 +45,20 @@
             android:textStyle="bold"
             android:layout_marginStart="16dp"
             app:layout_constraintStart_toEndOf="@id/historyEmoji"
+            app:layout_constraintEnd_toStartOf="@id/countBarrier"
             app:layout_constraintTop_toTopOf="parent"/>
+
+        <!-- Barra de progreso visual -->
+        <View
+            android:id="@+id/progressBar"
+            android:layout_width="0dp"
+            android:layout_height="4dp"
+            android:background="@color/green_safe"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toEndOf="@id/historyEmoji"
+            app:layout_constraintEnd_toStartOf="@id/countBarrier"
+            app:layout_constraintTop_toBottomOf="@id/historyDate" />
 
         <!-- Notas del registro/icono - @noteBadge -->
         <TextView
@@ -61,18 +74,6 @@
             android:layout_marginEnd="12dp"
             app:layout_constraintEnd_toStartOf="@id/countBarrier"
             app:layout_constraintBaseline_toBaselineOf="@id/historyDate"/>
-
-        <!-- Barra de progreso visual -->
-        <View
-            android:id="@+id/progressBar"
-            android:layout_width="0dp"
-            android:layout_height="4dp"
-            android:background="@color/green_safe"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
-            app:layout_constraintStart_toEndOf="@id/historyEmoji"
-            app:layout_constraintEnd_toStartOf="@id/countBarrier"
-            app:layout_constraintTop_toBottomOf="@id/historyDate"/>
 
         <!-- Contador -->
         <TextView

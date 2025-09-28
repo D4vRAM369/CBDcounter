@@ -272,6 +272,7 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         addButton.setOnClickListener {
             currentCount++
             updateDisplay()
+            appendTimestampToTodayNote()
             saveData()
             animateCounter(1.1f)
             showFeedback("CBD agregado", false)
@@ -309,6 +310,25 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         counterText.animate().scaleX(scale).scaleY(scale).setDuration(100).withEndAction {
             counterText.animate().scaleX(1f).scaleY(1f).setDuration(100).start()
         }.start()
+    }
+
+    private fun appendTimestampToTodayNote() {
+        val today = getCurrentDateKey()
+        val timestamp = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+        val currentNote = Prefs.getNote(this, today)
+        val entry = "🔸 $timestamp"
+
+        val updatedNote = if (currentNote.isNullOrBlank()) {
+            entry
+        } else {
+            buildString {
+                append(currentNote)
+                if (!currentNote.endsWith("\n")) append("\n")
+                append(entry)
+            }
+        }
+
+        Prefs.setNote(this, today, updatedNote)
     }
 }
 
