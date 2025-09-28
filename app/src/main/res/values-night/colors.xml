@@ -37,6 +37,9 @@
     <color name="orange_light">#FF9800</color>
     <color name="orange_dark">#FF6F00</color>
 
+    <!-- Tinte para los iconos en tema oscuro -->
+    <color name="io_action_icon_tint">@color/white</color>
+
     <!-- colores para el gradient_header-->
     <color name="gradient_start">#1A1A2E</color>  <!-- tus azules oscuros -->
     <color name="gradient_end">#16213E</color>

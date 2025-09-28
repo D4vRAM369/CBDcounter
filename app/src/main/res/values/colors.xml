@@ -38,6 +38,9 @@
     <!-- Colores adicionales para el texto -->
     <color name="text_light">#9CA3AF</color>
 
+    <!-- Tinte configurable para los botones de importación/exportación -->
+    <color name="io_action_icon_tint">@color/text_primary</color>
+
     <!-- Colores para el gradient_header -->
     <color name="gradient_start">#6B46C1</color>  <!-- antes  este morado en la v1.0-->
     <color name="gradient_end">#9F7AEA</color>
