@@ -1,8 +1,10 @@
 package com.d4vram.cbdcounter
 
 import android.content.Context
-import android.content.res.Configuration
+import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +12,20 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.switchmaterial.SwitchMaterial
+import java.io.BufferedReader
+import java.io.File
+import java.io.InputStreamReader
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -31,6 +39,8 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     private lateinit var addButton: Button
     private lateinit var subtractButton: Button
     private lateinit var resetButton: Button
+    private lateinit var exportButton: MaterialButton
+    private lateinit var importButton: MaterialButton
 
     // Botón switch para cambiar el tema
     private lateinit var themeSwitch: SwitchMaterial
@@ -50,6 +60,11 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     private val allHistoryData = ArrayList<HistoryItem>()
     private val displayedHistoryData = ArrayList<HistoryItem>()
     private var currentViewMode = ViewMode.WEEK
+
+    private val importCsvLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            uri?.let { handleImportCsv(it) }
+        }
 
     enum class ViewMode { WEEK, MONTH, ALL }
 
@@ -76,6 +91,8 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         addButton = findViewById(R.id.addButton)
         subtractButton = findViewById(R.id.subtractButton)
         resetButton = findViewById(R.id.resetButton)
+        exportButton = findViewById(R.id.exportButton)
+        importButton = findViewById(R.id.importButton)
         themeSwitch = findViewById(R.id.themeSwitch)
 
         // Estado inicial del switch según el tema actual
@@ -300,6 +317,11 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
                 .show()
         }
 
+        exportButton.setOnClickListener { exportCsv() }
+        importButton.setOnClickListener {
+            importCsvLauncher.launch(arrayOf("text/csv", "text/plain"))
+        }
+
     }
 
     private fun showFeedback(message: String, isPositive: Boolean) {
@@ -310,6 +332,179 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         counterText.animate().scaleX(scale).scaleY(scale).setDuration(100).withEndAction {
             counterText.animate().scaleX(1f).scaleY(1f).setDuration(100).start()
         }.start()
+    }
+
+    private fun exportCsv() {
+        loadAllHistoryData()
+        val csvContent = buildCsvContent()
+        if (csvContent.isBlank()) {
+            showFeedback("No hay datos para exportar", true)
+            return
+        }
+
+        val exportDir = File(cacheDir, "exports").apply { if (!exists()) mkdirs() }
+        val fileName = "cbd_counter_" + SimpleDateFormat("yyyyMMdd_HHmm", Locale.getDefault()).format(Date()) + ".csv"
+        val file = File(exportDir, fileName)
+
+        val uriResult = runCatching {
+            file.writeText(csvContent, Charsets.UTF_8)
+            val authority = "$packageName.fileprovider"
+            FileProvider.getUriForFile(this, authority, file)
+        }
+
+        uriResult.onSuccess { uri ->
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/csv"
+                putExtra(Intent.EXTRA_STREAM, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            startActivity(Intent.createChooser(shareIntent, "Compartir CSV"))
+            showFeedback("CSV exportado", false)
+        }.onFailure {
+            showFeedback("Error al exportar CSV", true)
+        }
+    }
+
+    private fun buildCsvContent(): String {
+        val prefsMap = sharedPrefs.all
+        if (prefsMap.isEmpty()) return ""
+
+        val dates = mutableSetOf<String>()
+        prefsMap.keys.forEach { key ->
+            when {
+                key.startsWith("count_") -> dates.add(key.removePrefix("count_"))
+                key.startsWith("NOTE_") -> dates.add(key.removePrefix("NOTE_"))
+            }
+        }
+        if (dates.isEmpty()) return ""
+
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val sortedDates = dates.mapNotNull { dateString ->
+            runCatching { dateFormat.parse(dateString) }.getOrNull()?.let { parsed ->
+                dateString to parsed
+            }
+        }.sortedBy { it.second }
+
+        val builder = StringBuilder("date,count,note\n")
+        sortedDates.forEach { (dateString, _) ->
+            val count = sharedPrefs.getInt("count_$dateString", 0)
+            val note = Prefs.getNote(this, dateString) ?: ""
+            builder.append(dateString)
+                .append(',')
+                .append(count)
+                .append(',')
+                .append(escapeCsvField(note))
+                .append('\n')
+        }
+        return builder.toString()
+    }
+
+    private fun handleImportCsv(uri: Uri) {
+        val result = runCatching {
+            contentResolver.openInputStream(uri)?.use { stream ->
+                BufferedReader(InputStreamReader(stream, Charsets.UTF_8)).use { reader ->
+                    val lines = reader.readLines()
+                    if (lines.isEmpty()) throw IllegalArgumentException("Archivo vacío")
+
+                    val editor = sharedPrefs.edit()
+                    sharedPrefs.all.keys.filter {
+                        it.startsWith("count_") || it.startsWith("NOTE_")
+                    }.forEach { key -> editor.remove(key) }
+
+                    lines.drop(1).forEach { line ->
+                        if (line.isBlank()) return@forEach
+                        val columns = splitCsvLine(line)
+                        if (columns.size < 2) return@forEach
+
+                        val date = columns[0]
+                        val count = columns[1].toIntOrNull() ?: return@forEach
+                        editor.putInt("count_$date", count)
+
+                        val rawNote = if (columns.size >= 3) columns[2] else ""
+                        val note = unescapeCsvField(rawNote)
+                        if (note.isNotEmpty()) {
+                            editor.putString("NOTE_$date", note)
+                        }
+                    }
+                    editor.apply()
+                }
+            } ?: throw IllegalArgumentException("No se pudo abrir el archivo")
+        }
+
+        result.onSuccess {
+            loadTodayData()
+            loadAllHistoryData()
+            updateDisplay()
+            updateHistoryView()
+            updateStats()
+            showFeedback("Importación completada", false)
+        }.onFailure {
+            showFeedback("Error al importar CSV", true)
+        }
+    }
+
+    private fun splitCsvLine(line: String): List<String> {
+        val fields = mutableListOf<String>()
+        val current = StringBuilder()
+        var escape = false
+        line.forEach { char ->
+            when {
+                escape -> {
+                    current.append(char)
+                    escape = false
+                }
+                char == '\\' -> {
+                    current.append(char)
+                    escape = true
+                }
+                char == ',' -> {
+                    fields.add(current.toString())
+                    current.setLength(0)
+                }
+                else -> current.append(char)
+            }
+        }
+        fields.add(current.toString())
+        return fields
+    }
+
+    private fun escapeCsvField(value: String): String {
+        if (value.isEmpty()) return ""
+        val builder = StringBuilder()
+        value.forEach { char ->
+            when (char) {
+                '\\' -> builder.append("\\\\")
+                '\n' -> builder.append("\\n")
+                ',' -> builder.append("\\,")
+                else -> builder.append(char)
+            }
+        }
+        return builder.toString()
+    }
+
+    private fun unescapeCsvField(value: String): String {
+        if (value.isEmpty()) return ""
+        val builder = StringBuilder()
+        var escape = false
+        value.forEach { char ->
+            if (escape) {
+                builder.append(
+                    when (char) {
+                        'n' -> '\n'
+                        '\\' -> '\\'
+                        ',' -> ','
+                        else -> char
+                    }
+                )
+                escape = false
+            } else if (char == '\\') {
+                escape = true
+            } else {
+                builder.append(char)
+            }
+        }
+        if (escape) builder.append('\\')
+        return builder.toString()
     }
 
     private fun appendTimestampToTodayNote() {
