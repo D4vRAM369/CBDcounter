@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,7 +21,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.switchmaterial.SwitchMaterial
 import java.io.BufferedReader
@@ -39,8 +39,8 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     private lateinit var addButton: Button
     private lateinit var subtractButton: Button
     private lateinit var resetButton: Button
-    private lateinit var exportButton: MaterialButton
-    private lateinit var importButton: MaterialButton
+    private lateinit var exportButton: ImageButton
+    private lateinit var importButton: ImageButton
 
     // Botón switch para cambiar el tema
     private lateinit var themeSwitch: SwitchMaterial

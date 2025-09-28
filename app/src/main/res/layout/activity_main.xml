@@ -67,9 +67,9 @@
     <!-- Card del contador -->
     <androidx.cardview.widget.CardView
         android:id="@+id/counterCard"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:layout_marginTop="160dp"
+        android:layout_width="136dp"
+        android:layout_height="128dp"
+        android:layout_marginTop="94dp"
         app:cardCornerRadius="70dp"
         app:cardElevation="8dp"
         app:cardBackgroundColor="@color/surface"
@@ -103,6 +103,46 @@
 
     </androidx.cardview.widget.CardView>
 
+    <LinearLayout
+        android:id="@+id/ioContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingHorizontal="6dp"
+        android:paddingVertical="6dp"
+        android:layout_marginTop="-52dp"
+        android:layout_marginBottom="-10dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/bg_io_action_pill"
+        app:layout_constraintTop_toBottomOf="@id/counterCard"
+        app:layout_constraintBottom_toTopOf="@id/buttonContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageButton
+            android:id="@+id/exportButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/export_csv"
+            android:padding="4dp"
+            android:layout_marginBottom="4dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_export_csv" />
+
+        <ImageButton
+            android:id="@+id/importButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/import_csv"
+            android:padding="4dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_import_csv" />
+
+    </LinearLayout>
+
     <!-- Botones de control -->
     <LinearLayout
         android:id="@+id/buttonContainer"
@@ -110,8 +150,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingHorizontal="24dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/counterCard"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@id/ioContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -236,44 +276,8 @@
         android:scrollbarStyle="outsideOverlay"
         android:fadeScrollbars="false"
         app:layout_constraintTop_toBottomOf="@id/historyTitle"
-        app:layout_constraintBottom_toTopOf="@id/ioContainer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/ioContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingBottom="24dp"
-        android:paddingTop="8dp"
-        android:gravity="center"
-        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/exportButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Exportar CSV"
-            style="@style/Widget.Material3.Button" />
-
-        <Space
-            android:layout_width="12dp"
-            android:layout_height="0dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/importButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Importar CSV"
-            style="@style/Widget.Material3.Button.TonalButton" />
-
-    </LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

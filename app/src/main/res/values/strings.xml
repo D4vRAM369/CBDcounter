@@ -14,4 +14,6 @@
     <string name="cbd_added">CBD agregado</string>
     <string name="cbd_subtracted">CBD restado</string>
     <string name="counter_reset">Contador reiniciado</string>
+    <string name="export_csv">Exportar CSV</string>
+    <string name="import_csv">Importar CSV</string>
 </resources>
