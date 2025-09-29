@@ -6,7 +6,7 @@
 
 <img width="512" height="512" alt="icono_cbdcounter2_cleaned" src="https://github.com/user-attachments/assets/0d6eff86-af54-4a67-a132-9e63a87eef40" />
 
-CBDcounter empezó como un proyecto para uso personal que no tenía intención de subir o publicar, pero luego pensé *"¿Por qué no?"*.
+CBDcounter empezó como otro proyecto más para uso personal, que no tenía intención de subir o publicar, pero ayer por la tarde pensé *"¿Por qué no?"*.
 
 Interfaz simple y minimalista. Además del funcionamiento dentro de la propia app, también permite registrar rápidamente las tomas mediante un widget agregado a pantalla de inicio, y visualizar la evolución de ese día. 
 
