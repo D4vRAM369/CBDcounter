@@ -21,6 +21,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.d4vram.cbdcounter.model.HistoryItem
+import com.d4vram.cbdcounter.util.ViewMode
+import com.d4vram.cbdcounter.view.NoteBottomSheet
+import com.d4vram.cbdcounter.view.adapter.ImprovedHistoryAdapter
+import com.d4vram.cbdcounter.widget.CBDWidgetProvider
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.switchmaterial.SwitchMaterial
 import java.io.BufferedReader
@@ -29,6 +34,8 @@ import java.io.InputStreamReader
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import androidx.core.content.edit
+import com.d4vram.cbdcounter.view.adapter.HistoryItemDecoration
 
 class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
 
@@ -65,8 +72,6 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             uri?.let { handleImportCsv(it) }
         }
-
-    enum class ViewMode { WEEK, MONTH, ALL }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,6 +157,7 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
                 updateHistoryView()
                 updateStats()
             }
+
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
@@ -185,7 +191,8 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
                     if (date != null) {
                         allHistoryData.add(HistoryItem(dateString, value, date))
                     }
-                } catch (_: Exception) {}
+                } catch (_: Exception) {
+                }
             }
         }
         allHistoryData.sortByDescending { it.dateObject }
@@ -201,11 +208,13 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
                 val weekAgo = calendar.time
                 displayedHistoryData.addAll(allHistoryData.filter { it.dateObject >= weekAgo })
             }
+
             ViewMode.MONTH -> {
                 calendar.add(Calendar.DAY_OF_YEAR, -30)
                 val monthAgo = calendar.time
                 displayedHistoryData.addAll(allHistoryData.filter { it.dateObject >= monthAgo })
             }
+
             ViewMode.ALL -> {
                 displayedHistoryData.addAll(allHistoryData)
             }
@@ -218,9 +227,9 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
 
     private fun updateStats() {
         if (displayedHistoryData.isEmpty()) {
-            avgText.text = "Promedio: 0"
-            totalText.text = "Total: 0"
-            streakText.text = "Racha: 0 días"
+            avgText.text = getString(R.string.promedio_0)
+            totalText.text = getString(R.string.total_0)
+            streakText.text = getString(R.string.racha_0)
             return
         }
         val average = displayedHistoryData.map { it.count }.average()
@@ -242,7 +251,7 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
 
     private fun saveData() {
         val today = getCurrentDateKey()
-        sharedPrefs.edit().putInt("count_$today", currentCount).apply()
+        sharedPrefs.edit { putInt("count_$today", currentCount) }
         loadAllHistoryData()
         updateHistoryView()
         updateStats()
@@ -304,17 +313,14 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
             }
         }
         resetButton.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setTitle("Reiniciar contador")
-                .setMessage("¿Estás seguro de que quieres reiniciar el contador de hoy?")
+            AlertDialog.Builder(this).setTitle(getString(R.string.confirm_reset_title))
+                .setMessage(getString(R.string.confirm_reset_message))
                 .setPositiveButton("Sí") { _, _ ->
                     currentCount = 0
                     updateDisplay()
                     saveData()
                     showFeedback("¡Día reiniciado! 💪", true)
-                }
-                .setNegativeButton("Cancelar", null)
-                .show()
+                }.setNegativeButton("Cancelar", null).show()
         }
 
         exportButton.setOnClickListener { exportCsv() }
@@ -343,7 +349,9 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         }
 
         val exportDir = File(cacheDir, "exports").apply { if (!exists()) mkdirs() }
-        val fileName = "cbd_counter_" + SimpleDateFormat("yyyyMMdd_HHmm", Locale.getDefault()).format(Date()) + ".csv"
+        val fileName = "cbd_counter_" + SimpleDateFormat(
+            "yyyyMMdd_HHmm", Locale.getDefault()
+        ).format(Date()) + ".csv"
         val file = File(exportDir, fileName)
 
         val uriResult = runCatching {
@@ -389,12 +397,8 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         sortedDates.forEach { (dateString, _) ->
             val count = sharedPrefs.getInt("count_$dateString", 0)
             val note = Prefs.getNote(this, dateString) ?: ""
-            builder.append(dateString)
-                .append(',')
-                .append(count)
-                .append(',')
-                .append(escapeCsvField(note))
-                .append('\n')
+            builder.append(dateString).append(',').append(count).append(',')
+                .append(escapeCsvField(note)).append('\n')
         }
         return builder.toString()
     }
@@ -406,27 +410,27 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
                     val lines = reader.readLines()
                     if (lines.isEmpty()) throw IllegalArgumentException("Archivo vacío")
 
-                    val editor = sharedPrefs.edit()
-                    sharedPrefs.all.keys.filter {
-                        it.startsWith("count_") || it.startsWith("NOTE_")
-                    }.forEach { key -> editor.remove(key) }
+                    sharedPrefs.edit {
+                        sharedPrefs.all.keys.filter {
+                            it.startsWith("count_") || it.startsWith("NOTE_")
+                        }.forEach { key -> remove(key) }
 
-                    lines.drop(1).forEach { line ->
-                        if (line.isBlank()) return@forEach
-                        val columns = splitCsvLine(line)
-                        if (columns.size < 2) return@forEach
+                        lines.drop(1).forEach { line ->
+                            if (line.isBlank()) return@forEach
+                            val columns = splitCsvLine(line)
+                            if (columns.size < 2) return@forEach
 
-                        val date = columns[0]
-                        val count = columns[1].toIntOrNull() ?: return@forEach
-                        editor.putInt("count_$date", count)
+                            val date = columns[0]
+                            val count = columns[1].toIntOrNull() ?: return@forEach
+                            putInt("count_$date", count)
 
-                        val rawNote = if (columns.size >= 3) columns[2] else ""
-                        val note = unescapeCsvField(rawNote)
-                        if (note.isNotEmpty()) {
-                            editor.putString("NOTE_$date", note)
+                            val rawNote = if (columns.size >= 3) columns[2] else ""
+                            val note = unescapeCsvField(rawNote)
+                            if (note.isNotEmpty()) {
+                                putString("NOTE_$date", note)
+                            }
                         }
                     }
-                    editor.apply()
                 }
             } ?: throw IllegalArgumentException("No se pudo abrir el archivo")
         }
@@ -453,14 +457,17 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
                     current.append(char)
                     escape = false
                 }
+
                 char == '\\' -> {
                     current.append(char)
                     escape = true
                 }
+
                 char == ',' -> {
                     fields.add(current.toString())
                     current.setLength(0)
                 }
+
                 else -> current.append(char)
             }
         }
@@ -527,135 +534,3 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     }
 }
 
-// Data class
-data class HistoryItem(val date: String, val count: Int, val dateObject: Date)
-
-// Adapter
-class ImprovedHistoryAdapter(
-    private val historyList: List<HistoryItem>,
-    private val onDayClick: (String) -> Unit
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    companion object {
-        const val TYPE_HEADER = 0
-        const val TYPE_ITEM = 1
-    }
-
-    private val groupedData = mutableListOf<Any>()
-
-    init { groupData() }
-
-    private fun groupData() {
-        groupedData.clear()
-        if (historyList.isEmpty()) return
-        val dateFormat = SimpleDateFormat("MMMM yyyy", Locale("es", "ES"))
-        var lastMonth = ""
-        historyList.forEach { item ->
-            val monthYear = dateFormat.format(item.dateObject)
-                .replaceFirstChar { it.uppercase() }
-            if (monthYear != lastMonth) {
-                groupedData.add(monthYear)
-                lastMonth = monthYear
-            }
-            groupedData.add(item)
-        }
-    }
-
-    override fun getItemViewType(position: Int) =
-        if (groupedData[position] is String) TYPE_HEADER else TYPE_ITEM
-
-    class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val dateText: TextView = itemView.findViewById(R.id.historyDate)
-        val countText: TextView = itemView.findViewById(R.id.historyCount)
-        val emojiText: TextView = itemView.findViewById(R.id.historyEmoji)
-        val progressBar: View = itemView.findViewById(R.id.progressBar)
-        val noteBadge: TextView? = itemView.findViewById(R.id.noteBadge) // puede no existir si no lo añadiste
-    }
-    class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val headerText: TextView = itemView.findViewById(R.id.headerText)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        if (viewType == TYPE_HEADER) {
-            HeaderViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.history_header, parent, false))
-        } else {
-            ItemViewHolder(LayoutInflater.from(parent.context)
-                .inflate(R.layout.history_item, parent, false))
-        }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder) {
-            is HeaderViewHolder -> holder.headerText.text = groupedData[position] as String
-            is ItemViewHolder -> {
-                val item = groupedData[position] as HistoryItem
-                val dayFormat = SimpleDateFormat("EEEE dd", Locale("es", "ES"))
-                holder.dateText.text = dayFormat.format(item.dateObject)
-                    .replaceFirstChar { it.uppercase() }
-                holder.countText.text = "${item.count} CBD"
-
-                holder.emojiText.text = when {
-                    item.count == 0 -> "😌"
-                    item.count <= 2 -> "🙂"
-                    item.count <= 4 -> "😄"
-                    item.count <= 5 -> "🫠"
-                    item.count <= 6 -> "🤔"
-                    item.count <= 7 -> "🙄"
-                    item.count <= 8 -> "😶‍🌫️"
-                    item.count <= 9 -> "🫡"
-                    item.count <= 10 -> "🫥"
-                    item.count <= 11 -> "⛔️"
-                    else -> "💀"
-                }
-
-                // Barra de progreso (como ya tenías)
-                val maxWidth = holder.itemView.width
-                val progress = minOf(item.count / 10f, 1f)
-                val layoutParams = holder.progressBar.layoutParams
-                layoutParams.width = (maxWidth * progress).toInt()
-                holder.progressBar.layoutParams = layoutParams
-                val color = when {
-                    item.count == 0 -> R.color.green_safe
-                    item.count <= 3 -> R.color.yellow_warning
-                    item.count <= 6 -> R.color.orange_danger
-                    else -> R.color.red_critical
-                }
-                holder.progressBar.setBackgroundColor(
-                    ContextCompat.getColor(holder.itemView.context, color)
-                )
-
-                // --- NUEVO: badge de nota visible si existe nota para ese día
-                val ctx = holder.itemView.context
-                holder.noteBadge?.visibility =
-                    if (Prefs.hasNote(ctx, item.date)) View.VISIBLE else View.GONE
-
-                // --- NUEVO: clicks para abrir el modal
-                holder.itemView.setOnClickListener { onDayClick(item.date) }
-                holder.noteBadge?.setOnClickListener { onDayClick(item.date) }
-            }
-        }
-    }
-
-    override fun getItemCount() = groupedData.size
-
-    fun refresh() {
-        groupData()
-        notifyDataSetChanged()
-    }
-}
-
-
-// Decoración
-class HistoryItemDecoration(private val spacing: Int) : RecyclerView.ItemDecoration() {
-    override fun getItemOffsets(
-        outRect: android.graphics.Rect,
-        view: View,
-        parent: RecyclerView,
-        state: RecyclerView.State
-    ) {
-        outRect.bottom = spacing
-        if (parent.getChildAdapterPosition(view) == 0) {
-            outRect.top = spacing
-        }
-    }
-}

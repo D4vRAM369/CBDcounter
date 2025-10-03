@@ -16,4 +16,7 @@
     <string name="counter_reset">Contador reiniciado</string>
     <string name="export_csv">Exportar CSV</string>
     <string name="import_csv">Importar CSV</string>
+    <string name="promedio_0">Promedio: 0</string>
+    <string name="racha_0">Racha: 0 días</string>
+    <string name="total_0">Total: 0</string>
 </resources>
