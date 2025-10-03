@@ -23,7 +23,7 @@
         </activity>
 
         <!-- Widget - DEBE ESTAR DENTRO DE <application> -->
-        <receiver android:name=".CBDWidgetProvider"
+        <receiver android:name=".widget.CBDWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

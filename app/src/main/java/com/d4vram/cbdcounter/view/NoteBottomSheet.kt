@@ -1,9 +1,11 @@
-package com.d4vram.cbdcounter
+package com.d4vram.cbdcounter.view
 
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.TextView
+import com.d4vram.cbdcounter.Prefs
+import com.d4vram.cbdcounter.R
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
