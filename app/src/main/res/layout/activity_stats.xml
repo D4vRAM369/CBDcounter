@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/statsToolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_header"
+        android:minHeight="?attr/actionBarSize"
+        android:title="@string/stats_title"
+        android:titleTextColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_left"
+        app:navigationIconTint="@color/white"
+        app:titleCentered="true" />
+
+    <LinearLayout
+        android:id="@+id/monthNavigator"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/statsToolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/prevMonthButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/calendar_previous"
+            android:padding="8dp"
+            android:tint="@color/text_primary"
+            android:src="@drawable/ic_arrow_left" />
+
+        <TextView
+            android:id="@+id/monthLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Octubre 2025"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="16dp" />
+
+        <ImageButton
+            android:id="@+id/nextMonthButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/calendar_next"
+            android:padding="8dp"
+            android:tint="@color/text_primary"
+            android:src="@drawable/ic_arrow_right" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dayHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/monthNavigator"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            style="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="L"
+            android:textColor="@color/calendar_header_text"
+            android:textStyle="bold" />
+
+        <TextView
+            style="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="M"
+            android:textColor="@color/calendar_header_text"
+            android:textStyle="bold" />
+
+        <TextView
+            style="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="X"
+            android:textColor="@color/calendar_header_text"
+            android:textStyle="bold" />
+
+        <TextView
+            style="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="J"
+            android:textColor="@color/calendar_header_text"
+            android:textStyle="bold" />
+
+        <TextView
+            style="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="V"
+            android:textColor="@color/calendar_header_text"
+            android:textStyle="bold" />
+
+        <TextView
+            style="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="S"
+            android:textColor="@color/calendar_header_text"
+            android:textStyle="bold" />
+
+        <TextView
+            style="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="D"
+            android:textColor="@color/calendar_header_text"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/calendarRecycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="24dp"
+        android:overScrollMode="never"
+        app:layout_constraintTop_toBottomOf="@id/dayHeader"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

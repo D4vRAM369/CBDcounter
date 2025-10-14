@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     private lateinit var emojiText: TextView
     private lateinit var addButton: Button
     private lateinit var addInfusedButton: MaterialButton
+    private lateinit var statsButton: MaterialButton
     private lateinit var subtractButton: Button
     private lateinit var resetButton: Button
     private lateinit var exportButton: ImageButton
@@ -102,6 +103,7 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         emojiText = findViewById(R.id.emojiText)
         addButton = findViewById(R.id.addButton)
         addInfusedButton = findViewById(R.id.addInfusedButton)
+        statsButton = findViewById(R.id.statsButton)
         subtractButton = findViewById(R.id.subtractButton)
         resetButton = findViewById(R.id.resetButton)
         exportButton = findViewById(R.id.exportButton)
@@ -282,25 +284,12 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         counterText.setTextColor(ContextCompat.getColor(this, color))
     }
 
-    private fun getEmoji(count: Int): String {
-        return when {
-            count == 0 -> "😌"
-            count <= 2 -> "🙂"
-            count <= 4 -> "😄"
-            count <= 5 -> "🫠"
-            count <= 6 -> "🤔"
-            count <= 7 -> "🙄"
-            count <= 8 -> "😶‍🌫️"
-            count <= 9 -> "🫡"
-            count <= 10 -> "🫥"
-            count <= 11 -> "⛔️"
-            else -> "💀"
-        }
-    }
+    private fun getEmoji(count: Int): String = EmojiUtils.emojiForCount(count)
 
     private fun setupClickListeners() {
         addButton.setOnClickListener { registerStandardIntake() }
         addInfusedButton.setOnClickListener { showInfusionDialog() }
+        statsButton.setOnClickListener { openStatsCalendar() }
         subtractButton.setOnClickListener {
             if (currentCount > 0) {
                 currentCount--
@@ -578,6 +567,10 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         }
 
         Prefs.setNote(this, today, updatedNote)
+    }
+
+    private fun openStatsCalendar() {
+        startActivity(Intent(this, StatsActivity::class.java))
     }
 }
 

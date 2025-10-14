@@ -16,6 +16,10 @@
     <string name="counter_reset">Contador reiniciado</string>
     <string name="export_csv">Exportar CSV</string>
     <string name="import_csv">Importar CSV</string>
+    <string name="stats_button">📈 Stats</string>
+    <string name="stats_title">Calendario</string>
+    <string name="calendar_previous">Mes anterior</string>
+    <string name="calendar_next">Mes siguiente</string>
     <string name="add_infused_button">+1</string>
     <string name="add_infused_button_description">Añadir CBD aliñado</string>
     <string name="infusion_question">¿Con qué está aliñado el CBD?</string>

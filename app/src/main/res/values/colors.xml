@@ -54,5 +54,8 @@
     <color name="polem_orange">#FF8C42</color>
     <color name="polem_outline">#FDBA74</color>
     <color name="polem_ripple">#80FF8C42</color>
+    <color name="calendar_today_fill">#33667EEA</color>
+    <color name="calendar_today_stroke">#667eea</color>
+    <color name="calendar_header_text">#6B7280</color>
 
 </resources>

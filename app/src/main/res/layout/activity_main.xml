@@ -102,6 +102,23 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
+    <!-- Botón Stats -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/statsButton"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/stats_button"
+        android:textSize="14sp"
+        android:textAllCaps="false"
+        android:paddingHorizontal="16dp"
+        android:insetBottom="0dp"
+        android:insetTop="0dp"
+        app:layout_constraintTop_toBottomOf="@id/counterCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:iconPadding="0dp" />
 
     <LinearLayout
         android:id="@+id/ioContainer"
