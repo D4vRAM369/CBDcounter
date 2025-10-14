@@ -45,4 +45,14 @@
     <color name="gradient_start">#6B46C1</color>  <!-- antes  este morado en la v1.0-->
     <color name="gradient_end">#9F7AEA</color>
 
+    <!-- Colores para el modal 420 y el chip aliñado -->
+    <color name="infused_button_background">#1F5F3B</color>
+    <color name="weed_green">#2F855A</color>
+    <color name="weed_outline">#48BB78</color>
+    <color name="weed_ripple">#8038A169</color>
+    <color name="weed_smoke">#C9F5D3</color>
+    <color name="polem_orange">#FF8C42</color>
+    <color name="polem_outline">#FDBA74</color>
+    <color name="polem_ripple">#80FF8C42</color>
+
 </resources>

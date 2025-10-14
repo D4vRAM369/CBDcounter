@@ -16,4 +16,13 @@
     <string name="counter_reset">Contador reiniciado</string>
     <string name="export_csv">Exportar CSV</string>
     <string name="import_csv">Importar CSV</string>
+    <string name="add_infused_button">+1</string>
+    <string name="add_infused_button_description">Añadir CBD aliñado</string>
+    <string name="infusion_question">¿Con qué está aliñado el CBD?</string>
+    <string name="infusion_subtitle">Etiqueta la toma con vibra 420.</string>
+    <string name="weed_option">weed</string>
+    <string name="polem_option">polem</string>
+    <string name="cbd_infused_added_weed">CBD aliñado con weed agregado</string>
+    <string name="cbd_infused_added_polem">CBD aliñado con polem agregado</string>
+    <string name="infusion_note_suffix"> (aliñado con %1$s)</string>
 </resources>

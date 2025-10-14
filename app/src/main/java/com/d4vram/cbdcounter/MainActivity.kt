@@ -17,12 +17,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -37,6 +40,7 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     private lateinit var dateText: TextView
     private lateinit var emojiText: TextView
     private lateinit var addButton: Button
+    private lateinit var addInfusedButton: MaterialButton
     private lateinit var subtractButton: Button
     private lateinit var resetButton: Button
     private lateinit var exportButton: ImageButton
@@ -67,6 +71,14 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         }
 
     enum class ViewMode { WEEK, MONTH, ALL }
+    private enum class InfusionType(
+        @StringRes val labelRes: Int,
+        @StringRes val feedbackRes: Int,
+        val icon: String
+    ) {
+        WEED(R.string.weed_option, R.string.cbd_infused_added_weed, "\uD83D\uDFE2"),
+        POLEM(R.string.polem_option, R.string.cbd_infused_added_polem, "\uD83D\uDFE4")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +101,7 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         dateText = findViewById(R.id.dateText)
         emojiText = findViewById(R.id.emojiText)
         addButton = findViewById(R.id.addButton)
+        addInfusedButton = findViewById(R.id.addInfusedButton)
         subtractButton = findViewById(R.id.subtractButton)
         resetButton = findViewById(R.id.resetButton)
         exportButton = findViewById(R.id.exportButton)
@@ -286,21 +299,15 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     }
 
     private fun setupClickListeners() {
-        addButton.setOnClickListener {
-            currentCount++
-            updateDisplay()
-            appendTimestampToTodayNote()
-            saveData()
-            animateCounter(1.1f)
-            showFeedback("CBD agregado", false)
-        }
+        addButton.setOnClickListener { registerStandardIntake() }
+        addInfusedButton.setOnClickListener { showInfusionDialog() }
         subtractButton.setOnClickListener {
             if (currentCount > 0) {
                 currentCount--
                 updateDisplay()
                 saveData()
                 animateCounter(0.9f)
-                showFeedback("CBD restado", true)
+                showFeedback(getString(R.string.cbd_subtracted), true)
             }
         }
         resetButton.setOnClickListener {
@@ -507,11 +514,58 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         return builder.toString()
     }
 
-    private fun appendTimestampToTodayNote() {
+    private fun registerStandardIntake() {
+        val entry = "🔸 ${getCurrentTimestamp()}"
+        registerIntake(entry, getString(R.string.cbd_added))
+    }
+
+    private fun showInfusionDialog() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_infusion_choice, null)
+        val weedButton = dialogView.findViewById<MaterialButton>(R.id.weedButton)
+        val polemButton = dialogView.findViewById<MaterialButton>(R.id.polemButton)
+
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setView(dialogView)
+            .create()
+
+        weedButton.text = "${InfusionType.WEED.icon} ${getString(InfusionType.WEED.labelRes)}"
+        polemButton.text = "${InfusionType.POLEM.icon} ${getString(InfusionType.POLEM.labelRes)}"
+
+        weedButton.setOnClickListener {
+            handleInfusionSelection(InfusionType.WEED)
+            dialog.dismiss()
+        }
+        polemButton.setOnClickListener {
+            handleInfusionSelection(InfusionType.POLEM)
+            dialog.dismiss()
+        }
+
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+    }
+
+    private fun handleInfusionSelection(type: InfusionType) {
+        val label = getString(type.labelRes)
+        val suffix = getString(R.string.infusion_note_suffix, label)
+        val entry = "${type.icon} ${getCurrentTimestamp()}$suffix"
+        registerIntake(entry, getString(type.feedbackRes))
+    }
+
+    private fun registerIntake(entry: String, feedbackMessage: String) {
+        currentCount++
+        updateDisplay()
+        appendEntryToTodayNote(entry)
+        saveData()
+        animateCounter(1.1f)
+        showFeedback(feedbackMessage, false)
+    }
+
+    private fun getCurrentTimestamp(): String =
+        SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+
+    private fun appendEntryToTodayNote(entry: String) {
         val today = getCurrentDateKey()
-        val timestamp = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
         val currentNote = Prefs.getNote(this, today)
-        val entry = "🔸 $timestamp"
 
         val updatedNote = if (currentNote.isNullOrBlank()) {
             entry
