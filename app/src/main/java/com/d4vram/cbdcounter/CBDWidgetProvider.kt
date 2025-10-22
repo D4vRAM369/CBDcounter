@@ -8,6 +8,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.widget.RemoteViews
 import java.text.SimpleDateFormat
 import java.util.*
@@ -55,7 +56,19 @@ class CBDWidgetProvider : AppWidgetProvider() {
                 set(Calendar.MILLISECOND, 0)
             }.timeInMillis
 
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+            val canUseExact = Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
+                alarmManager.canScheduleExactAlarms()
+
+            if (canUseExact) {
+                try {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+                } catch (security: SecurityException) {
+                    alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+                }
+            } else {
+                // Sin permiso para alarmas exactas en Android 12+, usamos una alarma inexacta.
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+            }
         }
 
         private fun cancelMidnightUpdate(context: Context) {

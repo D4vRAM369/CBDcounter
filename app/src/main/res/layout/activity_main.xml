@@ -21,7 +21,7 @@
         android:id="@+id/appTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="🌿 Contador CBD"
+        android:text="@string/app_name_description"
         android:textSize="24sp"
         android:textColor="@color/white"
         android:textStyle="bold"

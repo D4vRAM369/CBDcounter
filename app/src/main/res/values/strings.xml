@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name_description">🌿 Contador de CBD y THC</string>
     <string name="app_name">CBD Counter</string>
-    <string name="widget_description">Contador rápido de CBD</string>
+    <string name="widget_description">Contador rápido de CBD y THC</string>
     <string name="add_button">+ 1</string>
     <string name="subtract_button">- 1</string>
     <string name="reset_button">REINICIAR DÍA</string>
@@ -25,8 +26,8 @@
     <string name="infusion_question">¿Con qué está aliñado el CBD?</string>
     <string name="infusion_subtitle">Etiqueta la toma con vibra 420.</string>
     <string name="weed_option">weed</string>
-    <string name="polem_option">polem</string>
+    <string name="polem_option">polen</string>
     <string name="cbd_infused_added_weed">CBD aliñado con weed agregado</string>
-    <string name="cbd_infused_added_polem">CBD aliñado con polem agregado</string>
+    <string name="cbd_infused_added_polem">CBD aliñado con polen agregado</string>
     <string name="infusion_note_suffix"> (aliñado con %1$s)</string>
 </resources>
