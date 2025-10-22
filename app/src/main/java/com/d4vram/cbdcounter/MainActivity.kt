@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.BufferedReader
 import java.io.File
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     private lateinit var emojiText: TextView
     private lateinit var addButton: Button
     private lateinit var addInfusedButton: MaterialButton
-    private lateinit var statsButton: MaterialButton
+    private lateinit var statsButton: Chip
     private lateinit var subtractButton: Button
     private lateinit var resetButton: Button
     private lateinit var exportButton: ImageButton
