@@ -67,6 +67,14 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     private val displayedHistoryData = ArrayList<HistoryItem>()
     private var currentViewMode = ViewMode.WEEK
 
+    private val importMimeTypes = arrayOf(
+        "text/csv",
+        "text/comma-separated-values",
+        "application/csv",
+        "application/vnd.ms-excel",
+        "text/plain"
+    )
+
     private val importCsvLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             uri?.let { handleImportCsv(it) }
@@ -316,7 +324,7 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
 
         exportButton.setOnClickListener { exportCsv() }
         importButton.setOnClickListener {
-            importCsvLauncher.launch(arrayOf("text/csv", "text/plain"))
+            importCsvLauncher.launch(importMimeTypes)
         }
 
     }
