@@ -30,4 +30,11 @@
     <string name="cbd_infused_added_weed">CBD aliñado con weed agregado</string>
     <string name="cbd_infused_added_polem">CBD aliñado con polen agregado</string>
     <string name="infusion_note_suffix"> (aliñado con %1$s)</string>
+    <string name="note_title">Nota del día</string>
+    <string name="note_hint">Escribe tu nota…</string>
+    <string name="note_title_with_date">Nota del día %1$s</string>
+    <string name="save">Guardar</string>
+    <string name="note_delete">Borrar nota</string>
+    <string name="cbd">CBD</string>
+
 </resources>
