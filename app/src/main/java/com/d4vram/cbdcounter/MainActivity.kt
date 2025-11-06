@@ -303,6 +303,7 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
             if (currentCount > 0) {
                 currentCount--
                 updateDisplay()
+                removeLastEntryFromTodayNote()  // 🎯 Borrar último timestamp
                 saveData()
                 animateCounter(0.9f)
                 showFeedback(getString(R.string.cbd_subtracted), true)
@@ -573,6 +574,31 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
                 if (!currentNote.endsWith("\n")) append("\n")
                 append(entry)
             }
+        }
+
+        Prefs.setNote(this, today, updatedNote)
+    }
+
+    private fun removeLastEntryFromTodayNote() {
+        val today = getCurrentDateKey()
+        val currentNote = Prefs.getNote(this, today)
+
+        // Si no hay nota o está vacía, no hay nada que borrar
+        if (currentNote.isNullOrBlank()) return
+
+        // Dividir la nota en líneas
+        val lines = currentNote.split("\n").toMutableList()
+
+        // Eliminar la última línea
+        if (lines.isNotEmpty()) {
+            lines.removeAt(lines.lastIndex)
+        }
+
+        // Si quedan líneas, unirlas de nuevo; si no, guardar null
+        val updatedNote = if (lines.isNotEmpty()) {
+            lines.joinToString("\n")
+        } else {
+            null
         }
 
         Prefs.setNote(this, today, updatedNote)
