@@ -151,11 +151,188 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:paddingHorizontal="16dp"
-        android:paddingBottom="24dp"
+        android:paddingTop="8dp"
         android:overScrollMode="never"
         app:layout_constraintTop_toBottomOf="@id/dayHeader"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/emojiLegend"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Leyenda de emojis debajo del calendario (tabla vertical) -->
+    <LinearLayout
+        android:id="@+id/emojiLegend"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:background="@drawable/rounded_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Título de la leyenda -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Leyenda"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Grid de 2 columnas con colores -->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="6"
+            android:alignmentMode="alignBounds"
+            android:columnOrderPreserved="false">
+
+            <!-- Fila 1: Nivel Seguro (Verde) -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="3dp"
+                android:text="😌  0"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary"
+                android:padding="8dp"
+                android:gravity="start|center_vertical"
+                android:background="@drawable/legend_item_safe" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="3dp"
+                android:text="🙂  1-2"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary"
+                android:padding="8dp"
+                android:gravity="start|center_vertical"
+                android:background="@drawable/legend_item_safe" />
+
+            <!-- Fila 2: Nivel Moderado (Amarillo) -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="3dp"
+                android:text="😄  3-4"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary"
+                android:padding="8dp"
+                android:gravity="start|center_vertical"
+                android:background="@drawable/legend_item_moderate" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="3dp"
+                android:text="🫠  5"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary"
+                android:padding="8dp"
+                android:gravity="start|center_vertical"
+                android:background="@drawable/legend_item_moderate" />
+
+            <!-- Fila 3: Nivel Alto (Naranja) -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="3dp"
+                android:text="🤔  6"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary"
+                android:padding="8dp"
+                android:gravity="start|center_vertical"
+                android:background="@drawable/legend_item_high" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="3dp"
+                android:text="🙄  7"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary"
+                android:padding="8dp"
+                android:gravity="start|center_vertical"
+                android:background="@drawable/legend_item_high" />
+
+            <!-- Fila 4: Transición Alto → Peligroso -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="3dp"
+                android:text="😶‍🌫️  8"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary"
+                android:padding="8dp"
+                android:gravity="start|center_vertical"
+                android:background="@drawable/legend_item_high" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="3dp"
+                android:text="🫡  9"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary"
+                android:padding="8dp"
+                android:gravity="start|center_vertical"
+                android:background="@drawable/legend_item_danger" />
+
+            <!-- Fila 5: Nivel Peligroso (Rojo) -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="3dp"
+                android:text="🫥  10"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary"
+                android:padding="8dp"
+                android:gravity="start|center_vertical"
+                android:background="@drawable/legend_item_danger" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="3dp"
+                android:text="⛔️  11"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary"
+                android:padding="8dp"
+                android:gravity="start|center_vertical"
+                android:background="@drawable/legend_item_danger" />
+
+            <!-- Fila 6: Nivel Crítico (Morado) -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_columnSpan="2"
+                android:layout_margin="3dp"
+                android:text="💀  12+"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary"
+                android:padding="8dp"
+                android:gravity="center"
+                android:background="@drawable/legend_item_critical" />
+
+        </GridLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
