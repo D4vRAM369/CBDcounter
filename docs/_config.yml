@@ -1,0 +1,28 @@
+# Configuración de GitHub Pages para CBDCounter
+
+# Tema (puedes cambiarlo luego si quieres)
+theme: jekyll-theme-cayman
+
+# Información del sitio
+title: CBDCounter
+description: Tracking personal de CBD con total privacidad
+lang: es-ES
+
+# URLs
+url: "https://d4vram369.github.io"
+baseurl: "/CBDcounter"
+
+# Autor
+author:
+  name: D4vRAM
+  email: d4vram369@gmail.com
+
+# SEO
+plugins:
+  - jekyll-seo-tag
+
+# Markdown
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
