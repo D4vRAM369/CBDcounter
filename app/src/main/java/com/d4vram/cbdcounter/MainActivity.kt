@@ -104,6 +104,9 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         updateDisplay()
         updateHistoryView()
         updateStats()
+
+        // Mostrar disclaimer médico en el primer uso
+        showDisclaimerIfNeeded()
     }
 
     override fun onResume() {
@@ -581,6 +584,33 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
 
     private fun getCurrentTimestamp(): String =
         SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+
+    /**
+     * Muestra el disclaimer médico la primera vez que se abre la app.
+     * Requerido por las políticas de Google Play para apps relacionadas con sustancias.
+     */
+    private fun showDisclaimerIfNeeded() {
+        val disclaimerAccepted = sharedPrefs.getBoolean("disclaimer_accepted", false)
+        if (!disclaimerAccepted) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.disclaimer_title)
+                .setMessage(R.string.disclaimer_message)
+                .setPositiveButton(R.string.disclaimer_accept) { _, _ ->
+                    sharedPrefs.edit().putBoolean("disclaimer_accepted", true).apply()
+                }
+                .setNegativeButton(R.string.disclaimer_decline) { _, _ ->
+                    // Si el usuario no acepta, cerrar la app
+                    Toast.makeText(
+                        this,
+                        "Debes aceptar el aviso para usar la aplicación",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    finish()
+                }
+                .setCancelable(false) // No puede cancelar con el botón atrás
+                .show()
+        }
+    }
 
     private fun appendEntryToTodayNote(entry: String) {
         val today = getCurrentDateKey()

@@ -37,4 +37,10 @@
     <string name="note_delete">Borrar nota</string>
     <string name="cbd">CBD</string>
 
+    <!-- Disclaimer médico -->
+    <string name="disclaimer_title">⚠️ Aviso Importante</string>
+    <string name="disclaimer_message">CBDCounter es una herramienta de tracking personal.\n\n• Esta app NO es un dispositivo médico\n• NO proporciona consejo médico profesional\n• NO promueve el consumo de sustancias\n• NO facilita la compra ni venta de productos\n\nÚsala bajo tu propia responsabilidad y consulta siempre con un profesional de la salud para decisiones relacionadas con tu bienestar.\n\nAl continuar, aceptas que entiendes y estás de acuerdo con este aviso.</string>
+    <string name="disclaimer_accept">Entendido y acepto</string>
+    <string name="disclaimer_decline">No acepto</string>
+
 </resources>
