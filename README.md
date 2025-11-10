@@ -100,7 +100,9 @@ Este proyecto está bajo la licencia [GPL-3.0](LICENSE).
 
 ## 🚀 Cómo compilar
 1. Clonar este repositorio:
+2. 
    ```bash
+   
    git clone https://github.com/D4vRAM369/CBDcounter.git
    cd CBDcounter
    ./gradlew clean assembleDebug
