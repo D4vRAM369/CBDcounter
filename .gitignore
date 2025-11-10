@@ -22,6 +22,7 @@ captures/
 # Keys / services
 *.jks
 *.keystore
+keystore.properties
 google-services.json
 
 # Logs & profiling

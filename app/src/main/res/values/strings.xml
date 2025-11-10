@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name_description">🌿 Contador de CBD y THC</string>
     <string name="app_name">CBD Counter</string>
-    <string name="widget_description">Contador rápido de CBD</string>
+    <string name="widget_description">Contador rápido de CBD y THC</string>
     <string name="add_button">+ 1</string>
     <string name="subtract_button">- 1</string>
     <string name="reset_button">REINICIAR DÍA</string>
@@ -16,4 +17,30 @@
     <string name="counter_reset">Contador reiniciado</string>
     <string name="export_csv">Exportar CSV</string>
     <string name="import_csv">Importar CSV</string>
+    <string name="stats_button">📈 Stats</string>
+    <string name="stats_title">Calendario</string>
+    <string name="calendar_previous">Mes anterior</string>
+    <string name="calendar_next">Mes siguiente</string>
+    <string name="add_infused_button">+1</string>
+    <string name="add_infused_button_description">Añadir CBD aliñado</string>
+    <string name="infusion_question">¿Con qué está aliñado el CBD?</string>
+    <string name="infusion_subtitle">Etiqueta la toma con vibra 420.</string>
+    <string name="weed_option">weed</string>
+    <string name="polem_option">polen</string>
+    <string name="cbd_infused_added_weed">CBD aliñado con weed agregado</string>
+    <string name="cbd_infused_added_polem">CBD aliñado con polen agregado</string>
+    <string name="infusion_note_suffix"> (aliñado con %1$s)</string>
+    <string name="note_title">Nota del día</string>
+    <string name="note_hint">Escribe tu nota…</string>
+    <string name="note_title_with_date">Nota del día %1$s</string>
+    <string name="save">Guardar</string>
+    <string name="note_delete">Borrar nota</string>
+    <string name="cbd">CBD</string>
+
+    <!-- Disclaimer médico -->
+    <string name="disclaimer_title">⚠️ Aviso Importante</string>
+    <string name="disclaimer_message">CBDCounter es una herramienta de tracking personal.\n\n• Esta app NO es un dispositivo médico\n• NO proporciona consejo médico profesional\n• NO promueve el consumo de sustancias\n• NO facilita la compra ni venta de productos\n\nÚsala bajo tu propia responsabilidad y consulta siempre con un profesional de la salud para decisiones relacionadas con tu bienestar.\n\nAl continuar, aceptas que entiendes y estás de acuerdo con este aviso.</string>
+    <string name="disclaimer_accept">Entendido y acepto</string>
+    <string name="disclaimer_decline">No acepto</string>
+
 </resources>

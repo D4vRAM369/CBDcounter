@@ -28,8 +28,9 @@ class NoteBottomSheet : BottomSheetDialogFragment() {
         val btnSave = v.findViewById<MaterialButton>(R.id.btnSave)
         val btnDelete = v.findViewById<MaterialButton>(R.id.btnDelete)
 
-        tvTitle.text = "Nota del día $dateArg"
-        etNote.setText(Prefs.getNote(requireContext(), dateArg) ?: "")
+        tvTitle.text = getString(R.string.note_title_with_date, dateArg)
+        val initialNote = Prefs.getNote(requireContext(), dateArg) ?: ""
+        etNote.setText(initialNote)
 
         btnSave.setOnClickListener {
             val text = etNote.text?.toString()?.trim()

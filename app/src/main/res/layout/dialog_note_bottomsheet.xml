@@ -9,7 +9,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nota del día"
+        android:text="@string/note_title"
         android:textStyle="bold"
         android:textSize="16sp"
         android:layout_marginBottom="8dp"/>
@@ -22,7 +22,7 @@
             android:id="@+id/etNote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Escribe tu nota…"
+            android:hint="@string/note_hint"
             android:minLines="3"
             android:gravity="top|start" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -38,14 +38,14 @@
             android:id="@+id/btnDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Borrar nota"
+            android:text="@string/note_delete"
             style="@style/Widget.Material3.Button.OutlinedButton"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Guardar"
+            android:text="@string/save"
             android:layout_marginStart="12dp"
             style="@style/Widget.Material3.Button"/>
     </LinearLayout>

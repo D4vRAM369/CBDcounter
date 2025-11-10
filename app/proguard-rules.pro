@@ -1,21 +1,32 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Mantener Activities y Services
+  -keep public class * extends android.app.Activity
+  -keep public class * extends android.app.Application
+  -keep public class * extends android.appwidget.AppWidgetProvider
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+  # Mantener clases de AndroidX
+  -keep class androidx.** { *; }
+  -dontwarn androidx.**
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+  # Mantener Material Design
+  -keep class com.google.android.material.** { *; }
+  -dontwarn com.google.android.material.**
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+  # Mantener data classes (para no romper tus HistoryItem, etc)
+  -keepclassmembers class ** {
+      @kotlin.jvm.JvmField public <fields>;
+  }
+
+  # Mantener atributos para stack traces legibles
+  -keepattributes SourceFile,LineNumberTable
+  -renamesourcefileattribute SourceFile
+
+  # Mantener enums (para InfusionType, ViewMode, etc)
+  -keepclassmembers enum * {
+      public static **[] values();
+      public static ** valueOf(java.lang.String);
+  }
+
+  # Mantener Parcelables si los usas en el futuro
+  -keepclassmembers class * implements android.os.Parcelable {
+      public static final android.os.Parcelable$Creator *;
+  }

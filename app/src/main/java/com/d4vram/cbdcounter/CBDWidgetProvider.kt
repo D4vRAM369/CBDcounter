@@ -1,12 +1,14 @@
 // CBDWidgetProvider.kt - CORREGIDO
 package com.d4vram.cbdcounter
 
+import android.app.AlarmManager
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.widget.RemoteViews
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,6 +18,8 @@ class CBDWidgetProvider : AppWidgetProvider() {
     companion object {
         const val ACTION_ADD_CBD = "com.d4vram.cbdcounter.ADD_CBD"
         const val ACTION_RESET_CBD = "com.d4vram.cbdcounter.RESET_CBD"
+        private const val ACTION_SCHEDULED_REFRESH = "com.d4vram.cbdcounter.SCHEDULED_REFRESH"
+        private const val MIDNIGHT_REQUEST_CODE = 420
 
         // Método estático para actualizar widgets desde MainActivity
         fun updateAllWidgets(context: Context) {
@@ -25,8 +29,57 @@ class CBDWidgetProvider : AppWidgetProvider() {
             val appWidgetManager = AppWidgetManager.getInstance(context)
             val componentName = ComponentName(context, CBDWidgetProvider::class.java)
             val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+            if (appWidgetIds.isEmpty()) {
+                cancelMidnightUpdate(context)
+                return
+            }
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds)
             context.sendBroadcast(intent)
+            scheduleMidnightUpdate(context)
+        }
+
+        private fun scheduleMidnightUpdate(context: Context) {
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager ?: return
+            val pendingIntent = PendingIntent.getBroadcast(
+                context,
+                MIDNIGHT_REQUEST_CODE,
+                Intent(context, CBDWidgetProvider::class.java).apply { action = ACTION_SCHEDULED_REFRESH },
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            val triggerAt = Calendar.getInstance().apply {
+                timeInMillis = System.currentTimeMillis()
+                add(Calendar.DAY_OF_YEAR, 1)
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 5)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }.timeInMillis
+
+            val canUseExact = Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
+                alarmManager.canScheduleExactAlarms()
+
+            if (canUseExact) {
+                try {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+                } catch (security: SecurityException) {
+                    alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+                }
+            } else {
+                // Sin permiso para alarmas exactas en Android 12+, usamos una alarma inexacta.
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+            }
+        }
+
+        private fun cancelMidnightUpdate(context: Context) {
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager ?: return
+            val pendingIntent = PendingIntent.getBroadcast(
+                context,
+                MIDNIGHT_REQUEST_CODE,
+                Intent(context, CBDWidgetProvider::class.java).apply { action = ACTION_SCHEDULED_REFRESH },
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            alarmManager.cancel(pendingIntent)
         }
     }
 
@@ -34,6 +87,15 @@ class CBDWidgetProvider : AppWidgetProvider() {
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
+        scheduleMidnightUpdate(context)
+    }
+
+    override fun onEnabled(context: Context) {
+        scheduleMidnightUpdate(context)
+    }
+
+    override fun onDisabled(context: Context) {
+        cancelMidnightUpdate(context)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -55,6 +117,13 @@ class CBDWidgetProvider : AppWidgetProvider() {
                     onUpdate(context, appWidgetManager, appWidgetIds)
                 }
             }
+            Intent.ACTION_DATE_CHANGED,
+            Intent.ACTION_TIME_CHANGED,
+            Intent.ACTION_TIMEZONE_CHANGED,
+            Intent.ACTION_BOOT_COMPLETED,
+            ACTION_SCHEDULED_REFRESH -> {
+                updateAllWidgets(context)
+            }
         }
     }
 
@@ -64,7 +133,7 @@ class CBDWidgetProvider : AppWidgetProvider() {
         // Obtener contador actual
         val count = getCurrentCount(context)
         val date = getCurrentDateDisplay()
-        val emoji = getEmoji(count)
+        val emoji = EmojiUtils.emojiForCount(count, context)
 
         // Actualizar vistas
         views.setTextViewText(R.id.widget_counter, count.toString())
@@ -132,21 +201,5 @@ class CBDWidgetProvider : AppWidgetProvider() {
     private fun getCurrentDateDisplay(): String {
         val formatter = SimpleDateFormat("dd/MM", Locale.getDefault())
         return formatter.format(Date())
-    }
-
-    private fun getEmoji(count: Int): String {
-        return when {
-            count == 0 -> "😌"
-            count <= 2 -> "🙂"
-            count <= 4 -> "😄"
-            count <= 5 -> "🫠"
-            count <= 6 -> "🤔"
-            count <= 7 -> "🙄"
-            count <= 8 -> "😶‍🌫️"
-            count <= 9 -> "🫡"
-            count <= 10 -> "🫥"
-            count <= 11 -> "⛔️"
-            else -> "💀"
-        }
     }
 }

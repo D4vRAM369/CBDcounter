@@ -17,12 +17,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -37,10 +41,13 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     private lateinit var dateText: TextView
     private lateinit var emojiText: TextView
     private lateinit var addButton: Button
+    private lateinit var addInfusedButton: MaterialButton
+    private lateinit var statsButton: Chip
     private lateinit var subtractButton: Button
     private lateinit var resetButton: Button
     private lateinit var exportButton: ImageButton
     private lateinit var importButton: ImageButton
+    private lateinit var settingsButton: ImageButton
 
     // Botón switch para cambiar el tema
     private lateinit var themeSwitch: SwitchMaterial
@@ -61,12 +68,28 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     private val displayedHistoryData = ArrayList<HistoryItem>()
     private var currentViewMode = ViewMode.WEEK
 
+    private val importMimeTypes = arrayOf(
+        "text/csv",
+        "text/comma-separated-values",
+        "application/csv",
+        "application/vnd.ms-excel",
+        "text/plain"
+    )
+
     private val importCsvLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             uri?.let { handleImportCsv(it) }
         }
 
     enum class ViewMode { WEEK, MONTH, ALL }
+    private enum class InfusionType(
+        @StringRes val labelRes: Int,
+        @StringRes val feedbackRes: Int,
+        val icon: String
+    ) {
+        WEED(R.string.weed_option, R.string.cbd_infused_added_weed, "\uD83D\uDFE2"),
+        POLEM(R.string.polem_option, R.string.cbd_infused_added_polem, "\uD83D\uDFE4")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +104,15 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         updateDisplay()
         updateHistoryView()
         updateStats()
+
+        // Mostrar disclaimer médico en el primer uso
+        showDisclaimerIfNeeded()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Actualizar emoji cuando se vuelve de EmojiSettingsActivity
+        updateDisplay()
     }
 
     private fun initViews() {
@@ -89,11 +121,14 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         dateText = findViewById(R.id.dateText)
         emojiText = findViewById(R.id.emojiText)
         addButton = findViewById(R.id.addButton)
+        addInfusedButton = findViewById(R.id.addInfusedButton)
+        statsButton = findViewById(R.id.statsButton)
         subtractButton = findViewById(R.id.subtractButton)
         resetButton = findViewById(R.id.resetButton)
         exportButton = findViewById(R.id.exportButton)
         importButton = findViewById(R.id.importButton)
-        themeSwitch = findViewById(R.id.themeSwitch)
+        settingsButton = findViewById(R.id.settingsButton)
+        themeSwitch = findViewById(R.id.themeSwitch)    
 
         // Estado inicial del switch según el tema actual
         val isNight = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
@@ -269,38 +304,24 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         counterText.setTextColor(ContextCompat.getColor(this, color))
     }
 
-    private fun getEmoji(count: Int): String {
-        return when {
-            count == 0 -> "😌"
-            count <= 2 -> "🙂"
-            count <= 4 -> "😄"
-            count <= 5 -> "🫠"
-            count <= 6 -> "🤔"
-            count <= 7 -> "🙄"
-            count <= 8 -> "😶‍🌫️"
-            count <= 9 -> "🫡"
-            count <= 10 -> "🫥"
-            count <= 11 -> "⛔️"
-            else -> "💀"
-        }
-    }
+    private fun getEmoji(count: Int): String = EmojiUtils.emojiForCount(count, this)
 
     private fun setupClickListeners() {
-        addButton.setOnClickListener {
-            currentCount++
-            updateDisplay()
-            appendTimestampToTodayNote()
-            saveData()
-            animateCounter(1.1f)
-            showFeedback("CBD agregado", false)
+        addButton.setOnClickListener { registerStandardIntake() }
+        addInfusedButton.setOnClickListener { showInfusionDialog() }
+        statsButton.setOnClickListener { openStatsCalendar() }
+        settingsButton.setOnClickListener {
+            // Abrir pantalla de personalización de emojis
+            startActivity(Intent(this, EmojiSettingsActivity::class.java))
         }
         subtractButton.setOnClickListener {
             if (currentCount > 0) {
                 currentCount--
                 updateDisplay()
+                removeLastEntryFromTodayNote()  // 🎯 Borrar último timestamp
                 saveData()
                 animateCounter(0.9f)
-                showFeedback("CBD restado", true)
+                showFeedback(getString(R.string.cbd_subtracted), true)
             }
         }
         resetButton.setOnClickListener {
@@ -319,7 +340,15 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
 
         exportButton.setOnClickListener { exportCsv() }
         importButton.setOnClickListener {
-            importCsvLauncher.launch(arrayOf("text/csv", "text/plain"))
+            // Mostrar diálogo de confirmación antes de importar
+            MaterialAlertDialogBuilder(this)
+                .setTitle("⚠️ Importar datos")
+                .setMessage("Esto BORRARÁ todos tus datos actuales (historial, notas y emojis personalizados) y los reemplazará con los del archivo CSV.\n\n¿Estás seguro de continuar?")
+                .setPositiveButton("Sí, importar") { _, _ ->
+                    importCsvLauncher.launch(importMimeTypes)
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
         }
 
     }
@@ -507,11 +536,85 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         return builder.toString()
     }
 
-    private fun appendTimestampToTodayNote() {
+    private fun registerStandardIntake() {
+        val entry = "🔸 ${getCurrentTimestamp()}"
+        registerIntake(entry, getString(R.string.cbd_added))
+    }
+
+    private fun showInfusionDialog() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_infusion_choice, null)
+        val weedButton = dialogView.findViewById<MaterialButton>(R.id.weedButton)
+        val polemButton = dialogView.findViewById<MaterialButton>(R.id.polemButton)
+
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setView(dialogView)
+            .create()
+
+        weedButton.text = "${InfusionType.WEED.icon} ${getString(InfusionType.WEED.labelRes)}"
+        polemButton.text = "${InfusionType.POLEM.icon} ${getString(InfusionType.POLEM.labelRes)}"
+
+        weedButton.setOnClickListener {
+            handleInfusionSelection(InfusionType.WEED)
+            dialog.dismiss()
+        }
+        polemButton.setOnClickListener {
+            handleInfusionSelection(InfusionType.POLEM)
+            dialog.dismiss()
+        }
+
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+    }
+
+    private fun handleInfusionSelection(type: InfusionType) {
+        val label = getString(type.labelRes)
+        val suffix = getString(R.string.infusion_note_suffix, label)
+        val entry = "${type.icon} ${getCurrentTimestamp()}$suffix"
+        registerIntake(entry, getString(type.feedbackRes))
+    }
+
+    private fun registerIntake(entry: String, feedbackMessage: String) {
+        currentCount++
+        updateDisplay()
+        appendEntryToTodayNote(entry)
+        saveData()
+        animateCounter(1.1f)
+        showFeedback(feedbackMessage, false)
+    }
+
+    private fun getCurrentTimestamp(): String =
+        SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+
+    /**
+     * Muestra el disclaimer médico la primera vez que se abre la app.
+     * Requerido por las políticas de Google Play para apps relacionadas con sustancias.
+     */
+    private fun showDisclaimerIfNeeded() {
+        val disclaimerAccepted = sharedPrefs.getBoolean("disclaimer_accepted", false)
+        if (!disclaimerAccepted) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.disclaimer_title)
+                .setMessage(R.string.disclaimer_message)
+                .setPositiveButton(R.string.disclaimer_accept) { _, _ ->
+                    sharedPrefs.edit().putBoolean("disclaimer_accepted", true).apply()
+                }
+                .setNegativeButton(R.string.disclaimer_decline) { _, _ ->
+                    // Si el usuario no acepta, cerrar la app
+                    Toast.makeText(
+                        this,
+                        "Debes aceptar el aviso para usar la aplicación",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    finish()
+                }
+                .setCancelable(false) // No puede cancelar con el botón atrás
+                .show()
+        }
+    }
+
+    private fun appendEntryToTodayNote(entry: String) {
         val today = getCurrentDateKey()
-        val timestamp = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
         val currentNote = Prefs.getNote(this, today)
-        val entry = "🔸 $timestamp"
 
         val updatedNote = if (currentNote.isNullOrBlank()) {
             entry
@@ -524,6 +627,35 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         }
 
         Prefs.setNote(this, today, updatedNote)
+    }
+
+    private fun removeLastEntryFromTodayNote() {
+        val today = getCurrentDateKey()
+        val currentNote = Prefs.getNote(this, today)
+
+        // Si no hay nota o está vacía, no hay nada que borrar
+        if (currentNote.isNullOrBlank()) return
+
+        // Dividir la nota en líneas
+        val lines = currentNote.split("\n").toMutableList()
+
+        // Eliminar la última línea
+        if (lines.isNotEmpty()) {
+            lines.removeAt(lines.lastIndex)
+        }
+
+        // Si quedan líneas, unirlas de nuevo; si no, guardar null
+        val updatedNote = if (lines.isNotEmpty()) {
+            lines.joinToString("\n")
+        } else {
+            null
+        }
+
+        Prefs.setNote(this, today, updatedNote)
+    }
+
+    private fun openStatsCalendar() {
+        startActivity(Intent(this, StatsActivity::class.java))
     }
 }
 
