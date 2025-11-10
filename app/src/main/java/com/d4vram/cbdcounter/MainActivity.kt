@@ -337,7 +337,15 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
 
         exportButton.setOnClickListener { exportCsv() }
         importButton.setOnClickListener {
-            importCsvLauncher.launch(importMimeTypes)
+            // Mostrar diálogo de confirmación antes de importar
+            MaterialAlertDialogBuilder(this)
+                .setTitle("⚠️ Importar datos")
+                .setMessage("Esto BORRARÁ todos tus datos actuales (historial, notas y emojis personalizados) y los reemplazará con los del archivo CSV.\n\n¿Estás seguro de continuar?")
+                .setPositiveButton("Sí, importar") { _, _ ->
+                    importCsvLauncher.launch(importMimeTypes)
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
         }
 
     }

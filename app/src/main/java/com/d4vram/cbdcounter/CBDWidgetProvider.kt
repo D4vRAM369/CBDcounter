@@ -133,7 +133,7 @@ class CBDWidgetProvider : AppWidgetProvider() {
         // Obtener contador actual
         val count = getCurrentCount(context)
         val date = getCurrentDateDisplay()
-        val emoji = getEmoji(count)
+        val emoji = EmojiUtils.emojiForCount(count, context)
 
         // Actualizar vistas
         views.setTextViewText(R.id.widget_counter, count.toString())
@@ -201,21 +201,5 @@ class CBDWidgetProvider : AppWidgetProvider() {
     private fun getCurrentDateDisplay(): String {
         val formatter = SimpleDateFormat("dd/MM", Locale.getDefault())
         return formatter.format(Date())
-    }
-
-    private fun getEmoji(count: Int): String {
-        return when {
-            count == 0 -> "😌"
-            count <= 2 -> "🙂"
-            count <= 4 -> "😄"
-            count <= 5 -> "🫠"
-            count <= 6 -> "🤔"
-            count <= 7 -> "🙄"
-            count <= 8 -> "😶‍🌫️"
-            count <= 9 -> "🫡"
-            count <= 10 -> "🫥"
-            count <= 11 -> "⛔️"
-            else -> "💀"
-        }
     }
 }
