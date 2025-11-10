@@ -78,17 +78,22 @@ Aquí algunas capturas en tema claro y oscuro, mostrando el contador, el histori
 
 ---
 
-## ✨ Características actuales
-- 📲 Widget para sumar +1 rápidamente desde la pantalla de inicio, que también usa un timestamp con un emoji 🔸 previamente  de la hora en formato 24H.
-- ➖ Al clickar en -1 también elimina la cadena de texto _(o string)_ creada al clickar en +1 con el emoji y la hora en notas adicionales de ese día, haciéndolo más cómodo si se pulsa +1 por error.
-- 🙂 Los emojis cambian dependiendo de la cantidad que lleves fumados en cada día, además de la posibilidad de editar los iconos a tu conveniencia entre los 151 disponibles.
-- 📝 Posibilidad de tomar notas cada día.
-- 🔒 Persistencia de datos aunque se cierre la app.
-- 🎨 Interfaz sencilla y minimalista.
-- 🔄 Posibilidad de Exportar CSV e Importar CSV
-- 💨 Nuevo botón +1 añadido encima del +1 principal de CBD. Éste vale para si es un aliñado, seleccionar con que lo quieres aliñar. Luego se mostrará en notas con un 🟢 si el valor elegido es weed, o un 🟤 si el valor elegido es polen. Aquí en ésta captura muestro un ejemplo:
+## ✨ Características
 
-  
+- 📲 **Widget +1 instantáneo**: suma desde la pantalla de inicio. Cada toque añade a las notas del día un 🔸 con marca temporal en formato 24 h.
+- ➖ **Deshacer inteligente (-1)**: al restar, elimina también la última cadena (🔸 + hora) asociada a ese toque, para corregir pulsaciones por error.
+- 🙂 **Emojis dinámicos (151)**: el icono del día cambia según el contador. Puedes personalizar el set de emojis a tu gusto.
+- 📝 **Notas por día**: añade texto libre con marcas de tiempo automáticas.
+- 🔄 **Exportar / Importar CSV**: guarda tus datos o muévelos entre dispositivos.
+- 🔒 **Datos 100% locales**: persistencia incluso tras cerrar la app. Sin anuncios. Sin analytics.
+- 🎨 **Interfaz minimalista**: clara, ligera y enfocada en el flujo diario.
+- 💨 **Aliñados rápidos (+1 extra)**: botón adicional para marcar tipo de mezcla:
+  - 🟢 *Weed*  
+  - 🟤 *Polen*
+ 
+  Se registran en las notas del día con su icono y hora para distinguirlos de los +1 estándar.
+  Una imágen de ejemplo:
+
   <img width="640" height="317" alt="image" src="https://github.com/user-attachments/assets/da9f0188-0604-40ae-aee4-06caebefc9e7" />
 
 
