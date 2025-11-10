@@ -48,7 +48,7 @@ Segunda versión oficial con correcciones críticas y preparación completa para
 **Android App Bundle (Recomendado para sideload vía adb):**
 - `app-release.aab` (4.6 MB)
 
-**⚠️ Nota:** Para instalar directamente en tu dispositivo, espera a la publicación en Google Play Store.
+**⚠️ Nota:** Para instalar directamente en tu dispositivo, espera a la publicación en Google Play Store, o simplemente descarga la última actualización en Releases.
 
 ---
 
