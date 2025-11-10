@@ -55,6 +55,8 @@ Hecho para uso personal, y compartido por el amor al open source y su comunidad 
 
 ## 📸 Capturas de pantalla (versión 1.1)
 Aquí algunas capturas en tema claro y oscuro, mostrando el contador, el historial, las notas y el widget en acción 👇
+
+
 <img width="400" height="699" alt="image" src="https://github.com/user-attachments/assets/e6c8e1f9-6555-4633-a44f-47a3833c1259" />
 <p align="center">
   <img src="https://github.com/user-attachments/assets/b2f65ea2-a472-4460-9da7-2e7274a72605" width="260"/>
