@@ -81,16 +81,21 @@ Here are some screenshots in light and dark themes, showing the counter, history
 
 ---
 
-## ✨ Current features
-- 📲 Widget to quickly add +1 from the home screen, which also uses a timestamp with an emoji 🔸  preceding the time in 24-hour format.
-- ➖ Clicking -1 also deletes the text string created when clicking +1 with the emoji and time in additional notes for that day, making it more convenient if you press +1 by mistake.
-- 🙂 The emojis change depending on how much you smoke each day, and you can also edit the icons to your liking from among the 151 available.
-- 📝 Ability to take notes every day.
-- 🔒 Data persistence even when the app is closed.
-- 🎨 Simple and minimalist interface.
-- 🔄 Ability to export CSV and import CSV.
-- 📊📆 Statistics added with a calendar that indicates the legend with the value assigned to each emoji, with a dynamic legend that changes according to the selected emojis.
-- 💨 New +1 button added above the main CBD +1. This is useful if you are seasoning something, to select what you want to season it with. It will then be displayed in notes with a 🟢 if the chosen value is weed, or a 🟤 if the chosen value is pollen. Here in this screenshot I show an example:
+## ✨ Features
+
+- 📲 **Instant +1 widget**: add from your home screen. Each tap adds a 🔸 with a timestamp in 24-hour format to your notes for the day.
+- ➖ **Smart undo (-1)**: when subtracting, it also deletes the last string (🔸 + time) associated with that tap, to correct accidental taps.
+- 🙂 **Dynamic emojis (151)**: the icon of the day changes according to the counter. You can customize the set of emojis to your liking.
+- 📝 **Notes per day**: add free text with automatic timestamps.
+- 🔄 **Export/Import CSV**: save your data or move it between devices.
+- 🔒 **100% local data**: persistence even after closing the app. No ads. No analytics.
+- 🎨 **Minimalist interface**: clear, lightweight, and focused on daily flow.
+- 💨 **Quick seasonings (+1 extra)**: additional button to mark mix type:
+- 🟢 *Weed*
+- 🟤 *Pollen*
+ 
+They are recorded in the day's notes with their icon and time to distinguish them from the standard +1.
+An example image:
 
   
   <img width="640" height="317" alt="image" src="https://github.com/user-attachments/assets/da9f0188-0604-40ae-aee4-06caebefc9e7" />
