@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     private lateinit var resetButton: Button
     private lateinit var exportButton: ImageButton
     private lateinit var importButton: ImageButton
+    private lateinit var settingsButton: ImageButton
 
     // Botón switch para cambiar el tema
     private lateinit var themeSwitch: SwitchMaterial
@@ -105,6 +106,12 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         updateStats()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Actualizar emoji cuando se vuelve de EmojiSettingsActivity
+        updateDisplay()
+    }
+
     private fun initViews() {
         // Views principales
         counterText = findViewById(R.id.counterText)
@@ -117,7 +124,8 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         resetButton = findViewById(R.id.resetButton)
         exportButton = findViewById(R.id.exportButton)
         importButton = findViewById(R.id.importButton)
-        themeSwitch = findViewById(R.id.themeSwitch)
+        settingsButton = findViewById(R.id.settingsButton)
+        themeSwitch = findViewById(R.id.themeSwitch)    
 
         // Estado inicial del switch según el tema actual
         val isNight = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
@@ -293,12 +301,16 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         counterText.setTextColor(ContextCompat.getColor(this, color))
     }
 
-    private fun getEmoji(count: Int): String = EmojiUtils.emojiForCount(count)
+    private fun getEmoji(count: Int): String = EmojiUtils.emojiForCount(count, this)
 
     private fun setupClickListeners() {
         addButton.setOnClickListener { registerStandardIntake() }
         addInfusedButton.setOnClickListener { showInfusionDialog() }
         statsButton.setOnClickListener { openStatsCalendar() }
+        settingsButton.setOnClickListener {
+            // Abrir pantalla de personalización de emojis
+            startActivity(Intent(this, EmojiSettingsActivity::class.java))
+        }
         subtractButton.setOnClickListener {
             if (currentCount > 0) {
                 currentCount--

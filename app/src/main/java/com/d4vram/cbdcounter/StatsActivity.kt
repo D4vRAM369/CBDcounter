@@ -88,7 +88,7 @@ class StatsActivity : AppCompatActivity() {
             val prefKey = "count_$dateKey"
             val hasData = sharedPrefs.contains(prefKey)
             val count = sharedPrefs.getInt(prefKey, 0)
-            val emoji = if (hasData) EmojiUtils.emojiForCount(count) else ""
+            val emoji = if (hasData) EmojiUtils.emojiForCount(count, this) else ""
             val isToday = dateKey == todayKey &&
                 todayCalendar.get(Calendar.MONTH) == currentMonth &&
                 todayCalendar.get(Calendar.YEAR) == currentYear
