@@ -194,6 +194,7 @@
 
             <!-- Fila 1: Nivel Seguro (Verde) -->
             <TextView
+                android:id="@+id/legendEmoji0"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -206,6 +207,7 @@
                 android:background="@drawable/legend_item_safe" />
 
             <TextView
+                android:id="@+id/legendEmoji1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -219,6 +221,7 @@
 
             <!-- Fila 2: Nivel Moderado (Amarillo) -->
             <TextView
+                android:id="@+id/legendEmoji3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -231,6 +234,7 @@
                 android:background="@drawable/legend_item_moderate" />
 
             <TextView
+                android:id="@+id/legendEmoji5"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -244,6 +248,7 @@
 
             <!-- Fila 3: Nivel Alto (Naranja) -->
             <TextView
+                android:id="@+id/legendEmoji6"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -256,6 +261,7 @@
                 android:background="@drawable/legend_item_high" />
 
             <TextView
+                android:id="@+id/legendEmoji7"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -269,6 +275,7 @@
 
             <!-- Fila 4: Transición Alto → Peligroso -->
             <TextView
+                android:id="@+id/legendEmoji8"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -281,6 +288,7 @@
                 android:background="@drawable/legend_item_high" />
 
             <TextView
+                android:id="@+id/legendEmoji9"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -294,6 +302,7 @@
 
             <!-- Fila 5: Nivel Peligroso (Rojo) -->
             <TextView
+                android:id="@+id/legendEmoji10"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -306,6 +315,7 @@
                 android:background="@drawable/legend_item_danger" />
 
             <TextView
+                android:id="@+id/legendEmoji11"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
@@ -319,6 +329,7 @@
 
             <!-- Fila 6: Nivel Crítico (Morado) -->
             <TextView
+                android:id="@+id/legendEmoji12"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"

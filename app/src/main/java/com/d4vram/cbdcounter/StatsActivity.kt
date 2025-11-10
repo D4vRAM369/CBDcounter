@@ -26,6 +26,19 @@ class StatsActivity : AppCompatActivity() {
     private lateinit var calendarRecycler: RecyclerView
     private lateinit var sharedPrefs: SharedPreferences
 
+    // Referencias a los TextViews de la leyenda
+    private lateinit var legendEmoji0: TextView
+    private lateinit var legendEmoji1: TextView
+    private lateinit var legendEmoji3: TextView
+    private lateinit var legendEmoji5: TextView
+    private lateinit var legendEmoji6: TextView
+    private lateinit var legendEmoji7: TextView
+    private lateinit var legendEmoji8: TextView
+    private lateinit var legendEmoji9: TextView
+    private lateinit var legendEmoji10: TextView
+    private lateinit var legendEmoji11: TextView
+    private lateinit var legendEmoji12: TextView
+
     private val displayCalendar: Calendar = Calendar.getInstance()
     private val monthFormat = SimpleDateFormat("LLLL yyyy", Locale("es", "ES"))
     private val dateKeyFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -41,6 +54,19 @@ class StatsActivity : AppCompatActivity() {
         prevMonthButton = findViewById(R.id.prevMonthButton)
         nextMonthButton = findViewById(R.id.nextMonthButton)
         calendarRecycler = findViewById(R.id.calendarRecycler)
+
+        // Inicializar referencias a los TextViews de la leyenda
+        legendEmoji0 = findViewById(R.id.legendEmoji0)
+        legendEmoji1 = findViewById(R.id.legendEmoji1)
+        legendEmoji3 = findViewById(R.id.legendEmoji3)
+        legendEmoji5 = findViewById(R.id.legendEmoji5)
+        legendEmoji6 = findViewById(R.id.legendEmoji6)
+        legendEmoji7 = findViewById(R.id.legendEmoji7)
+        legendEmoji8 = findViewById(R.id.legendEmoji8)
+        legendEmoji9 = findViewById(R.id.legendEmoji9)
+        legendEmoji10 = findViewById(R.id.legendEmoji10)
+        legendEmoji11 = findViewById(R.id.legendEmoji11)
+        legendEmoji12 = findViewById(R.id.legendEmoji12)
 
         toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
@@ -60,6 +86,17 @@ class StatsActivity : AppCompatActivity() {
         }
 
         updateCalendar()
+        updateLegend() // Cargar emojis dinámicamente al iniciar
+    }
+
+    /**
+     * Se ejecuta cada vez que la Activity vuelve a primer plano
+     * Esto incluye cuando vuelves de EmojiSettingsActivity
+     */
+    override fun onResume() {
+        super.onResume()
+        updateLegend() // Actualizar leyenda por si cambiaron los emojis
+        updateCalendar() // Actualizar calendario también
     }
 
     private fun updateCalendar() {
@@ -68,6 +105,33 @@ class StatsActivity : AppCompatActivity() {
             .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
         monthLabel.text = formattedMonth
         calendarAdapter.submit(buildCalendarCells())
+    }
+
+    /**
+     * Actualiza la leyenda de emojis con los valores personalizados del usuario
+     * Esta función lee desde SharedPreferences y actualiza cada TextView dinámicamente
+     */
+    private fun updateLegend() {
+        // Definir los rangos con sus labels correspondientes
+        val legendData = listOf(
+            Triple(0, legendEmoji0, "0"),
+            Triple(1, legendEmoji1, "1-2"),
+            Triple(3, legendEmoji3, "3-4"),
+            Triple(5, legendEmoji5, "5"),
+            Triple(6, legendEmoji6, "6"),
+            Triple(7, legendEmoji7, "7"),
+            Triple(8, legendEmoji8, "8"),
+            Triple(9, legendEmoji9, "9"),
+            Triple(10, legendEmoji10, "10"),
+            Triple(11, legendEmoji11, "11"),
+            Triple(12, legendEmoji12, "12+")
+        )
+
+        // Actualizar cada TextView con el emoji correspondiente
+        for ((count, textView, rangeText) in legendData) {
+            val emoji = EmojiUtils.emojiForCount(count, this)
+            textView.text = "$emoji  $rangeText"
+        }
     }
 
     private fun buildCalendarCells(): List<CalendarCell> {
