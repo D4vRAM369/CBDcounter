@@ -78,7 +78,7 @@ Como siempre:
 
 ## 📚 Documentación
 
-- **Política de Privacidad:** https://d4vram369.github.io/CBDcounter/privacy-policy
+- **Política de Privacidad:** [https://d4vram369.github.io/CBDcounter/privacy-policy](https://d4vram369.github.io/CBDcounter/privacy.html)
 - **CHANGELOG completo:** [CHANGELOG.md](CHANGELOG.md)
 
 ---
