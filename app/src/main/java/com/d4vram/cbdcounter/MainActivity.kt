@@ -1,11 +1,15 @@
 package com.d4vram.cbdcounter
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowInsetsController
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,6 +80,24 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         "text/plain"
     )
 
+    // Receptor para detectar cambio de día/hora mientras la app está abierta
+    private val dateChangeReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            when (intent?.action) {
+                Intent.ACTION_DATE_CHANGED,
+                Intent.ACTION_TIME_CHANGED,
+                Intent.ACTION_TIMEZONE_CHANGED -> {
+                    // Recargar datos del día actual
+                    loadTodayData()
+                    updateDisplay()
+                    loadAllHistoryData()
+                    updateHistoryView()
+                    updateStats()
+                }
+            }
+        }
+    }
+
     private val importCsvLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             uri?.let { handleImportCsv(it) }
@@ -95,6 +117,21 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Hacer que el contenido se dibuje detrás de la barra de estado
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false)
+            window.insetsController?.setSystemBarsAppearance(
+                0,
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            )
+        }
+
         initViews()
         initSharedPreferences()
         loadTodayData()
@@ -112,7 +149,26 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     override fun onResume() {
         super.onResume()
         // Actualizar emoji cuando se vuelve de EmojiSettingsActivity
+        loadTodayData()
         updateDisplay()
+        
+        // Registrar receptor para cambios de fecha/hora
+        val filter = IntentFilter().apply {
+            addAction(Intent.ACTION_DATE_CHANGED)
+            addAction(Intent.ACTION_TIME_CHANGED)
+            addAction(Intent.ACTION_TIMEZONE_CHANGED)
+        }
+        registerReceiver(dateChangeReceiver, filter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Desregistrar receptor para evitar memory leaks
+        try {
+            unregisterReceiver(dateChangeReceiver)
+        } catch (e: IllegalArgumentException) {
+            // Receptor ya desregistrado, ignorar
+        }
     }
 
     private fun initViews() {
