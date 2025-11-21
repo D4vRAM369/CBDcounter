@@ -109,8 +109,8 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         @StringRes val feedbackRes: Int,
         val icon: String
     ) {
-        WEED(R.string.weed_option, R.string.cbd_infused_added_weed, "\uD83D\uDFE2"),
-        POLEM(R.string.polem_option, R.string.cbd_infused_added_polem, "\uD83D\uDFE4")
+        WEED(R.string.weed_option, R.string.cbd_infused_added_weed, "🌿"),
+        POLEM(R.string.polem_option, R.string.cbd_infused_added_polem, "🍫")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

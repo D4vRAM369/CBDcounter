@@ -233,13 +233,13 @@ class CBDWidgetProvider : AppWidgetProvider() {
 
     private fun addWeed(context: Context) {
         addCBD(context)
-        val entry = "🌿 ${getCurrentTimestamp()}"
+        val entry = "🌿 ${getCurrentTimestamp()} (aliñado con weed)"
         appendNote(context, entry)
     }
 
     private fun addPolem(context: Context) {
         addCBD(context)
-        val entry = "🍫 ${getCurrentTimestamp()}"
+        val entry = "🍫 ${getCurrentTimestamp()} (aliñado con polen)"
         appendNote(context, entry)
     }
 
