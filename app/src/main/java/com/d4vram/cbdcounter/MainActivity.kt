@@ -188,14 +188,17 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
 
         // Estado inicial del switch según el tema actual
         val isNight = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        
+        // Evitar que el listener se dispare al configurar el estado inicial
+        themeSwitch.setOnCheckedChangeListener(null)
         themeSwitch.isChecked = isNight == Configuration.UI_MODE_NIGHT_YES
 
-        // Listener: alternar modo oscuro
+        // Listener: alternar modo oscuro con comprobación de estado
         themeSwitch.setOnCheckedChangeListener { _, checked ->
-            AppCompatDelegate.setDefaultNightMode(
-                if (checked) AppCompatDelegate.MODE_NIGHT_YES
-                else AppCompatDelegate.MODE_NIGHT_NO
-            )
+            val targetMode = if (checked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+            if (AppCompatDelegate.getDefaultNightMode() != targetMode) {
+                AppCompatDelegate.setDefaultNightMode(targetMode)
+            }
         }
 
         // Historial
