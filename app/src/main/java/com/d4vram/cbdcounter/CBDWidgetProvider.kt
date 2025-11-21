@@ -17,6 +17,8 @@ class CBDWidgetProvider : AppWidgetProvider() {
 
     companion object {
         const val ACTION_ADD_CBD = "com.d4vram.cbdcounter.ADD_CBD"
+        const val ACTION_ADD_WEED = "com.d4vram.cbdcounter.ADD_WEED"
+        const val ACTION_ADD_POLEM = "com.d4vram.cbdcounter.ADD_POLEM"
         const val ACTION_RESET_CBD = "com.d4vram.cbdcounter.RESET_CBD"
         private const val ACTION_SCHEDULED_REFRESH = "com.d4vram.cbdcounter.SCHEDULED_REFRESH"
         private const val MIDNIGHT_REQUEST_CODE = 420
@@ -104,7 +106,15 @@ class CBDWidgetProvider : AppWidgetProvider() {
         when (intent.action) {
             ACTION_ADD_CBD -> {
                 addCBD(context)
-                updateAllWidgets(context) // CORREGIDO: usar updateAllWidgets en lugar de updateAllWidgetsInternal
+                updateAllWidgets(context)
+            }
+            ACTION_ADD_WEED -> {
+                addWeed(context)
+                updateAllWidgets(context)
+            }
+            ACTION_ADD_POLEM -> {
+                addPolem(context)
+                updateAllWidgets(context)
             }
             ACTION_RESET_CBD -> {
                 resetCBD(context)
@@ -148,6 +158,24 @@ class CBDWidgetProvider : AppWidgetProvider() {
             context, 0, addIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         views.setOnClickPendingIntent(R.id.widget_add_button, addPendingIntent)
+
+        // Configurar botón Weed
+        val weedIntent = Intent(context, CBDWidgetProvider::class.java).apply {
+            action = ACTION_ADD_WEED
+        }
+        val weedPendingIntent = PendingIntent.getBroadcast(
+            context, 2, weedIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        views.setOnClickPendingIntent(R.id.widget_btn_weed, weedPendingIntent)
+
+        // Configurar botón Polem
+        val polemIntent = Intent(context, CBDWidgetProvider::class.java).apply {
+            action = ACTION_ADD_POLEM
+        }
+        val polemPendingIntent = PendingIntent.getBroadcast(
+            context, 3, polemIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        views.setOnClickPendingIntent(R.id.widget_btn_polem, polemPendingIntent)
 
         // Configurar botón reset
         val resetIntent = Intent(context, CBDWidgetProvider::class.java).apply {
@@ -202,4 +230,30 @@ class CBDWidgetProvider : AppWidgetProvider() {
         val formatter = SimpleDateFormat("dd/MM", Locale.getDefault())
         return formatter.format(Date())
     }
+
+    private fun addWeed(context: Context) {
+        addCBD(context)
+        val entry = "🌿 ${getCurrentTimestamp()}"
+        appendNote(context, entry)
+    }
+
+    private fun addPolem(context: Context) {
+        addCBD(context)
+        val entry = "🍫 ${getCurrentTimestamp()}"
+        appendNote(context, entry)
+    }
+
+    private fun appendNote(context: Context, entry: String) {
+        val today = getCurrentDateKey()
+        val currentNote = Prefs.getNote(context, today)
+        val updatedNote = if (currentNote.isNullOrBlank()) {
+            entry
+        } else {
+            "$currentNote\n$entry"
+        }
+        Prefs.setNote(context, today, updatedNote)
+    }
+
+    private fun getCurrentTimestamp(): String =
+        SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
 }
