@@ -204,6 +204,9 @@ class CBDWidgetProvider : AppWidgetProvider() {
         sharedPrefs.edit()
             .putInt("count_$today", currentCount + 1)
             .apply()
+
+        val entry = "🔸 ${getCurrentTimestamp()}"
+        appendNote(context, entry)
     }
 
     private fun resetCBD(context: Context) {
