@@ -374,15 +374,46 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
             startActivity(Intent(this, EmojiSettingsActivity::class.java))
         }
         subtractButton.setOnClickListener {
-            if (currentCount > 0) {
+        if (currentCount > 0) {
+            // Inflar layout personalizado
+            val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_confirm_delete, null)
+            
+            // Crear el diálogo
+            val dialog = MaterialAlertDialogBuilder(this)
+                .setView(dialogView)
+                .setCancelable(true)
+                .create()
+
+            // Configurar chips
+            dialogView.findViewById<View>(R.id.chip_confirm).setOnClickListener {
                 currentCount--
                 updateDisplay()
                 removeLastEntryFromTodayNote()  // 🎯 Borrar último timestamp
                 saveData()
                 animateCounter(0.9f)
                 showFeedback(getString(R.string.cbd_subtracted), true)
+                dialog.dismiss()
             }
+
+            dialogView.findViewById<View>(R.id.chip_keep_note).setOnClickListener {
+                currentCount--
+                updateDisplay()
+                // NO borramos la nota, solo restamos el contador
+                saveData()
+                animateCounter(0.9f)
+                showFeedback("Restado -1 (nota mantenida)", true)
+                dialog.dismiss()
+            }
+
+            dialogView.findViewById<View>(R.id.chip_cancel).setOnClickListener {
+                dialog.dismiss()
+            }
+
+            // Mostrar con fondo transparente para que se vea bien el card (opcional, pero recomendado si el root es CardView)
+            dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+            dialog.show()
         }
+    }
         resetButton.setOnClickListener {
             AlertDialog.Builder(this)
                 .setTitle("Reiniciar contador")

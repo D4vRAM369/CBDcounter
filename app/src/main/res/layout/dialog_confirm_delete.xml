@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="28dp"
+    app:cardElevation="8dp"
+    app:cardBackgroundColor="?attr/colorSurface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_delete_forever"
+            app:tint="?attr/colorError"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="Alerta" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Está a punto de eliminarse 1 registro en las Notas de hoy, ¿Continuar?"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textColor="?android:attr/textColorPrimary"
+            android:layout_marginBottom="24dp"
+            android:lineSpacingExtra="4dp"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            app:selectionRequired="false">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_cancel"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No, cancelar"
+                app:chipIcon="@drawable/ic_close"
+                android:textColor="?android:attr/textColorSecondary"
+                app:chipBackgroundColor="?attr/colorSurfaceVariant"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_keep_note"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Solo -1 (mantener nota)"
+                app:chipIcon="@drawable/ic_edit_note"
+                android:textColor="?attr/colorPrimary"
+                app:chipBackgroundColor="?attr/colorSurfaceVariant"
+                android:layout_marginStart="8dp"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_confirm"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sí, eliminar todo"
+                app:chipIcon="@drawable/ic_check"
+                android:textColor="?attr/colorOnError"
+                app:chipBackgroundColor="?attr/colorError"
+                android:layout_marginStart="8dp"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

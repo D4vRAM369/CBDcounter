@@ -105,7 +105,7 @@ class CBDWidgetProvider : AppWidgetProvider() {
 
         when (intent.action) {
             ACTION_ADD_CBD -> {
-                addCBD(context)
+                addStandardCBD(context)
                 updateAllWidgets(context)
             }
             ACTION_ADD_WEED -> {
@@ -196,7 +196,7 @@ class CBDWidgetProvider : AppWidgetProvider() {
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 
-    private fun addCBD(context: Context) {
+    private fun incrementCounter(context: Context) {
         val sharedPrefs = context.getSharedPreferences("CBDCounter", Context.MODE_PRIVATE)
         val today = getCurrentDateKey()
         val currentCount = sharedPrefs.getInt("count_$today", 0)
@@ -204,7 +204,10 @@ class CBDWidgetProvider : AppWidgetProvider() {
         sharedPrefs.edit()
             .putInt("count_$today", currentCount + 1)
             .apply()
+    }
 
+    private fun addStandardCBD(context: Context) {
+        incrementCounter(context)
         val entry = "🔸 ${getCurrentTimestamp()}"
         appendNote(context, entry)
     }
@@ -235,13 +238,13 @@ class CBDWidgetProvider : AppWidgetProvider() {
     }
 
     private fun addWeed(context: Context) {
-        addCBD(context)
+        incrementCounter(context)
         val entry = "🌿 ${getCurrentTimestamp()} (aliñado con weed)"
         appendNote(context, entry)
     }
 
     private fun addPolem(context: Context) {
-        addCBD(context)
+        incrementCounter(context)
         val entry = "🍫 ${getCurrentTimestamp()} (aliñado con polen)"
         appendNote(context, entry)
     }
