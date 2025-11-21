@@ -12,24 +12,27 @@
 ![minSdk](https://img.shields.io/badge/minSdk-24+-informational)
 ![targetSdk](https://img.shields.io/badge/targetSdk-35-informational)
 <img src="https://img.shields.io/badge/ClaudeCode_&_PBL-powered-4B0082?style=flat-square&logo=anthropic&logoColor=white"/>
+<img src="https://img.shields.io/badge/Gemini_3_Pro-powered-8E75B2?style=flat-square&logo=googlegemini&logoColor=white"/>
+<img src="https://img.shields.io/badge/Antigravity_IDE-powered-FF6D00?style=flat-square&logo=google&logoColor=white"/>
+<img src="https://img.shields.io/badge/ChatGPT-powered-74aa9c?style=flat-square&logo=openai&logoColor=white"/>
+<img src="https://img.shields.io/badge/Project--Based_Learning-driven-orange?style=flat-square"/>
+<img src="https://img.shields.io/badge/ABP-metodología-blue?style=flat-square"/>
 ![privacy](https://img.shields.io/badge/privacy-100%25%20local-success)
 
 ---
 
-> 📢 **Novedad — v1.1 ya disponible (10/11/2025)**  
-> Primera versión pública estable en GitHub y Play Store *(pendiente de verificación)*.
+> 📢 **Novedad — v1.2 ya disponible (21/11/2025)**  
+> Versión centrada en perfeccionar el Widget, unificar la UI y mejorar la estabilidad.
 >
 > 🟢 **Novedades principales:**
-> - Widget de contador diario mejorado  
-> - Calendario con estadísticas  
-> - Notas con marcas de tiempo  
-> - 151 emojis personalizables  
-> - Import/Export **CSV**  
-> - Privacidad total: **cero datos enviados**, **sin anuncios**, **sin analytics** (_esto siempre ha sido así, pero la política de Google Play me obliga a aclararlo, por ello hay una nueva página de Política de Privacidad)_.
-> - La aplicación **será publicada en la PlayStore** desde que acabe _el trámite burocrático con Google y el papeleo_, que sigue todo en marcha.
+> - **Widget 2.0**: Nuevo diseño 2x2 con botones cuadrados y emojis unificados (🌿/🍫).
+> - **Notas Inteligentes**: Formato automático con timestamp y opción de "Mantener Nota" al restar.
+> - **Mejoras Visuales**: Chips Material Design y transiciones suaves sin parpadeos.
+> - **Correcciones**: Solucionados crashes críticos y bugs de duplicación en el widget.
+> - Privacidad total: **cero datos enviados**, **sin anuncios**, **sin analytics**.
 
-🔗 **Descarga v1.1:**  
-👉 [Ver Release oficial (v1.1)](https://github.com/D4vRAM369/CBDcounter/releases/tag/v1.1)
+🔗 **Descarga v1.2:**  
+👉 [Ver Release oficial (v1.2)](https://github.com/D4vRAM369/CBDcounter/releases/tag/v1.2)
 
 🛡️ **Política de Privacidad:**  
 [https://d4vram369.github.io/CBDcounter/privacy.html](https://d4vram369.github.io/CBDcounter/privacy.html)
@@ -53,7 +56,7 @@ Como todos los proyectos que he desarrollado hasta ahora (publicos y aún sin pu
 Hecho para uso personal, y compartido por el amor al open source y su comunidad ❤️
 
 
-## 📸 Capturas de pantalla (versión 1.1)
+## 📸 Capturas de pantalla (versión 1.2)
 Aquí algunas capturas en tema claro y oscuro, mostrando el contador, el historial, las notas y el widget en acción 👇
 
 
@@ -82,16 +85,16 @@ Aquí algunas capturas en tema claro y oscuro, mostrando el contador, el histori
 
 ## ✨ Características
 
-- 📲 **Widget +1 instantáneo**: suma desde la pantalla de inicio. Cada toque añade a las notas del día un 🔸 con marca temporal en formato 24 h.
-- ➖ **Deshacer inteligente (-1)**: al restar, elimina también la última cadena (🔸 + hora) asociada a ese toque, para corregir pulsaciones por error.
+- 📲 **Widget 2.0**: Nuevo diseño 2x2 optimizado. Suma desde la pantalla de inicio con botones cuadrados y emojis unificados.
+- ➖ **Deshacer inteligente (-1)**: Opción de borrar la última entrada o mantener la nota en el historial.
 - 🙂 **Emojis dinámicos (151)**: el icono del día cambia según el contador. Puedes personalizar el set de emojis a tu gusto.
-- 📝 **Notas por día**: añade texto libre con marcas de tiempo automáticas.
+- 📝 **Notas por día**: añade texto libre con marcas de tiempo automáticas (`🌿 HH:mm`).
 - 🔄 **Exportar / Importar CSV**: guarda tus datos o muévelos entre dispositivos.
 - 🔒 **Datos 100% locales**: persistencia incluso tras cerrar la app. Sin anuncios. Sin analytics.
 - 🎨 **Interfaz minimalista**: clara, ligera y enfocada en el flujo diario.
 - 💨 **Aliñados rápidos (+1 extra)**: botón adicional para marcar tipo de mezcla:
-  - 🟢 *Weed*  
-  - 🟤 *Polen*
+  - 🟢 *Weed* (🌿)
+  - 🟤 *Polen* (🍫)
  
   Se registran en las notas del día con su icono y hora para distinguirlos de los +1 estándar.
   Una imágen de ejemplo:

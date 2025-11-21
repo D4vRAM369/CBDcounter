@@ -11,24 +11,27 @@
 ![minSdk](https://img.shields.io/badge/minSdk-24+-informational)
 ![targetSdk](https://img.shields.io/badge/targetSdk-35-informational)
 <img src="https://img.shields.io/badge/ClaudeCode_&_PBL-powered-4B0082?style=flat-square&logo=anthropic&logoColor=white"/>
+<img src="https://img.shields.io/badge/Gemini_3_Pro-powered-8E75B2?style=flat-square&logo=googlegemini&logoColor=white"/>
+<img src="https://img.shields.io/badge/Antigravity_IDE-powered-FF6D00?style=flat-square&logo=google&logoColor=white"/>
+<img src="https://img.shields.io/badge/ChatGPT-powered-74aa9c?style=flat-square&logo=openai&logoColor=white"/>
+<img src="https://img.shields.io/badge/Project--Based_Learning-driven-orange?style=flat-square"/>
+<img src="https://img.shields.io/badge/ABP-metodología-blue?style=flat-square"/>
 ![privacy](https://img.shields.io/badge/privacy-100%25%20local-success)
 
 ---
 
-> 📢 **New — v1.1 now available (11/10/2025)**  
-> First stable public release on GitHub and the Play Store *(pending verification)*.
+> 📢 **New — v1.2 now available (11/21/2025)**  
+> Version focused on perfecting the Widget, unifying the UI, and improving stability.
 >
 > 🟢 **Main new features:**
-> - Improved daily counter widget  
-> - Calendar with statistics  
-> - Notes with timestamps  
-> - 151 customizable emojis  
-> - Import/Export **CSV**  
-> - Total privacy: **zero data sent**, **no ads**, **no analytics** (_this has always been the case, but Google Play policy requires me to clarify this, which is why there is a new Privacy Policy page)_.
-> - The app **will be published on the PlayStore** as soon as _the bureaucratic process with Google and the paperwork_ are completed, which is still in progress.
+> - **Widget 2.0**: New 2x2 design with square buttons and unified emojis (🌿/🍫).
+> - **Smart Notes**: Automatic format with timestamp and "Keep Note" option when subtracting.
+> - **Visual Improvements**: Material Design Chips and smooth transitions without flickering.
+> - **Fixes**: Fixed critical crashes and widget duplication bugs.
+> - Total privacy: **zero data sent**, **no ads**, **no analytics**.
 
-🔗 **Download v1.1:**  
-👉 [See Official Release (v1.1)](https://github.com/D4vRAM369/CBDcounter/releases/tag/v1.1)
+🔗 **Download v1.2:**  
+👉 [See Official Release (v1.2)](https://github.com/D4vRAM369/CBDcounter/releases/tag/v1.2)
 
 🛡️ **Privacy Policy:**  
 [https://d4vram369.github.io/CBDcounter/privacy.html](https://d4vram369.github.io/CBDcounter/privacy.html)
@@ -83,19 +86,19 @@ Here are some screenshots in light and dark themes, showing the counter, history
 
 ## ✨ Features
 
-- 📲 **Instant +1 widget**: add from your home screen. Each tap adds a 🔸 with a timestamp in 24-hour format to your notes for the day.
-- ➖ **Smart undo (-1)**: when subtracting, it also deletes the last string (🔸 + time) associated with that tap, to correct accidental taps.
+- 📲 **Widget 2.0**: New optimized 2x2 design. Add from the home screen with square buttons and unified emojis.
+- ➖ **Smart undo (-1)**: Option to delete the last entry or keep the note in the history.
 - 🙂 **Dynamic emojis (151)**: the icon of the day changes according to the counter. You can customize the set of emojis to your liking.
-- 📝 **Notes per day**: add free text with automatic timestamps.
+- 📝 **Notes per day**: add free text with automatic timestamps (`🌿 HH:mm`).
 - 🔄 **Export/Import CSV**: save your data or move it between devices.
 - 🔒 **100% local data**: persistence even after closing the app. No ads. No analytics.
 - 🎨 **Minimalist interface**: clear, lightweight, and focused on daily flow.
 - 💨 **Quick seasonings (+1 extra)**: additional button to mark mix type:
-- 🟢 *Weed*
-- 🟤 *Pollen*
+  - 🟢 *Weed* (🌿)
+  - 🟤 *Pollen* (🍫)
  
-They are recorded in the day's notes with their icon and time to distinguish them from the standard +1.
-An example image:
+  They are recorded in the day's notes with their icon and time to distinguish them from the standard +1.
+  An example image:
 
   
   <img width="640" height="317" alt="image" src="https://github.com/user-attachments/assets/da9f0188-0604-40ae-aee4-06caebefc9e7" />
