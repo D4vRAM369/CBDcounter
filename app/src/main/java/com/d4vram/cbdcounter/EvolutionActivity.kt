@@ -2,6 +2,7 @@ package com.d4vram.cbdcounter
 
 import android.content.Context
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.appbar.MaterialToolbar
@@ -18,6 +19,9 @@ class EvolutionActivity : AppCompatActivity() {
     private val dateKeyFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val labelFormat = SimpleDateFormat("dd/MM", Locale.getDefault())
 
+    private var rangeDays = 7
+    private var offsetDays = 0 // 0 = up to today
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_evolution)
@@ -28,25 +32,44 @@ class EvolutionActivity : AppCompatActivity() {
         lineChart = findViewById(R.id.lineChart)
         rangeChipGroup = findViewById(R.id.rangeChipGroup)
         evolutionTitle = findViewById(R.id.evolutionTitle)
+        val btnPrev = findViewById<ImageButton>(R.id.btnPrev)
+        val btnNext = findViewById<ImageButton>(R.id.btnNext)
+
+        // Arrow listeners
+        btnPrev.setOnClickListener {
+            offsetDays += rangeDays
+            loadData(rangeDays, offsetDays)
+        }
+        btnNext.setOnClickListener {
+            offsetDays = (offsetDays - rangeDays).coerceAtLeast(0)
+            loadData(rangeDays, offsetDays)
+        }
 
         rangeChipGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.chip7Days -> loadData(7)
-                R.id.chip30Days -> loadData(30)
+                R.id.chip7Days -> {
+                    rangeDays = 7
+                }
+                R.id.chip30Days -> {
+                    rangeDays = 30
+                }
             }
+            offsetDays = 0 // reset to today when range changes
+            loadData(rangeDays, offsetDays)
         }
 
         // Default load
-        loadData(7)
+        loadData(rangeDays, offsetDays)
     }
 
-    private fun loadData(days: Int) {
+    private fun loadData(days: Int, offset: Int) {
         evolutionTitle.text = "Últimos $days días"
         val sharedPrefs = getSharedPreferences("CBDCounter", Context.MODE_PRIVATE)
         val dataPoints = mutableListOf<Pair<String, Int>>()
         val calendar = Calendar.getInstance()
-
-        // Go back 'days' days
+        // Move back 'offset' days from today
+        calendar.add(Calendar.DAY_OF_YEAR, -offset)
+        // Then go back (days-1) more to get start date
         calendar.add(Calendar.DAY_OF_YEAR, -(days - 1))
 
         for (i in 0 until days) {
@@ -54,11 +77,9 @@ class EvolutionActivity : AppCompatActivity() {
             val label = labelFormat.format(calendar.time)
             val prefKey = "count_$dateKey"
             val count = sharedPrefs.getInt(prefKey, 0)
-            
             dataPoints.add(Pair(label, count))
             calendar.add(Calendar.DAY_OF_YEAR, 1)
         }
-
         lineChart.setData(dataPoints)
     }
 }

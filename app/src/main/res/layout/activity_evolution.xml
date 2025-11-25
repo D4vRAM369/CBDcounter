@@ -20,6 +20,30 @@
         app:navigationIconTint="@color/white"
         app:titleCentered="true" />
 
+    <ImageButton
+        android:id="@+id/btnPrev"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_arrow_left"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/prev_range"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/evolutionToolbar"
+        app:layout_constraintBottom_toTopOf="@id/lineChart"
+        android:layout_marginStart="16dp" />
+
+    <ImageButton
+        android:id="@+id/btnNext"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_arrow_right"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/next_range"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/evolutionToolbar"
+        app:layout_constraintBottom_toTopOf="@id/lineChart"
+        android:layout_marginEnd="16dp" />
+
     <TextView
         android:id="@+id/evolutionTitle"
         android:layout_width="wrap_content"

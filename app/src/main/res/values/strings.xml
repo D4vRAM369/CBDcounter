@@ -43,4 +43,7 @@
     <string name="disclaimer_accept">Entendido y acepto</string>
     <string name="disclaimer_decline">No acepto</string>
 
+    <string name="prev_range">Anterior</string>
+    <string name="next_range">Siguiente</string>
+
 </resources>
