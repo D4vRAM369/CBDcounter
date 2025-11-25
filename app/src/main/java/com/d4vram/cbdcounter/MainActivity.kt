@@ -132,13 +132,13 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
             )
         }
 
-        initViews()
         initSharedPreferences()
+        initViews()
         loadTodayData()
         loadAllHistoryData()
         setupTabLayout()
         setupClickListeners()
-        updateDisplay()
+        updateDisplay(animate = false)
         updateHistoryView()
         updateStats()
 
@@ -150,7 +150,7 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         super.onResume()
         // Actualizar emoji cuando se vuelve de EmojiSettingsActivity
         loadTodayData()
-        updateDisplay()
+        updateDisplay(animate = false)
         
         // Registrar receptor para cambios de fecha/hora
         val filter = IntentFilter().apply {
@@ -186,19 +186,13 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         settingsButton = findViewById(R.id.settingsButton)
         themeSwitch = findViewById(R.id.themeSwitch)    
 
-        // Estado inicial del switch según el tema actual
-        val isNight = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        
-        // Evitar que el listener se dispare al configurar el estado inicial
+        // Estado inicial del switch según preferencias o sistema
+        val isNight = isDarkModeEnabled()
         themeSwitch.setOnCheckedChangeListener(null)
-        themeSwitch.isChecked = isNight == Configuration.UI_MODE_NIGHT_YES
-
-        // Listener: alternar modo oscuro con comprobación de estado
+        themeSwitch.isChecked = isNight
+        
         themeSwitch.setOnCheckedChangeListener { _, checked ->
-            val targetMode = if (checked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-            if (AppCompatDelegate.getDefaultNightMode() != targetMode) {
-                AppCompatDelegate.setDefaultNightMode(targetMode)
-            }
+            setDarkMode(checked)
         }
 
         // Historial
@@ -343,16 +337,31 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         CBDWidgetProvider.updateAllWidgets(this)
     }
 
-    private fun updateDisplay() {
+    private fun isDarkModeEnabled(): Boolean {
+        return sharedPrefs.getBoolean("dark_mode", 
+            (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)
+    }
+
+    private fun setDarkMode(enabled: Boolean) {
+        sharedPrefs.edit().putBoolean("dark_mode", enabled).apply()
+        val targetMode = if (enabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        AppCompatDelegate.setDefaultNightMode(targetMode)
+    }
+
+    private fun updateDisplay(animate: Boolean = true) {
         counterText.text = currentCount.toString()
         dateText.text = getCurrentDateDisplay()
         val newEmoji = getEmoji(currentCount)
-        if (emojiText.text != newEmoji) {
+        
+        if (animate && emojiText.text != newEmoji && emojiText.text.isNotEmpty()) {
             emojiText.animate().alpha(0f).setDuration(150).withEndAction {
                 emojiText.text = newEmoji
                 emojiText.animate().alpha(1f).setDuration(150).start()
             }.start()
-        } else emojiText.text = newEmoji
+        } else {
+            emojiText.alpha = 1f
+            emojiText.text = newEmoji
+        }
 
         val color = when {
             currentCount == 0 -> R.color.green_safe

@@ -183,6 +183,19 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="8dp" />
 
+        <com.google.android.material.chip.Chip
+            android:id="@+id/btnEvolution"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ver Evolución 📈"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            style="@style/Widget.MaterialComponents.Chip.Action"
+            app:chipIcon="@drawable/ic_arrow_right"
+            app:iconEndPadding="4dp"
+            app:textStartPadding="4dp"
+            />
+
         <!-- Grid de 2 columnas con colores -->
         <GridLayout
             android:layout_width="match_parent"

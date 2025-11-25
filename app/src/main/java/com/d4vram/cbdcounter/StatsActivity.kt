@@ -85,6 +85,10 @@ class StatsActivity : AppCompatActivity() {
             updateCalendar()
         }
 
+        findViewById<com.google.android.material.chip.Chip>(R.id.btnEvolution).setOnClickListener {
+            startActivity(android.content.Intent(this, EvolutionActivity::class.java))
+        }
+
         updateCalendar()
         updateLegend() // Cargar emojis dinámicamente al iniciar
     }

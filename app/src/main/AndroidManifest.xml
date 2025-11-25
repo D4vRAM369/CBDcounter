@@ -34,6 +34,15 @@
         </activity>
 
         <activity
+            android:name=".EvolutionActivity"
+            android:exported="false"
+            android:parentActivityName=".StatsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".StatsActivity" />
+        </activity>
+
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
