@@ -5,6 +5,10 @@ import android.content.SharedPreferences
 
 object Prefs {
     private const val PREFS_NAME = "CBDCounter"
+    
+    // Constantes de claves para evitar errores tipográficos
+    const val KEY_COUNT_PREFIX = "count_"
+    const val KEY_NOTE_PREFIX = "NOTE_"
 
     // función privada para acceder a las SharedPreferences
     private fun prefs(ctx: Context): SharedPreferences =
@@ -12,18 +16,18 @@ object Prefs {
 
     // ---- Helpers para las NOTAS ----
     fun getNote(ctx: Context, date: String): String? =
-        prefs(ctx).getString("NOTE_$date", null)
+        prefs(ctx).getString("${KEY_NOTE_PREFIX}$date", null)
 
     fun setNote(ctx: Context, date: String, note: String?) {
         prefs(ctx).edit().apply {
             if (note.isNullOrBlank()) {
-                remove("NOTE_$date")  // borra la nota si está vacía
+                remove("${KEY_NOTE_PREFIX}$date")  // borra la nota si está vacía
             } else {
-                putString("NOTE_$date", note)  // guarda la nota
+                putString("${KEY_NOTE_PREFIX}$date", note)  // guarda la nota
             }
         }.apply()
     }
 
     fun hasNote(ctx: Context, date: String): Boolean =
-        prefs(ctx).contains("NOTE_$date")
+        prefs(ctx).contains("${KEY_NOTE_PREFIX}$date")
 }

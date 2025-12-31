@@ -100,7 +100,11 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
 
     private val importCsvLauncher =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-            uri?.let { handleImportCsv(it) }
+            runCatching {
+                uri?.let { handleImportCsv(it) }
+            }.onFailure { e ->
+                showFeedback("Error inesperado al importar: ${e.message}", true)
+            }
         }
 
     enum class ViewMode { WEEK, MONTH, ALL }
@@ -132,15 +136,20 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
             )
         }
 
-        initSharedPreferences()
-        initViews()
-        loadTodayData()
-        loadAllHistoryData()
-        setupTabLayout()
-        setupClickListeners()
-        updateDisplay(animate = false)
-        updateHistoryView()
-        updateStats()
+        runCatching {
+            initSharedPreferences()
+            initViews()
+            loadTodayData()
+            loadAllHistoryData()
+            setupTabLayout()
+            setupClickListeners()
+            updateDisplay(animate = false)
+            updateHistoryView()
+            updateStats()
+        }.onFailure { e ->
+            showFeedback("Error al iniciar la app: ${e.message}", true)
+            e.printStackTrace()
+        }
 
         // Mostrar disclaimer médico en el primer uso
         showDisclaimerIfNeeded()
@@ -486,10 +495,14 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
                 putExtra(Intent.EXTRA_STREAM, uri)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
-            startActivity(Intent.createChooser(shareIntent, "Compartir CSV"))
-            showFeedback("CSV exportado", false)
-        }.onFailure {
-            showFeedback("Error al exportar CSV", true)
+            try {
+                startActivity(Intent.createChooser(shareIntent, "Compartir CSV"))
+                showFeedback("CSV exportado", false)
+            } catch (e: Exception) {
+                showFeedback("No se encontró una app para compartir el CSV", true)
+            }
+        }.onFailure { e ->
+            showFeedback("Error al exportar CSV: ${e.message}", true)
         }
     }
 
@@ -560,14 +573,16 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         }
 
         result.onSuccess {
-            loadTodayData()
-            loadAllHistoryData()
-            updateDisplay()
-            updateHistoryView()
-            updateStats()
+            runCatching {
+                loadTodayData()
+                loadAllHistoryData()
+                updateDisplay()
+                updateHistoryView()
+                updateStats()
+            }
             showFeedback("Importación completada", false)
-        }.onFailure {
-            showFeedback("Error al importar CSV", true)
+        }.onFailure { e ->
+            showFeedback("Error al importar CSV: ${e.message}", true)
         }
     }
 
@@ -636,7 +651,7 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     }
 
     private fun registerStandardIntake() {
-        val entry = "🔸 ${getCurrentTimestamp()}"
+        val entry = "🔹 ${getCurrentTimestamp()}"
         registerIntake(entry, getString(R.string.cbd_added))
     }
 

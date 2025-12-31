@@ -23,6 +23,10 @@ class CBDWidgetProvider : AppWidgetProvider() {
         private const val ACTION_SCHEDULED_REFRESH = "com.d4vram.cbdcounter.SCHEDULED_REFRESH"
         private const val MIDNIGHT_REQUEST_CODE = 420
 
+        // Claves compartidas con Prefs.kt si fuera necesario, o centralizadas aquí
+        private const val PREFS_NAME = "CBDCounter"
+        private const val KEY_COUNT_PREFIX = "count_"
+
         // Método estático para actualizar widgets desde MainActivity
         fun updateAllWidgets(context: Context) {
             val intent = Intent(context, CBDWidgetProvider::class.java).apply {
@@ -103,37 +107,42 @@ class CBDWidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
 
-        when (intent.action) {
-            ACTION_ADD_CBD -> {
-                addStandardCBD(context)
-                updateAllWidgets(context)
-            }
-            ACTION_ADD_WEED -> {
-                addWeed(context)
-                updateAllWidgets(context)
-            }
-            ACTION_ADD_POLEM -> {
-                addPolem(context)
-                updateAllWidgets(context)
-            }
-            ACTION_RESET_CBD -> {
-                resetCBD(context)
-                updateAllWidgets(context) // CORREGIDO: usar updateAllWidgets en lugar de updateAllWidgetsInternal
-            }
-            AppWidgetManager.ACTION_APPWIDGET_UPDATE -> {
-                val appWidgetManager = AppWidgetManager.getInstance(context)
-                val appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)
-                if (appWidgetIds != null) {
-                    onUpdate(context, appWidgetManager, appWidgetIds)
+        runCatching {
+            when (intent.action) {
+                ACTION_ADD_CBD -> {
+                    addStandardCBD(context)
+                    updateAllWidgets(context)
+                }
+                ACTION_ADD_WEED -> {
+                    addWeed(context)
+                    updateAllWidgets(context)
+                }
+                ACTION_ADD_POLEM -> {
+                    addPolem(context)
+                    updateAllWidgets(context)
+                }
+                ACTION_RESET_CBD -> {
+                    resetCBD(context)
+                    updateAllWidgets(context)
+                }
+                AppWidgetManager.ACTION_APPWIDGET_UPDATE -> {
+                    val appWidgetManager = AppWidgetManager.getInstance(context)
+                    val appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)
+                    if (appWidgetIds != null) {
+                        onUpdate(context, appWidgetManager, appWidgetIds)
+                    }
+                }
+                Intent.ACTION_DATE_CHANGED,
+                Intent.ACTION_TIME_CHANGED,
+                Intent.ACTION_TIMEZONE_CHANGED,
+                Intent.ACTION_BOOT_COMPLETED,
+                ACTION_SCHEDULED_REFRESH -> {
+                    updateAllWidgets(context)
                 }
             }
-            Intent.ACTION_DATE_CHANGED,
-            Intent.ACTION_TIME_CHANGED,
-            Intent.ACTION_TIMEZONE_CHANGED,
-            Intent.ACTION_BOOT_COMPLETED,
-            ACTION_SCHEDULED_REFRESH -> {
-                updateAllWidgets(context)
-            }
+        }.onFailure { e ->
+            // Log error or show a Toast if critical, but prevent crash
+            e.printStackTrace()
         }
     }
 
@@ -197,34 +206,34 @@ class CBDWidgetProvider : AppWidgetProvider() {
     }
 
     private fun incrementCounter(context: Context) {
-        val sharedPrefs = context.getSharedPreferences("CBDCounter", Context.MODE_PRIVATE)
         val today = getCurrentDateKey()
-        val currentCount = sharedPrefs.getInt("count_$today", 0)
+        val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val currentCount = sharedPrefs.getInt("$KEY_COUNT_PREFIX$today", 0)
 
         sharedPrefs.edit()
-            .putInt("count_$today", currentCount + 1)
+            .putInt("$KEY_COUNT_PREFIX$today", currentCount + 1)
             .apply()
     }
 
     private fun addStandardCBD(context: Context) {
         incrementCounter(context)
-        val entry = "🔸 ${getCurrentTimestamp()}"
+        val entry = "🔹 ${getCurrentTimestamp()}"
         appendNote(context, entry)
     }
 
     private fun resetCBD(context: Context) {
-        val sharedPrefs = context.getSharedPreferences("CBDCounter", Context.MODE_PRIVATE)
         val today = getCurrentDateKey()
+        val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
         sharedPrefs.edit()
-            .putInt("count_$today", 0)
+            .putInt("$KEY_COUNT_PREFIX$today", 0)
             .apply()
     }
 
     private fun getCurrentCount(context: Context): Int {
-        val sharedPrefs = context.getSharedPreferences("CBDCounter", Context.MODE_PRIVATE)
         val today = getCurrentDateKey()
-        return sharedPrefs.getInt("count_$today", 0)
+        val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        return sharedPrefs.getInt("$KEY_COUNT_PREFIX$today", 0)
     }
 
     private fun getCurrentDateKey(): String {
