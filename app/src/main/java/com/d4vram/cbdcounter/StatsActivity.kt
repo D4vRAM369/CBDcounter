@@ -17,7 +17,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class StatsActivity : AppCompatActivity() {
+class StatsActivity : AppCompatActivity(), NoteBottomSheet.Listener {
 
     private lateinit var toolbar: MaterialToolbar
     private lateinit var monthLabel: TextView
@@ -43,7 +43,9 @@ class StatsActivity : AppCompatActivity() {
     private val monthFormat = SimpleDateFormat("LLLL yyyy", Locale("es", "ES"))
     private val dateKeyFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val todayKey: String = dateKeyFormat.format(Date())
-    private val calendarAdapter = CalendarAdapter()
+    private val calendarAdapter = CalendarAdapter(displayCalendar, dateKeyFormat) { date ->
+        DayModalFragment.newInstance(date).show(supportFragmentManager, "day_modal")
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +93,10 @@ class StatsActivity : AppCompatActivity() {
 
         updateCalendar()
         updateLegend() // Cargar emojis dinámicamente al iniciar
+    }
+
+    override fun onNoteChanged(date: String) {
+        updateCalendar() // Refresh calendar after note change
     }
 
     /**
@@ -186,7 +192,11 @@ class StatsActivity : AppCompatActivity() {
         ) : CalendarCell()
     }
 
-    private class CalendarAdapter : RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
+    private class CalendarAdapter(
+        private val displayCalendar: java.util.Calendar,
+        private val dateKeyFormat: java.text.SimpleDateFormat,
+        private val onDayClick: (String) -> Unit
+    ) : RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
         private val items = mutableListOf<CalendarCell>()
 
         fun submit(data: List<CalendarCell>) {
@@ -202,7 +212,7 @@ class StatsActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
-            holder.bind(items[position])
+            holder.bind(items[position], displayCalendar, dateKeyFormat, onDayClick)
         }
 
         override fun getItemCount(): Int = items.size
@@ -212,7 +222,17 @@ class StatsActivity : AppCompatActivity() {
             private val dayNumber: TextView = itemView.findViewById(R.id.dayNumber)
             private val dayEmoji: TextView = itemView.findViewById(R.id.dayEmoji)
 
-            fun bind(cell: CalendarCell) {
+            fun bind(cell: CalendarCell, displayCalendar: java.util.Calendar, dateKeyFormat: java.text.SimpleDateFormat, onDayClick: (String) -> Unit) {
+                itemView.setOnClickListener {
+                    if (cell is CalendarCell.Day && cell.hasData) {
+                        val calendar = java.util.Calendar.getInstance()
+                        calendar.time = displayCalendar.time
+                        calendar.set(java.util.Calendar.DAY_OF_MONTH, cell.number)
+                        val dateKey = dateKeyFormat.format(calendar.time)
+                        onDayClick(dateKey)
+                    }
+                }
+
                 when (cell) {
                     is CalendarCell.Empty -> {
                         dayNumber.text = ""

@@ -71,6 +71,21 @@
             android:elevation="4dp"
             android:translationZ="4dp"
             android:contentDescription="Tiene nota"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintEnd_toStartOf="@id/audioBadge"
+            app:layout_constraintBaseline_toBaselineOf="@id/historyDate"/>
+
+        <!-- Indicador de audio -->
+        <TextView
+            android:id="@+id/audioBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎤"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:elevation="4dp"
+            android:translationZ="4dp"
+            android:contentDescription="Tiene audio"
             android:layout_marginEnd="12dp"
             app:layout_constraintEnd_toStartOf="@id/countBarrier"
             app:layout_constraintBaseline_toBaselineOf="@id/historyDate"/>

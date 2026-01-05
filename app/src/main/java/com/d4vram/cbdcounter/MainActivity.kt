@@ -38,7 +38,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
+class MainActivity : AppCompatActivity() {
 
     // Views principales
     private lateinit var counterText: TextView
@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     private lateinit var avgText: TextView
     private lateinit var totalText: TextView
     private lateinit var streakText: TextView
+    private lateinit var searchButton: ImageButton
 
     // Data
     private lateinit var sharedPrefs: SharedPreferences
@@ -211,22 +212,27 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         avgText = findViewById(R.id.avgText)
         totalText = findViewById(R.id.totalText)
         streakText = findViewById(R.id.streakText)
+        searchButton = findViewById(R.id.searchButton)
 
         // Adapter con callback para abrir el modal de notas
         historyAdapter = ImprovedHistoryAdapter(displayedHistoryData) { date ->
-            NoteBottomSheet.new(date).show(supportFragmentManager, "note_sheet")
+            DayModalFragment.newInstance(date).show(supportFragmentManager, "day_modal")
         }
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
         historyRecyclerView.adapter = historyAdapter
 
         // Espaciado entre ítems
         historyRecyclerView.addItemDecoration(HistoryItemDecoration(16))
+
+
+
+        // Abrir diálogo de búsqueda de notas
+        searchButton.setOnClickListener {
+            SearchNotesDialog().show(supportFragmentManager, "search_notes")
+        }
     } // <-- CIERRE de initViews() AQUÍ
 
-    // Listener del BottomSheet: refresca el listado cuando cambia una nota
-    override fun onNoteChanged(date: String) {
-        historyAdapter.refresh()
-    }
+
 
 
     private fun initSharedPreferences() {
@@ -292,26 +298,29 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         displayedHistoryData.clear()
         val calendar = Calendar.getInstance()
 
-        when (currentViewMode) {
+        val filteredByTab = when (currentViewMode) {
             ViewMode.WEEK -> {
                 calendar.add(Calendar.DAY_OF_YEAR, -7)
                 val weekAgo = calendar.time
-                displayedHistoryData.addAll(allHistoryData.filter { it.dateObject >= weekAgo })
+                allHistoryData.filter { it.dateObject >= weekAgo }
             }
             ViewMode.MONTH -> {
                 calendar.add(Calendar.DAY_OF_YEAR, -30)
                 val monthAgo = calendar.time
-                displayedHistoryData.addAll(allHistoryData.filter { it.dateObject >= monthAgo })
+                allHistoryData.filter { it.dateObject >= monthAgo }
             }
-            ViewMode.ALL -> {
-                displayedHistoryData.addAll(allHistoryData)
-            }
+            ViewMode.ALL -> allHistoryData
         }
+
+        displayedHistoryData.addAll(filteredByTab)
+
         historyAdapter.refresh()
         if (displayedHistoryData.isNotEmpty()) {
             historyRecyclerView.smoothScrollToPosition(0)
         }
     }
+
+
 
     private fun updateStats() {
         if (displayedHistoryData.isEmpty()) {
@@ -388,8 +397,8 @@ class MainActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         addInfusedButton.setOnClickListener { showInfusionDialog() }
         statsButton.setOnClickListener { openStatsCalendar() }
         settingsButton.setOnClickListener {
-            // Abrir pantalla de personalización de emojis
-            startActivity(Intent(this, EmojiSettingsActivity::class.java))
+            // Abrir pantalla de ajustes generales
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
         subtractButton.setOnClickListener {
         if (currentCount > 0) {
@@ -815,7 +824,8 @@ class ImprovedHistoryAdapter(
         val countText: TextView = itemView.findViewById(R.id.historyCount)
         val emojiText: TextView = itemView.findViewById(R.id.historyEmoji)
         val progressBar: View = itemView.findViewById(R.id.progressBar)
-        val noteBadge: TextView? = itemView.findViewById(R.id.noteBadge) // puede no existir si no lo añadiste
+        val noteBadge: TextView? = itemView.findViewById(R.id.noteBadge)
+        val audioBadge: TextView? = itemView.findViewById(R.id.audioBadge)
     }
     class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val headerText: TextView = itemView.findViewById(R.id.headerText)
@@ -875,9 +885,14 @@ class ImprovedHistoryAdapter(
                 holder.noteBadge?.visibility =
                     if (Prefs.hasNote(ctx, item.date)) View.VISIBLE else View.GONE
 
+                // --- NUEVO: badge de audio visible si existe audio para ese día
+                holder.audioBadge?.visibility =
+                    if (Prefs.hasAudio(ctx, item.date)) View.VISIBLE else View.GONE
+
                 // --- NUEVO: clicks para abrir el modal
                 holder.itemView.setOnClickListener { onDayClick(item.date) }
                 holder.noteBadge?.setOnClickListener { onDayClick(item.date) }
+                holder.audioBadge?.setOnClickListener { onDayClick(item.date) }
             }
         }
     }

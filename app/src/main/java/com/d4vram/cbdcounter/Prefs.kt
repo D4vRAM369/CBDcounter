@@ -2,6 +2,7 @@ package com.d4vram.cbdcounter
 
 import android.content.Context
 import android.content.SharedPreferences
+import java.io.File
 
 object Prefs {
     private const val PREFS_NAME = "CBDCounter"
@@ -30,4 +31,9 @@ object Prefs {
 
     fun hasNote(ctx: Context, date: String): Boolean =
         prefs(ctx).contains("${KEY_NOTE_PREFIX}$date")
+
+    fun hasAudio(ctx: Context, date: String): Boolean {
+        val audioFile = File(ctx.filesDir, "audios/audio_$date.mp3")
+        return audioFile.exists()
+    }
 }
