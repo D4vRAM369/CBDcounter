@@ -34,3 +34,8 @@ google-services.json
 Thumbs.db
 
 *.keystore
+
+# Sesiones PBL (Learning/Aprendizaje)
+markdown/
+
+

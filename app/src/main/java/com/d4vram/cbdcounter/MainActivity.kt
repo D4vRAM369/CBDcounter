@@ -119,6 +119,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // 1. Aplicar tema ANTES de super.onCreate para evitar flickering
+        initSharedPreferences()
+        applyStoredTheme()
+        
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -138,7 +142,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         runCatching {
-            initSharedPreferences()
+            // initSharedPreferences() -> Ya llamado arriba
             initViews()
             loadTodayData()
             loadAllHistoryData()
@@ -202,7 +206,9 @@ class MainActivity : AppCompatActivity() {
         themeSwitch.isChecked = isNight
         
         themeSwitch.setOnCheckedChangeListener { _, checked ->
-            setDarkMode(checked)
+            if (checked != isDarkModeEnabled()) {
+                setDarkMode(checked)
+            }
         }
 
         // Historial
@@ -356,14 +362,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isDarkModeEnabled(): Boolean {
-        return sharedPrefs.getBoolean("dark_mode", 
-            (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES)
+        // Si no hay preferencia guardada, usamos el estado actual del delegado o el sistema
+        return sharedPrefs.getBoolean(Prefs.KEY_DARK_MODE, 
+            AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES ||
+            (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+        )
+    }
+
+    private fun applyStoredTheme() {
+        val enabled = isDarkModeEnabled()
+        val targetMode = if (enabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        
+        // Solo aplicar si el modo actual es diferente al objetivo para evitar bucles
+        if (AppCompatDelegate.getDefaultNightMode() != targetMode) {
+            AppCompatDelegate.setDefaultNightMode(targetMode)
+        }
     }
 
     private fun setDarkMode(enabled: Boolean) {
-        sharedPrefs.edit().putBoolean("dark_mode", enabled).apply()
-        val targetMode = if (enabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-        AppCompatDelegate.setDefaultNightMode(targetMode)
+        sharedPrefs.edit().putBoolean(Prefs.KEY_DARK_MODE, enabled).apply()
+        applyStoredTheme()
     }
 
     private fun updateDisplay(animate: Boolean = true) {

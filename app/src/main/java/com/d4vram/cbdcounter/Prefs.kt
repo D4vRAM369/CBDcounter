@@ -10,6 +10,7 @@ object Prefs {
     // Constantes de claves para evitar errores tipográficos
     const val KEY_COUNT_PREFIX = "count_"
     const val KEY_NOTE_PREFIX = "NOTE_"
+    const val KEY_DARK_MODE = "dark_mode"
 
     // función privada para acceder a las SharedPreferences
     private fun prefs(ctx: Context): SharedPreferences =

@@ -30,9 +30,16 @@ class DayModalFragment : DialogFragment() {
     private var mediaPlayer: MediaPlayer? = null
 
     private lateinit var audioSeekBar: SeekBar
+    private lateinit var tvCurrentTime: TextView
+    private lateinit var tvTotalTime: TextView
+    private lateinit var seekBarContainer: android.widget.LinearLayout
     private lateinit var playAudioButton: MaterialButton
     private lateinit var deleteAudioButton: MaterialButton
     private lateinit var audioControlsLayout: android.widget.LinearLayout
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var updateProgressRunnable: Runnable? = null
+    private var recordStartTime: Long = 0
 
 
     companion object {
@@ -62,9 +69,14 @@ class DayModalFragment : DialogFragment() {
         val saveButton = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.saveButton)
         val audioStatus = view.findViewById<TextView>(R.id.audioStatus)
         audioSeekBar = view.findViewById(R.id.audioSeekBar)
+        tvCurrentTime = view.findViewById(R.id.tvCurrentTime)
+        tvTotalTime = view.findViewById(R.id.tvTotalTime)
+        seekBarContainer = view.findViewById(R.id.seekBarContainer)
         playAudioButton = view.findViewById(R.id.playAudioButton)
         deleteAudioButton = view.findViewById(R.id.deleteAudioButton)
         audioControlsLayout = view.findViewById(R.id.audioControlsLayout)
+
+        setupSeekBarListener()
 
 
         date?.let { d ->
@@ -82,24 +94,36 @@ class DayModalFragment : DialogFragment() {
             audioFile = getAudioFile(d)
             if (audioFile?.exists() == true) {
                 audioStatus.text = "Audio grabado disponible"
-                audioSeekBar.visibility = View.VISIBLE
+                seekBarContainer.visibility = View.VISIBLE
                 audioControlsLayout.visibility = View.VISIBLE
                 setupAudioPlayer(audioFile!!)
             } else {
-                audioSeekBar.visibility = View.GONE
+                seekBarContainer.visibility = View.GONE
                 audioControlsLayout.visibility = View.GONE
             }
         }
 
-        recordAudioButton.setOnClickListener {
+ recordAudioButton.setOnClickListener {
             if (isRecording) {
                 stopRecording()
                 recordAudioButton.text = "Grabar Audio"
                 audioStatus.text = "Grabación detenida"
+                
+                // Si se guardó el archivo, cargarlo
+                audioFile?.let { file ->
+                    if (file.exists()) {
+                        audioStatus.text = "Audio grabado disponible"
+                        seekBarContainer.visibility = View.VISIBLE
+                        audioControlsLayout.visibility = View.VISIBLE
+                        setupAudioPlayer(file)
+                    }
+                }
             } else {
                 startRecording()
                 recordAudioButton.text = "Detener Grabación"
                 audioStatus.text = "Grabando..."
+                seekBarContainer.visibility = View.VISIBLE
+                audioControlsLayout.visibility = View.GONE
             }
         }
 
@@ -115,7 +139,7 @@ class DayModalFragment : DialogFragment() {
             mediaPlayer?.release()
             mediaPlayer = null
             audioStatus.text = ""
-            audioSeekBar.visibility = View.GONE
+            seekBarContainer.visibility = View.GONE
             audioControlsLayout.visibility = View.GONE
             Toast.makeText(context, "Audio borrado", Toast.LENGTH_SHORT).show()
         }
@@ -167,6 +191,8 @@ class DayModalFragment : DialogFragment() {
                     start()
                 }
                 isRecording = true
+                recordStartTime = System.currentTimeMillis()
+                startRecordingProgressUpdate()
                 Toast.makeText(context, "Grabación iniciada", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Toast.makeText(context, "Error al iniciar grabación: ${e.message} (Código: ${e.cause})", Toast.LENGTH_LONG).show()
@@ -184,6 +210,7 @@ class DayModalFragment : DialogFragment() {
                 }
                 mediaRecorder = null
                 isRecording = false
+                stopProgressUpdates()
                 Toast.makeText(context, "Grabación guardada", Toast.LENGTH_SHORT).show()
             } catch (e: Exception) {
                 Toast.makeText(context, "Error al detener grabación: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -206,39 +233,102 @@ class DayModalFragment : DialogFragment() {
 
     private fun setupAudioPlayer(file: File) {
         try {
+            mediaPlayer?.release()
             mediaPlayer = MediaPlayer().apply {
                 setDataSource(file.absolutePath)
                 prepare()
                 setOnCompletionListener {
                     updatePlayButtonText()
-                    audioSeekBar.setProgress(0)
+                    audioSeekBar.progress = 0
+                    tvCurrentTime.text = formatTime(0)
+                    stopProgressUpdates()
                 }
             }
             val duration = mediaPlayer!!.duration
-            audioSeekBar.setMax(duration)
-            val handler = Handler(Looper.getMainLooper())
-            val runnable = object : Runnable {
-                override fun run() {
-                    mediaPlayer?.let {
-                        if (it.isPlaying) {
-                            audioSeekBar.setProgress(it.currentPosition)
-                            handler.postDelayed(this, 100)
-                        }
-                    }
-                }
-            }
-            handler.post(runnable)
+            audioSeekBar.max = duration
+            tvTotalTime.text = formatTime(duration)
+            tvCurrentTime.text = formatTime(0)
+            audioSeekBar.progress = 0
+            
         } catch (e: Exception) {
             Toast.makeText(context, "Error al cargar audio: ${e.message}", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun setupSeekBarListener() {
+        audioSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    mediaPlayer?.seekTo(progress)
+                    tvCurrentTime.text = formatTime(progress)
+                }
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                if (mediaPlayer?.isPlaying == true) {
+                    stopProgressUpdates()
+                }
+            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                if (mediaPlayer?.isPlaying == true) {
+                    startPlaybackProgressUpdate()
+                }
+            }
+        })
+    }
+
+    private fun startPlaybackProgressUpdate() {
+        stopProgressUpdates()
+        updateProgressRunnable = object : Runnable {
+            override fun run() {
+                mediaPlayer?.let {
+                    if (it.isPlaying) {
+                        val current = it.currentPosition
+                        audioSeekBar.progress = current
+                        tvCurrentTime.text = formatTime(current)
+                        handler.postDelayed(this, 100)
+                    }
+                }
+            }
+        }
+        handler.post(updateProgressRunnable!!)
+    }
+
+    private fun startRecordingProgressUpdate() {
+        stopProgressUpdates()
+        audioSeekBar.max = 300000 // 5 minutos max (referencia, se puede ajustar)
+        tvTotalTime.text = "--:--"
+        updateProgressRunnable = object : Runnable {
+            override fun run() {
+                if (isRecording) {
+                    val elapsed = (System.currentTimeMillis() - recordStartTime).toInt()
+                    audioSeekBar.progress = elapsed
+                    tvCurrentTime.text = formatTime(elapsed)
+                    handler.postDelayed(this, 100)
+                }
+            }
+        }
+        handler.post(updateProgressRunnable!!)
+    }
+
+    private fun stopProgressUpdates() {
+        updateProgressRunnable?.let { handler.removeCallbacks(it) }
+        updateProgressRunnable = null
+    }
+
+    private fun formatTime(millis: Int): String {
+        val seconds = (millis / 1000) % 60
+        val minutes = (millis / (1000 * 60)) % 60
+        return String.format("%02d:%02d", minutes, seconds)
     }
 
     private fun togglePlayback() {
         mediaPlayer?.let {
             if (it.isPlaying) {
                 it.pause()
+                stopProgressUpdates()
             } else {
                 it.start()
+                startPlaybackProgressUpdate()
             }
             updatePlayButtonText()
         }
