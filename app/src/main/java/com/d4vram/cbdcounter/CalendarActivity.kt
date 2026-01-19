@@ -17,7 +17,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class StatsActivity : AppCompatActivity(), NoteBottomSheet.Listener {
+class CalendarActivity : AppCompatActivity(), NoteBottomSheet.Listener {
 
     private lateinit var toolbar: MaterialToolbar
     private lateinit var monthLabel: TextView
@@ -50,6 +50,8 @@ class StatsActivity : AppCompatActivity(), NoteBottomSheet.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stats)
+
+        window.statusBarColor = getColor(R.color.gradient_start)
 
         toolbar = findViewById(R.id.statsToolbar)
         monthLabel = findViewById(R.id.monthLabel)

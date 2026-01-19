@@ -205,35 +205,33 @@ class CBDWidgetProvider : AppWidgetProvider() {
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 
-    private fun incrementCounter(context: Context) {
+    private fun incrementActiveCounter(context: Context) {
         val today = getCurrentDateKey()
-        val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val currentCount = sharedPrefs.getInt("$KEY_COUNT_PREFIX$today", 0)
-
-        sharedPrefs.edit()
-            .putInt("$KEY_COUNT_PREFIX$today", currentCount + 1)
-            .apply()
+        Prefs.incrementActiveCount(context, today)
     }
 
     private fun addStandardCBD(context: Context) {
-        incrementCounter(context)
-        val entry = "🔹 ${getCurrentTimestamp()}"
+        incrementActiveCounter(context)
+        val isThc = Prefs.getSubstanceType(context) == "THC"
+        val entry = if (isThc) "🟢 ${getCurrentTimestamp()}" else "🔹 ${getCurrentTimestamp()}"
         appendNote(context, entry)
     }
 
     private fun resetCBD(context: Context) {
         val today = getCurrentDateKey()
-        val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-
-        sharedPrefs.edit()
-            .putInt("$KEY_COUNT_PREFIX$today", 0)
-            .apply()
+        // Reset solo el contador del modo activo
+        val isThc = Prefs.getSubstanceType(context) == "THC"
+        if (isThc) {
+            Prefs.setThcCount(context, today, 0)
+        } else {
+            Prefs.setCbdCount(context, today, 0)
+        }
     }
 
     private fun getCurrentCount(context: Context): Int {
         val today = getCurrentDateKey()
-        val sharedPrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        return sharedPrefs.getInt("$KEY_COUNT_PREFIX$today", 0)
+        // Devolver el contador del modo activo
+        return Prefs.getActiveCount(context, today)
     }
 
     private fun getCurrentDateKey(): String {
@@ -247,13 +245,13 @@ class CBDWidgetProvider : AppWidgetProvider() {
     }
 
     private fun addWeed(context: Context) {
-        incrementCounter(context)
+        incrementActiveCounter(context)
         val entry = "🌿 ${getCurrentTimestamp()} (aliñado con weed)"
         appendNote(context, entry)
     }
 
     private fun addPolem(context: Context) {
-        incrementCounter(context)
+        incrementActiveCounter(context)
         val entry = "🍫 ${getCurrentTimestamp()} (aliñado con polen)"
         appendNote(context, entry)
     }

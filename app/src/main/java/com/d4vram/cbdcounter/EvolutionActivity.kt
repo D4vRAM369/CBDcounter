@@ -26,6 +26,8 @@ class EvolutionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_evolution)
 
+        window.statusBarColor = getColor(R.color.gradient_start)
+
         val toolbar = findViewById<MaterialToolbar>(R.id.evolutionToolbar)
         toolbar.setNavigationOnClickListener { finish() }
 

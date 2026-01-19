@@ -46,4 +46,41 @@
     <string name="prev_range">Anterior</string>
     <string name="next_range">Siguiente</string>
 
+    <!-- Dashboard Strings -->
+    <string name="dashboard_title">Estadísticas</string>
+    <string name="card_today">Hoy</string>
+    <string name="card_week">Semana</string>
+    <string name="card_avg">Promedio</string>
+    <string name="card_streak">Racha</string>
+    <string name="view_calendar">📅 Ver calendario completo</string>
+    <string name="patterns_title">Patrones</string>
+    <string name="pattern_busiest_day">Día más activo: %1$s</string>
+    <string name="pattern_best_day">Mejor día: %1$s (%2$d)</string>
+
+    <!-- Toggle & THC Strings -->
+    <string name="settings_substance_title">Tipo de Sustancia</string>
+    <string name="thc">THC</string>
+    <string name="thc_added">THC agregado</string>
+    <string name="thc_subtracted">THC restado</string>
+    <string name="thc_infused_added_weed">THC con weed agregado</string>
+    <string name="thc_infused_added_polem">THC con polen agregado</string>
+    <string name="infusion_question_thc">¿Qué estás fumando?</string>
+    <string name="infusion_subtitle_thc">Etiqueta la toma con vibra 420.</string>
+
+    <!-- Settings Strings -->
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_backup_title">Copia de Seguridad</string>
+    <string name="backup_auto_label">Backup automático</string>
+    <string name="backup_csv_btn">📄 Exportar datos (CSV)</string>
+    <string name="backup_audio_btn">🎙️ Exportar audios (ZIP)</string>
+    <string name="backup_create_btn">💾 Crear backup ahora</string>
+    <string name="backup_restore_btn">📥 Restaurar backup</string>
+    <string name="backup_encrypt_label">Cifrar con contraseña (AES-256)</string>
+    <string name="backup_success">Backup creado con éxito</string>
+    <string name="restore_success">Datos restaurados correctamente</string>
+    <string name="backup_password_prompt">Introduce contraseña del backup</string>
+    <string name="settings_emoji_title">Personalizar Emojis</string>
+    <string name="settings_emoji_subtitle">Toca un emoji para cambiarlo. Se actualizará en la pantalla principal y en el widget.</string>
+    <string name="settings_reset_emoji">Restaurar emojis por defecto</string>
+
 </resources>
