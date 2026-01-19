@@ -817,7 +817,18 @@ class MainActivity : AppCompatActivity() {
         val label = getString(type.labelRes)
         val suffix = getString(R.string.infusion_note_suffix, label)
         val entry = "${type.icon} ${getCurrentTimestamp()}$suffix"
-        registerIntake(entry, getString(type.feedbackRes))
+        // Infusión (weed/polen) SIEMPRE suma a THC
+        registerThcIntake(entry, getString(type.feedbackRes))
+    }
+
+    /** Registra una toma que siempre va al contador THC (para infusiones) */
+    private fun registerThcIntake(entry: String, feedbackMessage: String) {
+        thcCount++
+        updateDisplay()
+        appendEntryToTodayNote(entry)
+        saveData()
+        animateCounter(1.1f)
+        showFeedback("$feedbackMessage (THC)", false)
     }
 
     private fun registerIntake(entry: String, feedbackMessage: String) {
