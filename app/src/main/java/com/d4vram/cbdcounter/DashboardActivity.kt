@@ -1,7 +1,9 @@
 package com.d4vram.cbdcounter
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
@@ -17,6 +19,7 @@ import java.util.*
 class DashboardActivity : AppCompatActivity() {
 
     private lateinit var sharedPrefs: SharedPreferences
+    private lateinit var dataChangeReceiver: android.content.BroadcastReceiver
     private lateinit var lineChart: LineChartView
     private lateinit var tvToday: TextView
     private lateinit var tvWeek: TextView
@@ -35,6 +38,24 @@ class DashboardActivity : AppCompatActivity() {
         window.statusBarColor = getColor(R.color.gradient_start)
 
         sharedPrefs = getSharedPreferences("CBDCounter", Context.MODE_PRIVATE)
+
+        // Initialize broadcast receiver for data changes (e.g., after CSV import)
+        dataChangeReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == MainActivity.ACTION_DATA_CHANGED) {
+                    // Refresh stats when data changes
+                    calculateStats()
+                    // Determine current selected chip range
+                    val rangeChipGroup = findViewById<ChipGroup>(R.id.rangeChipGroup)
+                    val days = when (rangeChipGroup.checkedChipId) {
+                        R.id.chip14Days -> 14
+                        R.id.chip30Days -> 30
+                        else -> 7
+                    }
+                    loadChartData(days)
+                }
+            }
+        }
 
         val toolbar = findViewById<MaterialToolbar>(R.id.dashboardToolbar)
         setSupportActionBar(toolbar)
@@ -72,6 +93,9 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        // Register receiver for data changes
+        registerReceiver(dataChangeReceiver, IntentFilter(MainActivity.ACTION_DATA_CHANGED), Context.RECEIVER_NOT_EXPORTED)
+
         // Refresh data on resume (in case settings changed or user returned from calendar)
         calculateStats()
         // Determine current selected chip range
@@ -82,6 +106,16 @@ class DashboardActivity : AppCompatActivity() {
             else -> 7
         }
         loadChartData(days)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Unregister receiver to avoid memory leaks
+        try {
+            unregisterReceiver(dataChangeReceiver)
+        } catch (e: IllegalArgumentException) {
+            // Receiver already unregistered, ignore
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -102,7 +136,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun calculateStats() {
         // 1. Today
         val todayKey = dateKeyFormat.format(Date())
-        val todayCount = sharedPrefs.getInt("count_$todayKey", 0)
+        val todayCount = Prefs.getTotalCount(this, todayKey)
         tvToday.text = todayCount.toString()
 
         // 2. Week Total & Average
@@ -116,7 +150,7 @@ class DashboardActivity : AppCompatActivity() {
         val tempCal = Calendar.getInstance()
         for (i in 0 until 7) {
             val key = dateKeyFormat.format(tempCal.time)
-            val c = sharedPrefs.getInt("count_$key", 0)
+            val c = Prefs.getTotalCount(this, key)
             weekTotal += c
             counts.add(c)
             tempCal.add(Calendar.DAY_OF_YEAR, -1) // go back
@@ -129,8 +163,9 @@ class DashboardActivity : AppCompatActivity() {
         var daysWithData = 0
         for (i in 0 until 30) {
              val key = dateKeyFormat.format(avgCal.time)
-             if (sharedPrefs.contains("count_$key")) {
-                 total30 += sharedPrefs.getInt("count_$key", 0)
+             val dayTotal = Prefs.getTotalCount(this, key)
+             if (dayTotal > 0) {
+                 total30 += dayTotal
                  daysWithData++
              }
              avgCal.add(Calendar.DAY_OF_YEAR, -1)
@@ -169,7 +204,7 @@ class DashboardActivity : AppCompatActivity() {
             val key = dateKeyFormat.format(checkingDate.time)
             // If we don't have data for a day, do we assume 0 (clean)?
             // Usually yes if it's in the past.
-            val count = sharedPrefs.getInt("count_$key", 0)
+            val count = Prefs.getTotalCount(this, key)
             if (count == 0) {
                 streak++
             } else {
@@ -181,32 +216,32 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     private fun calculatePatterns() {
-        val allData = sharedPrefs.all
+        val allDates = Prefs.getAllDatesWithData(this)
         val dayCounts = IntArray(7) { 0 } // Sun=0, Mon=1...
         val dayOccurrences = IntArray(7) { 0 }
         
         var maxCount = 0
         var bestDate = ""
 
-        allData.forEach { (key, value) ->
-            if (key.startsWith("count_") && value is Int) {
-                val dateStr = key.removePrefix("count_")
-                try {
-                    val date = dateKeyFormat.parse(dateStr)
-                    if (date != null && value > 0) {
+        allDates.forEach { dateStr ->
+            try {
+                val date = dateKeyFormat.parse(dateStr)
+                if (date != null) {
+                    val totalCount = Prefs.getTotalCount(this, dateStr)
+                    if (totalCount > 0) {
                         val cal = Calendar.getInstance()
                         cal.time = date
                         val dayOfWeek = cal.get(Calendar.DAY_OF_WEEK) - 1 // 0-indexed
-                        dayCounts[dayOfWeek] += value
+                        dayCounts[dayOfWeek] += totalCount
                         dayOccurrences[dayOfWeek]++
                         
-                        if (value > maxCount) {
-                            maxCount = value
+                        if (totalCount > maxCount) {
+                            maxCount = totalCount
                             bestDate = dateStr
                         }
                     }
-                } catch (_: Exception) {}
-            }
+                }
+            } catch (_: Exception) {}
         }
 
         // Busiest Day (Highest Average)
@@ -241,7 +276,7 @@ class DashboardActivity : AppCompatActivity() {
         for (i in 0 until days) {
             val dateKey = dateKeyFormat.format(calendar.time)
             val label = labelFormat.format(calendar.time)
-            val count = sharedPrefs.getInt("count_$dateKey", 0)
+            val count = Prefs.getTotalCount(this, dateKey)
             dataPoints.add(Pair(label, count))
             calendar.add(Calendar.DAY_OF_YEAR, 1)
         }

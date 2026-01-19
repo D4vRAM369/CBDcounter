@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
@@ -40,38 +41,11 @@ import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
-    // Views principales
-    private lateinit var counterText: TextView  // Oculto, para compatibilidad
-    private lateinit var cbdCountText: TextView
-    private lateinit var thcCountText: TextView
-    private lateinit var cbdContainer: View
-    private lateinit var thcContainer: View
-    private lateinit var dateText: TextView
-    private lateinit var emojiText: TextView
-    private lateinit var addButton: Button
-    private lateinit var addInfusedButton: MaterialButton
-    private lateinit var statsButton: Chip
-    private lateinit var subtractButton: Button
-    private lateinit var resetButton: Button
-    private lateinit var exportButton: ImageButton
-    private lateinit var importButton: ImageButton
-    private lateinit var settingsButton: ImageButton
-
-    // Botón switch para cambiar el tema
-    private lateinit var themeSwitch: SwitchMaterial
-
-    // Views del historial mejorado
-    private lateinit var historyRecyclerView: RecyclerView
-    private lateinit var historyAdapter: ImprovedHistoryAdapter
-    private lateinit var tabLayout: TabLayout
-    private lateinit var statsContainer: View
-    private lateinit var avgText: TextView
-    private lateinit var totalText: TextView
-    private lateinit var streakText: TextView
-    private lateinit var searchButton: ImageButton
-
-    // Data
     private lateinit var sharedPrefs: SharedPreferences
+
+    companion object {
+        const val ACTION_DATA_CHANGED = "com.d4vram.cbdcounter.ACTION_DATA_CHANGED"
+    }
     private var cbdCount = 0
     private var thcCount = 0
     private val currentCount: Int get() = cbdCount + thcCount  // Total para emoji y compatibilidad
@@ -86,6 +60,32 @@ class MainActivity : AppCompatActivity() {
         "application/vnd.ms-excel",
         "text/plain"
     )
+
+    // View variables
+    private lateinit var counterText: TextView
+    private lateinit var cbdCountText: TextView
+    private lateinit var thcCountText: TextView
+    private lateinit var cbdContainer: View
+    private lateinit var thcContainer: View
+    private lateinit var dateText: TextView
+    private lateinit var emojiText: TextView
+    private lateinit var addButton: MaterialButton
+    private lateinit var addInfusedButton: MaterialButton
+    private lateinit var statsButton: Chip  // Changed from MaterialButton to Chip
+    private lateinit var subtractButton: MaterialButton
+    private lateinit var resetButton: MaterialButton
+    private lateinit var exportButton: ImageButton
+    private lateinit var importButton: ImageButton
+    private lateinit var settingsButton: ImageButton
+    private lateinit var themeSwitch: SwitchMaterial
+    private lateinit var historyRecyclerView: RecyclerView
+    private lateinit var tabLayout: TabLayout
+    private lateinit var statsContainer: LinearLayout
+    private lateinit var avgText: TextView
+    private lateinit var totalText: TextView
+    private lateinit var streakText: TextView
+    private lateinit var searchButton: ImageButton
+    private lateinit var historyAdapter: ImprovedHistoryAdapter
 
     // Receptor para detectar cambio de día/hora mientras la app está abierta
     private val dateChangeReceiver = object : BroadcastReceiver() {
@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity() {
             addAction(Intent.ACTION_TIME_CHANGED)
             addAction(Intent.ACTION_TIMEZONE_CHANGED)
         }
-        registerReceiver(dateChangeReceiver, filter)
+        registerReceiver(dateChangeReceiver, filter, Context.RECEIVER_NOT_EXPORTED)
     }
 
     override fun onPause() {
@@ -694,6 +694,9 @@ class MainActivity : AppCompatActivity() {
                 updateDisplay()
                 updateHistoryView()
                 updateStats()
+
+                // Notify other activities (like DashboardActivity) that data has changed
+                sendBroadcast(Intent(ACTION_DATA_CHANGED))
             }
             showFeedback("Importación completada", false)
         }.onFailure { e ->

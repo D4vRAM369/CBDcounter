@@ -161,9 +161,8 @@ class CalendarActivity : AppCompatActivity(), NoteBottomSheet.Listener {
         for (day in 1..daysInMonth) {
             workingCalendar.set(Calendar.DAY_OF_MONTH, day)
             val dateKey = dateKeyFormat.format(workingCalendar.time)
-            val prefKey = "count_$dateKey"
-            val hasData = sharedPrefs.contains(prefKey)
-            val count = sharedPrefs.getInt(prefKey, 0)
+            val count = Prefs.getTotalCount(this, dateKey)
+            val hasData = count > 0
             val emoji = if (hasData) EmojiUtils.emojiForCount(count, this) else ""
             val isToday = dateKey == todayKey &&
                 todayCalendar.get(Calendar.MONTH) == currentMonth &&

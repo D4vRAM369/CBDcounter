@@ -245,15 +245,23 @@ class CBDWidgetProvider : AppWidgetProvider() {
     }
 
     private fun addWeed(context: Context) {
-        incrementActiveCounter(context)
+        // Weed SIEMPRE suma a THC
+        incrementThcCounter(context)
         val entry = "🌿 ${getCurrentTimestamp()} (aliñado con weed)"
         appendNote(context, entry)
     }
 
     private fun addPolem(context: Context) {
-        incrementActiveCounter(context)
+        // Polen SIEMPRE suma a THC
+        incrementThcCounter(context)
         val entry = "🍫 ${getCurrentTimestamp()} (aliñado con polen)"
         appendNote(context, entry)
+    }
+
+    private fun incrementThcCounter(context: Context) {
+        val today = getCurrentDateKey()
+        val currentThc = Prefs.getThcCount(context, today)
+        Prefs.setThcCount(context, today, currentThc + 1)
     }
 
     private fun appendNote(context: Context, entry: String) {
