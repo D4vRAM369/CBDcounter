@@ -640,20 +640,28 @@ class MainActivity : AppCompatActivity() {
 
     private fun escapeCsvField(value: String): String {
         if (value.isEmpty()) return ""
-        val builder = StringBuilder()
-        value.forEach { char ->
-            when (char) {
-                '\\' -> builder.append("\\\\")
-                '\n' -> builder.append("\\n")
-                ',' -> builder.append("\\,")
-                else -> builder.append(char)
-            }
+        
+        // RFC 4180: Si el campo contiene comas, saltos de línea o comillas,
+        // debe ir entre comillas dobles. Las comillas dobles se duplican.
+        val needsQuotes = value.contains(',') || value.contains('\n') || value.contains('"') || value.contains('\r')
+        
+        return if (needsQuotes) {
+            // Duplicar comillas dobles y envolver todo en comillas
+            "\"${value.replace("\"", "\"\"")}\""
+        } else {
+            value
         }
-        return builder.toString()
     }
 
     private fun unescapeCsvField(value: String): String {
         if (value.isEmpty()) return ""
+        
+        // RFC 4180: Si el campo está entre comillas, removerlas y desduplicar comillas internas
+        if (value.startsWith("\"") && value.endsWith("\"") && value.length >= 2) {
+            return value.substring(1, value.length - 1).replace("\"\"", "\"")
+        }
+        
+        // Backward compatibility: Manejar formato antiguo con backslash
         val builder = StringBuilder()
         var escape = false
         value.forEach { char ->
