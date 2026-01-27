@@ -230,8 +230,8 @@ class CBDWidgetProvider : AppWidgetProvider() {
 
     private fun getCurrentCount(context: Context): Int {
         val today = getCurrentDateKey()
-        // Devolver el contador del modo activo
-        return Prefs.getActiveCount(context, today)
+        // Devolver el TOTAL del día (CBD + THC)
+        return Prefs.getTotalCount(context, today)
     }
 
     private fun getCurrentDateKey(): String {
@@ -245,13 +245,17 @@ class CBDWidgetProvider : AppWidgetProvider() {
     }
 
     private fun addWeed(context: Context) {
-        incrementActiveCounter(context)
+        // Weed siempre suma a THC, independiente del modo activo
+        val today = getCurrentDateKey()
+        Prefs.setThcCount(context, today, Prefs.getThcCount(context, today) + 1)
         val entry = "🌿 ${getCurrentTimestamp()} (aliñado con weed)"
         appendNote(context, entry)
     }
 
     private fun addPolem(context: Context) {
-        incrementActiveCounter(context)
+        // Polen siempre suma a THC, independiente del modo activo
+        val today = getCurrentDateKey()
+        Prefs.setThcCount(context, today, Prefs.getThcCount(context, today) + 1)
         val entry = "🍫 ${getCurrentTimestamp()} (aliñado con polen)"
         appendNote(context, entry)
     }
