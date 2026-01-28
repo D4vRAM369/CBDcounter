@@ -1,6 +1,5 @@
 package com.d4vram.cbdcounter
 
-import android.content.Context
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.TextView
@@ -66,7 +65,6 @@ class EvolutionActivity : AppCompatActivity() {
 
     private fun loadData(days: Int, offset: Int) {
         evolutionTitle.text = "Últimos $days días"
-        val sharedPrefs = getSharedPreferences("CBDCounter", Context.MODE_PRIVATE)
         val dataPoints = mutableListOf<Pair<String, Int>>()
         val calendar = Calendar.getInstance()
         // Move back 'offset' days from today
@@ -77,8 +75,7 @@ class EvolutionActivity : AppCompatActivity() {
         for (i in 0 until days) {
             val dateKey = dateKeyFormat.format(calendar.time)
             val label = labelFormat.format(calendar.time)
-            val prefKey = "count_$dateKey"
-            val count = sharedPrefs.getInt(prefKey, 0)
+            val count = Prefs.getTotalCount(this, dateKey)
             dataPoints.add(Pair(label, count))
             calendar.add(Calendar.DAY_OF_YEAR, 1)
         }

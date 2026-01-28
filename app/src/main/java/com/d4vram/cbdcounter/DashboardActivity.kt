@@ -102,7 +102,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun calculateStats() {
         // 1. Today
         val todayKey = dateKeyFormat.format(Date())
-        val todayCount = sharedPrefs.getInt("count_$todayKey", 0)
+        val todayCount = Prefs.getTotalCount(this, todayKey)
         tvToday.text = todayCount.toString()
 
         // 2. Week Total & Average
@@ -116,7 +116,7 @@ class DashboardActivity : AppCompatActivity() {
         val tempCal = Calendar.getInstance()
         for (i in 0 until 7) {
             val key = dateKeyFormat.format(tempCal.time)
-            val c = sharedPrefs.getInt("count_$key", 0)
+            val c = Prefs.getTotalCount(this, key)
             weekTotal += c
             counts.add(c)
             tempCal.add(Calendar.DAY_OF_YEAR, -1) // go back
@@ -129,8 +129,9 @@ class DashboardActivity : AppCompatActivity() {
         var daysWithData = 0
         for (i in 0 until 30) {
              val key = dateKeyFormat.format(avgCal.time)
-             if (sharedPrefs.contains("count_$key")) {
-                 total30 += sharedPrefs.getInt("count_$key", 0)
+             val count = Prefs.getTotalCount(this, key)
+             if (count > 0) {
+                 total30 += count
                  daysWithData++
              }
              avgCal.add(Calendar.DAY_OF_YEAR, -1)
@@ -169,7 +170,7 @@ class DashboardActivity : AppCompatActivity() {
             val key = dateKeyFormat.format(checkingDate.time)
             // If we don't have data for a day, do we assume 0 (clean)?
             // Usually yes if it's in the past.
-            val count = sharedPrefs.getInt("count_$key", 0)
+            val count = Prefs.getTotalCount(this, key)
             if (count == 0) {
                 streak++
             } else {
@@ -181,32 +182,32 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     private fun calculatePatterns() {
-        val allData = sharedPrefs.all
         val dayCounts = IntArray(7) { 0 } // Sun=0, Mon=1...
         val dayOccurrences = IntArray(7) { 0 }
         
         var maxCount = 0
         var bestDate = ""
 
-        allData.forEach { (key, value) ->
-            if (key.startsWith("count_") && value is Int) {
-                val dateStr = key.removePrefix("count_")
-                try {
-                    val date = dateKeyFormat.parse(dateStr)
-                    if (date != null && value > 0) {
-                        val cal = Calendar.getInstance()
-                        cal.time = date
-                        val dayOfWeek = cal.get(Calendar.DAY_OF_WEEK) - 1 // 0-indexed
-                        dayCounts[dayOfWeek] += value
-                        dayOccurrences[dayOfWeek]++
-                        
-                        if (value > maxCount) {
-                            maxCount = value
-                            bestDate = dateStr
-                        }
+        // Usar Prefs.getAllDatesWithData para obtener fechas con datos
+        val datesWithData = Prefs.getAllDatesWithData(this)
+        
+        datesWithData.forEach { dateStr ->
+            try {
+                val date = dateKeyFormat.parse(dateStr)
+                val count = Prefs.getTotalCount(this, dateStr)
+                if (date != null && count > 0) {
+                    val cal = Calendar.getInstance()
+                    cal.time = date
+                    val dayOfWeek = cal.get(Calendar.DAY_OF_WEEK) - 1 // 0-indexed
+                    dayCounts[dayOfWeek] += count
+                    dayOccurrences[dayOfWeek]++
+                    
+                    if (count > maxCount) {
+                        maxCount = count
+                        bestDate = dateStr
                     }
-                } catch (_: Exception) {}
-            }
+                }
+            } catch (_: Exception) {}
         }
 
         // Busiest Day (Highest Average)
@@ -241,7 +242,7 @@ class DashboardActivity : AppCompatActivity() {
         for (i in 0 until days) {
             val dateKey = dateKeyFormat.format(calendar.time)
             val label = labelFormat.format(calendar.time)
-            val count = sharedPrefs.getInt("count_$dateKey", 0)
+            val count = Prefs.getTotalCount(this, dateKey)
             dataPoints.add(Pair(label, count))
             calendar.add(Calendar.DAY_OF_YEAR, 1)
         }

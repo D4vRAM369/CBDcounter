@@ -165,33 +165,26 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun buildCsvContent(): String {
-        val prefs = getSharedPreferences("CBDCounter", MODE_PRIVATE)
-        val allEntries = prefs.all
-        if (allEntries.isEmpty()) return ""
-
-        val dates = mutableSetOf<String>()
-        allEntries.keys.forEach { key ->
-            when {
-                key.startsWith("count_") -> dates.add(key.removePrefix("count_"))
-                key.startsWith("NOTE_") -> dates.add(key.removePrefix("NOTE_"))
-            }
-        }
-        if (dates.isEmpty()) return ""
+        val allDates = Prefs.getAllDatesWithData(this)
+        if (allDates.isEmpty()) return ""
 
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val sortedDates = dates.mapNotNull { dateString ->
+        val sortedDates = allDates.mapNotNull { dateString ->
             kotlin.runCatching { dateFormat.parse(dateString) }.getOrNull()?.let { parsed ->
                 dateString to parsed
             }
         }.sortedBy { it.second }
 
-        val builder = StringBuilder("date,count,note\n")
+        val builder = StringBuilder("date,count_cbd,count_thc,note\n")
         sortedDates.forEach { (dateString, _) ->
-            val count = prefs.getInt("count_$dateString", 0)
+            val cbdCount = Prefs.getCbdCount(this, dateString)
+            val thcCount = Prefs.getThcCount(this, dateString)
             val note = Prefs.getNote(this, dateString) ?: ""
             builder.append(dateString)
                 .append(',')
-                .append(count)
+                .append(cbdCount)
+                .append(',')
+                .append(thcCount)
                 .append(',')
                 .append(escapeCsvField(note))
                 .append('\n')
