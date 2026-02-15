@@ -84,13 +84,13 @@
 
 
 
-    <!-- Card del contador -->
+    <!-- Card del contador dual CBD/THC -->
     <androidx.cardview.widget.CardView
         android:id="@+id/counterCard"
-        android:layout_width="136dp"
-        android:layout_height="128dp"
-        android:layout_marginTop="145dp"
-        app:cardCornerRadius="70dp"
+        android:layout_width="220dp"
+        android:layout_height="155dp"
+        android:layout_marginTop="140dp"
+        app:cardCornerRadius="24dp"
         app:cardElevation="8dp"
         app:cardBackgroundColor="@color/surface"
         app:layout_constraintTop_toTopOf="parent"
@@ -101,24 +101,101 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:padding="12dp">
 
-            <TextView
-                android:id="@+id/counterText"
-                android:layout_width="wrap_content"
+            <!-- Contenedor de contadores duales -->
+            <LinearLayout
+                android:id="@+id/dualCounterContainer"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0"
-                android:textSize="36sp"
-                android:textStyle="bold"
-                android:textColor="@color/primary" />
+                android:orientation="horizontal"
+                android:gravity="center">
 
+                <!-- Contador CBD -->
+                <LinearLayout
+                    android:id="@+id/cbdContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@drawable/bg_counter_cbd">
+
+                    <TextView
+                        android:id="@+id/cbdCountText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/cbd_text" />
+
+                    <TextView
+                        android:id="@+id/cbdLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CBD"
+                        android:textSize="12sp"
+                        android:textColor="@color/cbd_text"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Separador -->
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@color/divider_color" />
+
+                <!-- Contador THC -->
+                <LinearLayout
+                    android:id="@+id/thcContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:background="@drawable/bg_counter_thc">
+
+                    <TextView
+                        android:id="@+id/thcCountText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="32sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/thc_text" />
+
+                    <TextView
+                        android:id="@+id/thcLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="THC"
+                        android:textSize="12sp"
+                        android:textColor="@color/thc_text"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Emoji basado en total -->
             <TextView
                 android:id="@+id/emojiText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="😌"
                 android:textSize="28sp"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="8dp" />
+
+            <!-- TextView oculto para compatibilidad (total) -->
+            <TextView
+                android:id="@+id/counterText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="0" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

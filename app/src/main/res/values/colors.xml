@@ -58,4 +58,18 @@
     <color name="calendar_today_stroke">#667eea</color>
     <color name="calendar_header_text">#6B7280</color>
 
+    <!-- Colores THC (Verde hierba) -->
+    <color name="thc_primary">#4CAF50</color>
+    <color name="thc_primary_dark">#388E3C</color>
+    <color name="thc_primary_light">#81C784</color>
+    <color name="thc_accent">#A5D6A7</color>
+    <color name="thc_chip_background">#E8F5E9</color>
+    <color name="thc_text">#2E7D32</color>
+    <color name="thc_weed_orange">#4CAF50</color>
+    <color name="thc_weed_outline">#81C784</color>
+
+    <!-- Colores CBD (Azul) para chips -->
+    <color name="cbd_chip_background">#E3F2FD</color>
+    <color name="cbd_text">#1565C0</color>
+
 </resources>

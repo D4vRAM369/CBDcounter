@@ -26,6 +26,8 @@ class EvolutionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_evolution)
 
+        window.statusBarColor = getColor(R.color.gradient_start)
+
         val toolbar = findViewById<MaterialToolbar>(R.id.evolutionToolbar)
         toolbar.setNavigationOnClickListener { finish() }
 
@@ -64,7 +66,6 @@ class EvolutionActivity : AppCompatActivity() {
 
     private fun loadData(days: Int, offset: Int) {
         evolutionTitle.text = "Últimos $days días"
-        val sharedPrefs = getSharedPreferences("CBDCounter", Context.MODE_PRIVATE)
         val dataPoints = mutableListOf<Pair<String, Int>>()
         val calendar = Calendar.getInstance()
         // Move back 'offset' days from today
@@ -75,8 +76,7 @@ class EvolutionActivity : AppCompatActivity() {
         for (i in 0 until days) {
             val dateKey = dateKeyFormat.format(calendar.time)
             val label = labelFormat.format(calendar.time)
-            val prefKey = "count_$dateKey"
-            val count = sharedPrefs.getInt(prefKey, 0)
+            val count = Prefs.getTotalCount(this, dateKey)
             dataPoints.add(Pair(label, count))
             calendar.add(Calendar.DAY_OF_YEAR, 1)
         }
