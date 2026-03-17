@@ -41,7 +41,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener {
+class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, VoiceNoteBottomSheet.Listener {
 
     // Views principales
     private lateinit var counterText: TextView  // Oculto, para compatibilidad
@@ -236,9 +236,13 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener {
         searchButton = findViewById(R.id.searchButton)
 
         // Adapter con callback para abrir el modal de notas
-        historyAdapter = ImprovedHistoryAdapter(displayedHistoryData) { date ->
-            DayModalFragment.newInstance(date).show(supportFragmentManager, "day_modal")
-        }
+        historyAdapter = ImprovedHistoryAdapter(
+            historyList = displayedHistoryData,
+            onDayClick = { date ->
+                DayModalFragment.newInstance(date).show(supportFragmentManager, "day_modal")
+            },
+            fragmentManager = supportFragmentManager
+        )
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
         historyRecyclerView.adapter = historyAdapter
 
@@ -769,6 +773,10 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener {
         registerIntake(entry, feedback)
     }
 
+    override fun onVoiceNoteChanged(date: String) {
+        historyAdapter.refresh()
+    }
+
     override fun onInfusionTypeSelected(type: String) {
         val infusionType = when (type) {
             "weed" -> InfusionType.WEED
@@ -915,7 +923,8 @@ data class HistoryItem(
 // Adapter
 class ImprovedHistoryAdapter(
     private val historyList: List<HistoryItem>,
-    private val onDayClick: (String) -> Unit
+    private val onDayClick: (String) -> Unit,
+    private val fragmentManager: androidx.fragment.app.FragmentManager? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -955,6 +964,7 @@ class ImprovedHistoryAdapter(
         val progressBar: View = itemView.findViewById(R.id.progressBar)
         val noteBadge: TextView? = itemView.findViewById(R.id.noteBadge)
         val audioBadge: TextView? = itemView.findViewById(R.id.audioBadge)
+        val voiceNoteButton: android.widget.ImageButton? = itemView.findViewById(R.id.voiceNoteButton)
     }
     class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val headerText: TextView = itemView.findViewById(R.id.headerText)
@@ -1053,6 +1063,17 @@ class ImprovedHistoryAdapter(
                 // Badge de audio visible si existe audio para ese día
                 holder.audioBadge?.visibility =
                     if (Prefs.hasAudio(ctx, item.date)) View.VISIBLE else View.GONE
+
+                // Botón de nota de voz: alpha según si ya hay grabación
+                holder.voiceNoteButton?.alpha =
+                    if (Prefs.hasVoiceNote(ctx, item.date)) 1f else 0.4f
+                holder.voiceNoteButton?.setOnClickListener {
+                    val fm = fragmentManager
+                        ?: (ctx as? androidx.appcompat.app.AppCompatActivity)?.supportFragmentManager
+                    fm?.let {
+                        VoiceNoteBottomSheet.new(item.date).show(it, "voice_note")
+                    }
+                }
 
                 // Clicks para abrir el modal
                 holder.itemView.setOnClickListener { onDayClick(item.date) }

@@ -128,6 +128,16 @@ object Prefs {
         editor.apply()
     }
 
+    // ---- Helpers para NOTAS DE VOZ ----
+    fun getVoiceNotePath(context: Context, date: String): String {
+        val dir = java.io.File(context.filesDir, "voice_notes").also { it.mkdirs() }
+        return java.io.File(dir, "$date.m4a").absolutePath
+    }
+
+    fun hasVoiceNote(context: Context, date: String): Boolean {
+        return java.io.File(getVoiceNotePath(context, date)).exists()
+    }
+
     /** Obtiene todas las fechas que tienen datos (para historial) */
     fun getAllDatesWithData(ctx: Context): Set<String> {
         val prefs = prefs(ctx)
