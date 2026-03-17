@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/stats_background"
+    android:background="@color/m3_surface"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -17,7 +17,7 @@
             android:id="@+id/dashboardToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/gradient_header"
+            android:background="?attr/colorPrimary"
             app:title="@string/dashboard_title"
             app:titleTextColor="@color/white"
             app:menu="@menu/dashboard_menu"
@@ -54,7 +54,8 @@
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
                     app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp">
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/m3_secondary_container">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -77,7 +78,7 @@
                             android:text="0"
                             android:textSize="24sp"
                             android:textStyle="bold"
-                            android:textColor="@color/primary"/>
+                            android:textColor="@color/m3_on_secondary_container"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -88,7 +89,8 @@
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
                     app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp">
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="?attr/colorSurfaceVariant">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -122,7 +124,8 @@
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
                     app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp">
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="?attr/colorSurfaceVariant">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -156,7 +159,8 @@
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
                     app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp">
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/m3_tertiary_container">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -179,7 +183,7 @@
                             android:text="0"
                             android:textSize="24sp"
                             android:textStyle="bold"
-                            android:textColor="@color/orange_dark"/>
+                            android:textColor="@color/m3_on_tertiary_container"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 

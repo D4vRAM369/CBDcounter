@@ -16,7 +16,7 @@
             android:id="@+id/settingsToolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@drawable/gradient_header"
+            android:background="?attr/colorPrimary"
             app:title="@string/settings_title"
             app:titleTextColor="@color/white"
             app:navigationIcon="@drawable/ic_arrow_left"
@@ -76,7 +76,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/divider_color"
+                android:background="@color/m3_outline"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="24dp"/>
 
@@ -144,7 +144,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/divider_color"
+                android:background="@color/m3_outline"
                 android:layout_marginBottom="24dp"/>
 
             <!-- ============ SECCIÓN: Personalizar Emojis ============ -->
