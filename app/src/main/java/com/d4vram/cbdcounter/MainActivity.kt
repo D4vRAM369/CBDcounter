@@ -47,8 +47,7 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
     private lateinit var counterText: TextView  // Oculto, para compatibilidad
     private lateinit var cbdCountText: TextView
     private lateinit var thcCountText: TextView
-    private lateinit var cbdContainer: View
-    private lateinit var thcContainer: View
+
     private lateinit var dateText: TextView
     private lateinit var emojiText: TextView
     private lateinit var addButton: Button
@@ -205,8 +204,7 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
         counterText = findViewById(R.id.counterText)  // Oculto, para compatibilidad
         cbdCountText = findViewById(R.id.cbdCountText)
         thcCountText = findViewById(R.id.thcCountText)
-        cbdContainer = findViewById(R.id.cbdContainer)
-        thcContainer = findViewById(R.id.thcContainer)
+
         dateText = findViewById(R.id.dateText)
         emojiText = findViewById(R.id.emojiText)
         addButton = findViewById(R.id.addButton)
@@ -441,19 +439,19 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
         val inactiveAlpha = 0.6f
 
         if (isThcActive) {
-            thcContainer.scaleX = activeScale
-            thcContainer.scaleY = activeScale
-            thcContainer.alpha = activeAlpha
-            cbdContainer.scaleX = inactiveScale
-            cbdContainer.scaleY = inactiveScale
-            cbdContainer.alpha = inactiveAlpha
+            thcCountText.scaleX = activeScale
+            thcCountText.scaleY = activeScale
+            thcCountText.alpha = activeAlpha
+            cbdCountText.scaleX = inactiveScale
+            cbdCountText.scaleY = inactiveScale
+            cbdCountText.alpha = inactiveAlpha
         } else {
-            cbdContainer.scaleX = activeScale
-            cbdContainer.scaleY = activeScale
-            cbdContainer.alpha = activeAlpha
-            thcContainer.scaleX = inactiveScale
-            thcContainer.scaleY = inactiveScale
-            thcContainer.alpha = inactiveAlpha
+            cbdCountText.scaleX = activeScale
+            cbdCountText.scaleY = activeScale
+            cbdCountText.alpha = activeAlpha
+            thcCountText.scaleX = inactiveScale
+            thcCountText.scaleY = inactiveScale
+            thcCountText.alpha = inactiveAlpha
         }
     }
 
