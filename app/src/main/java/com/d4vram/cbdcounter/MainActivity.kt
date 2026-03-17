@@ -41,7 +41,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener {
 
     // Views principales
     private lateinit var counterText: TextView  // Oculto, para compatibilidad
@@ -477,7 +477,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         addButton.setOnClickListener { registerStandardIntake() }
-        addInfusedButton.setOnClickListener { showInfusionDialog() }
+        addInfusedButton.setOnClickListener {
+            InfusionChoiceBottomSheet.new()
+                .show(supportFragmentManager, "infusion_choice")
+        }
         statsButton.setOnClickListener {
             startActivity(Intent(this, StatsActivity::class.java))
         }
@@ -766,45 +769,12 @@ class MainActivity : AppCompatActivity() {
         registerIntake(entry, feedback)
     }
 
-    private fun showInfusionDialog() {
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_infusion_choice, null)
-        val weedButton = dialogView.findViewById<MaterialButton>(R.id.weedButton)
-        val polemButton = dialogView.findViewById<MaterialButton>(R.id.polemButton)
-        val title = dialogView.findViewById<TextView>(R.id.infusionTitle)
-        val subtitle = dialogView.findViewById<TextView>(R.id.infusionSubtitle)
-
-        // Adjust text based on substance
-        val substanceType = Prefs.getSubstanceType(this)
-        if (substanceType == "THC") {
-            title.text = getString(R.string.infusion_question_thc)
-            subtitle.text = getString(R.string.infusion_subtitle_thc)
-            
-            // Adjust colors for THC mode
-            weedButton.setTextColor(ContextCompat.getColor(this, R.color.thc_weed_orange))
-            weedButton.strokeColor = androidx.core.content.res.ResourcesCompat.getColorStateList(resources, R.color.thc_weed_outline, theme)
-            polemButton.setTextColor(ContextCompat.getColor(this, R.color.thc_weed_orange))
-             polemButton.strokeColor = androidx.core.content.res.ResourcesCompat.getColorStateList(resources, R.color.thc_weed_outline, theme)
-        } 
-        // Default CBD strings are already in layout (or we can set them explicitely)
-
-        val dialog = MaterialAlertDialogBuilder(this)
-            .setView(dialogView)
-            .create()
-
-        weedButton.text = "${InfusionType.WEED.icon} ${getString(InfusionType.WEED.labelRes)}"
-        polemButton.text = "${InfusionType.POLEM.icon} ${getString(InfusionType.POLEM.labelRes)}"
-
-        weedButton.setOnClickListener {
-            handleInfusionSelection(InfusionType.WEED)
-            dialog.dismiss()
+    override fun onInfusionTypeSelected(type: String) {
+        val infusionType = when (type) {
+            "weed" -> InfusionType.WEED
+            else -> InfusionType.POLEM
         }
-        polemButton.setOnClickListener {
-            handleInfusionSelection(InfusionType.POLEM)
-            dialog.dismiss()
-        }
-
-        dialog.show()
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        handleInfusionSelection(infusionType)
     }
 
     private fun handleInfusionSelection(type: InfusionType) {
