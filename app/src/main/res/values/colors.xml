@@ -72,4 +72,34 @@
     <color name="cbd_chip_background">#E3F2FD</color>
     <color name="cbd_text">#1565C0</color>
 
+    <!-- ===== M3 Semantic tokens ===== -->
+    <!-- Primary: violeta M3 neutro -->
+    <color name="m3_primary">#6750A4</color>
+    <color name="m3_on_primary">#FFFFFF</color>
+    <color name="m3_primary_container">#EADDFF</color>
+    <color name="m3_on_primary_container">#21005D</color>
+
+    <!-- Secondary: CBD verde -->
+    <color name="m3_secondary">#4CAF50</color>
+    <color name="m3_on_secondary">#FFFFFF</color>
+    <color name="m3_secondary_container">#C8E6C9</color>
+    <color name="m3_on_secondary_container">#1B5E20</color>
+
+    <!-- Tertiary: THC púrpura -->
+    <color name="m3_tertiary">#7B1FA2</color>
+    <color name="m3_on_tertiary">#FFFFFF</color>
+    <color name="m3_tertiary_container">#E1BEE7</color>
+    <color name="m3_on_tertiary_container">#4A148C</color>
+
+    <!-- Surface dark -->
+    <color name="m3_surface">#141218</color>
+    <color name="m3_surface_variant">#2B2930</color>
+    <color name="m3_on_surface">#E6E1E5</color>
+    <color name="m3_on_surface_variant">#CAC4D0</color>
+    <color name="m3_outline">#938F99</color>
+
+    <!-- Polen ámbar -->
+    <color name="polen_amber">#FF8F00</color>
+    <color name="polen_amber_container">#FFF3E0</color>
+
 </resources>
