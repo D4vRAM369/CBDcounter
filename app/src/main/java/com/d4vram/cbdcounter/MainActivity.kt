@@ -14,7 +14,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,10 +29,11 @@ import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.chip.Chip
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.dynamicanimation.animation.SpringForce
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -50,15 +53,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var emojiText: TextView
     private lateinit var addButton: Button
     private lateinit var addInfusedButton: MaterialButton
-    private lateinit var statsButton: Chip
+    private lateinit var statsButton: ImageButton
     private lateinit var subtractButton: Button
     private lateinit var resetButton: Button
-    private lateinit var exportButton: ImageButton
-    private lateinit var importButton: ImageButton
     private lateinit var settingsButton: ImageButton
 
-    // Botón switch para cambiar el tema
-    private lateinit var themeSwitch: SwitchMaterial
+    // Botón para cambiar el tema
+    private lateinit var themeButton: ImageButton
 
     // Views del historial mejorado
     private lateinit var historyRecyclerView: RecyclerView
@@ -158,6 +159,13 @@ class MainActivity : AppCompatActivity() {
             updateDisplay(animate = false)
             updateHistoryView()
             updateStats()
+
+            // BottomSheet behavior
+            val bottomSheet = findViewById<LinearLayout>(R.id.bottomSheetContainer)
+            val sheetBehavior = BottomSheetBehavior.from(bottomSheet)
+            sheetBehavior.peekHeight = (260 * resources.displayMetrics.density).toInt()
+            sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            sheetBehavior.isHideable = false
         }.onFailure { e ->
             showFeedback("Error al iniciar la app: ${e.message}", true)
             e.printStackTrace()
@@ -206,19 +214,15 @@ class MainActivity : AppCompatActivity() {
         statsButton = findViewById(R.id.statsButton)
         subtractButton = findViewById(R.id.subtractButton)
         resetButton = findViewById(R.id.resetButton)
-        exportButton = findViewById(R.id.exportButton)
-        importButton = findViewById(R.id.importButton)
         settingsButton = findViewById(R.id.settingsButton)
-        themeSwitch = findViewById(R.id.themeSwitch)    
+        themeButton = findViewById(R.id.themeButton)
 
-        // Estado inicial del switch según preferencias o sistema
-        val isNight = isDarkModeEnabled()
-        themeSwitch.setOnCheckedChangeListener(null)
-        themeSwitch.isChecked = isNight
-        
-        themeSwitch.setOnCheckedChangeListener { _, checked ->
-            if (checked != isDarkModeEnabled()) {
-                setDarkMode(checked)
+        themeButton.setOnClickListener {
+            val currentMode = AppCompatDelegate.getDefaultNightMode()
+            if (currentMode == AppCompatDelegate.MODE_NIGHT_YES) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
         }
 
@@ -410,6 +414,7 @@ class MainActivity : AppCompatActivity() {
             emojiText.animate().alpha(0f).setDuration(150).withEndAction {
                 emojiText.text = newEmoji
                 emojiText.animate().alpha(1f).setDuration(150).start()
+                animateEmoji()
             }.start()
         } else {
             emojiText.alpha = 1f
@@ -473,7 +478,9 @@ class MainActivity : AppCompatActivity() {
     private fun setupClickListeners() {
         addButton.setOnClickListener { registerStandardIntake() }
         addInfusedButton.setOnClickListener { showInfusionDialog() }
-        statsButton.setOnClickListener { openStatsCalendar() }
+        statsButton.setOnClickListener {
+            startActivity(Intent(this, StatsActivity::class.java))
+        }
         settingsButton.setOnClickListener {
             // Abrir pantalla de ajustes generales
             startActivity(Intent(this, SettingsActivity::class.java))
@@ -533,19 +540,6 @@ class MainActivity : AppCompatActivity() {
                     updateDisplay()
                     saveData()
                     showFeedback("¡Día reiniciado! 💪", true)
-                }
-                .setNegativeButton("Cancelar", null)
-                .show()
-        }
-
-        exportButton.setOnClickListener { exportCsv() }
-        importButton.setOnClickListener {
-            // Mostrar diálogo de confirmación antes de importar
-            MaterialAlertDialogBuilder(this)
-                .setTitle("⚠️ Importar datos")
-                .setMessage("Esto BORRARÁ todos tus datos actuales (historial, notas y emojis personalizados) y los reemplazará con los del archivo CSV.\n\n¿Estás seguro de continuar?")
-                .setPositiveButton("Sí, importar") { _, _ ->
-                    importCsvLauncher.launch(importMimeTypes)
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()
@@ -915,6 +909,22 @@ class MainActivity : AppCompatActivity() {
         }
 
         Prefs.setNote(this, today, updatedNote)
+    }
+
+    private fun animateEmoji() {
+        val emojiView = findViewById<TextView>(R.id.emojiText)
+        SpringAnimation(emojiView, SpringAnimation.SCALE_X, 1f).apply {
+            spring.dampingRatio = SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY
+            spring.stiffness = SpringForce.STIFFNESS_LOW
+            setStartValue(0.7f)
+            start()
+        }
+        SpringAnimation(emojiView, SpringAnimation.SCALE_Y, 1f).apply {
+            spring.dampingRatio = SpringForce.DAMPING_RATIO_MEDIUM_BOUNCY
+            spring.stiffness = SpringForce.STIFFNESS_LOW
+            setStartValue(0.7f)
+            start()
+        }
     }
 
     private fun openStatsCalendar() {
