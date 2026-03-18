@@ -223,6 +223,19 @@
             app:cornerRadius="26dp"
             app:backgroundTint="@color/m3_secondary" />
 
+        <!-- Chip Estadísticas → DashboardActivity -->
+        <com.google.android.material.chip.Chip
+            android:id="@+id/statsChip"
+            style="@style/Widget.MaterialComponents.Chip.Action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:text="📊 Estadísticas"
+            android:textSize="14sp"
+            android:textAllCaps="false" />
+
         <!-- Fila stats -->
         <LinearLayout
             android:id="@+id/statsContainer"

@@ -48,12 +48,10 @@ class EvolutionActivity : AppCompatActivity() {
 
         rangeChipGroup.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.chip7Days -> {
-                    rangeDays = 7
-                }
-                R.id.chip30Days -> {
-                    rangeDays = 30
-                }
+                R.id.chip7Days -> rangeDays = 7
+                R.id.chip14Days -> rangeDays = 14
+                R.id.chip30Days -> rangeDays = 30
+                R.id.chip60Days -> rangeDays = 60
             }
             offsetDays = 0 // reset to today when range changes
             loadData(rangeDays, offsetDays)
@@ -64,7 +62,7 @@ class EvolutionActivity : AppCompatActivity() {
     }
 
     private fun loadData(days: Int, offset: Int) {
-        evolutionTitle.text = "Últimos $days días"
+        evolutionTitle.text = if (offset == 0) "Últimos $days días" else "Hace $offset–${offset + days} días"
         val dataPoints = mutableListOf<Pair<String, Int>>()
         val calendar = Calendar.getInstance()
         // Move back 'offset' days from today

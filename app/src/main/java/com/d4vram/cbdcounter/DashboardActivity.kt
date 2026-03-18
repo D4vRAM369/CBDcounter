@@ -23,7 +23,6 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var tvAvg: TextView
     private lateinit var tvStreak: TextView
     private lateinit var tvBusiestDay: TextView
-    private lateinit var tvBestDay: TextView
 
     private val dateKeyFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val labelFormat = SimpleDateFormat("dd/MM", Locale.getDefault())
@@ -46,7 +45,6 @@ class DashboardActivity : AppCompatActivity() {
         tvAvg = findViewById(R.id.tvAvgCount)
         tvStreak = findViewById(R.id.tvStreakCount)
         tvBusiestDay = findViewById(R.id.tvBusiestDay)
-        tvBestDay = findViewById(R.id.tvBestDay)
         lineChart = findViewById(R.id.lineChart)
         
         val btnViewCalendar = findViewById<MaterialButton>(R.id.btnViewCalendar)
@@ -185,12 +183,9 @@ class DashboardActivity : AppCompatActivity() {
         val dayCounts = IntArray(7) { 0 } // Sun=0, Mon=1...
         val dayOccurrences = IntArray(7) { 0 }
         
-        var maxCount = 0
-        var bestDate = ""
-
         // Usar Prefs.getAllDatesWithData para obtener fechas con datos
         val datesWithData = Prefs.getAllDatesWithData(this)
-        
+
         datesWithData.forEach { dateStr ->
             try {
                 val date = dateKeyFormat.parse(dateStr)
@@ -201,11 +196,6 @@ class DashboardActivity : AppCompatActivity() {
                     val dayOfWeek = cal.get(Calendar.DAY_OF_WEEK) - 1 // 0-indexed
                     dayCounts[dayOfWeek] += count
                     dayOccurrences[dayOfWeek]++
-                    
-                    if (count > maxCount) {
-                        maxCount = count
-                        bestDate = dateStr
-                    }
                 }
             } catch (_: Exception) {}
         }
@@ -228,7 +218,6 @@ class DashboardActivity : AppCompatActivity() {
         
         val busiestDayStr = if (busiestDayIndex != -1) "${daysOfWeek[busiestDayIndex]} (${String.format("%.1f", maxAvg)})" else "Sin datos"
         tvBusiestDay.text = getString(R.string.pattern_busiest_day, busiestDayStr)
-        tvBestDay.text = getString(R.string.pattern_best_day, if (bestDate.isNotEmpty()) bestDate else "-", maxCount)
     }
 
     private fun loadChartData(days: Int) {

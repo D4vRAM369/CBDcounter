@@ -90,10 +90,26 @@
             style="@style/Widget.MaterialComponents.Chip.Choice" />
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/chip14Days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="14 Días"
+            android:checkable="true"
+            style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+        <com.google.android.material.chip.Chip
             android:id="@+id/chip30Days"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="30 Días"
+            android:checkable="true"
+            style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip60Days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="60 Días"
             android:checkable="true"
             style="@style/Widget.MaterialComponents.Chip.Choice" />
 

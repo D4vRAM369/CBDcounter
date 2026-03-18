@@ -61,6 +61,9 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
     private lateinit var exportCsvIconButton: ImageButton
     private lateinit var importCsvIconButton: ImageButton
 
+    // Chip estadísticas
+    private lateinit var statsChip: com.google.android.material.chip.Chip
+
     // Views del historial mejorado
     private lateinit var historyRecyclerView: RecyclerView
     private lateinit var historyAdapter: ImprovedHistoryAdapter
@@ -216,6 +219,7 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
         calendarButton = findViewById(R.id.calendarButton)
         exportCsvIconButton = findViewById(R.id.exportCsvIconButton)
         importCsvIconButton = findViewById(R.id.importCsvIconButton)
+        statsChip = findViewById(R.id.statsChip)
 
         // Historial
         historyRecyclerView = findViewById(R.id.historyRecyclerView)
@@ -476,6 +480,7 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
         }
         exportCsvIconButton.setOnClickListener { exportCsv() }
         importCsvIconButton.setOnClickListener { importCsvLauncher.launch(importMimeTypes) }
+        statsChip.setOnClickListener { startActivity(Intent(this, DashboardActivity::class.java)) }
 
         addButton.setOnClickListener { registerStandardIntake() }
         addInfusedButton.setOnClickListener {
