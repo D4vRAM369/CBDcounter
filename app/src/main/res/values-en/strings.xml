@@ -83,6 +83,18 @@
     <string name="settings_emoji_subtitle">Tap an emoji to change it. It will update on the main screen and widget.</string>
     <string name="settings_reset_emoji">Restore default emojis</string>
 
+    <!-- SAF Backup folder & interval -->
+    <string name="backup_folder_label">Backup folder</string>
+    <string name="backup_folder_none">Not selected — tap to choose</string>
+    <string name="backup_change_folder">📂 Change folder</string>
+    <string name="backup_interval_label">Auto backup frequency</string>
+    <string name="backup_interval_12h">Every 12 h</string>
+    <string name="backup_interval_24h">Every 24 h</string>
+    <string name="backup_folder_saved">Folder saved successfully</string>
+    <string name="backup_no_folder">Please select a folder first</string>
+    <string name="backup_csv_saved">CSV saved to selected folder</string>
+    <string name="backup_zip_saved">Audio saved to selected folder</string>
+
     <!-- Content descriptions -->
     <string name="content_desc_settings">Settings</string>
     <string name="content_desc_calendar">Calendar</string>
