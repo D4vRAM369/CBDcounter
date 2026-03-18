@@ -149,15 +149,33 @@ class CBDWidgetProvider : AppWidgetProvider() {
     private fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
         val views = RemoteViews(context.packageName, R.layout.cbd_widget)
 
-        // Obtener contador actual
-        val count = getCurrentCount(context)
+        // Obtener contadores actuales
+        val today = getCurrentDateKey()
+        val cbdCount = Prefs.getCbdCount(context, today)
+        val thcCount = Prefs.getThcCount(context, today)
+        val totalCount = cbdCount + thcCount
         val date = getCurrentDateDisplay()
-        val emoji = EmojiUtils.emojiForCount(count, context)
+        val emoji = EmojiUtils.emojiForCount(totalCount, context)
+        val isThc = Prefs.getSubstanceType(context) == "THC"
 
-        // Actualizar vistas
-        views.setTextViewText(R.id.widget_counter, count.toString())
+        // Actualizar vistas principales
+        views.setTextViewText(R.id.widget_counter, totalCount.toString())
         views.setTextViewText(R.id.widget_date, date)
         views.setTextViewText(R.id.widget_emoji, emoji)
+
+        // Sub-línea CBD · THC (desglose)
+        views.setTextViewText(R.id.widget_sub_counts, "CBD $cbdCount · THC $thcCount")
+
+        // Badge modo activo
+        views.setTextViewText(R.id.widget_mode_label, if (isThc) "THC" else "CBD")
+
+        // Color del botón +1 según modo: texto púrpura en light (blanco bg), blanco en night (verde bg)
+        // No podemos detectar modo noche en RemoteViews; el color del texto se fija para modo claro
+        // ya que el bg del botón cambia vía drawable-night automáticamente.
+        // Para noche: el bg verde oscuro contrasta mejor con texto blanco.
+        val addTextColor = if (isThc) android.graphics.Color.parseColor("#7B1FA2")
+                           else android.graphics.Color.parseColor("#6750A4")
+        views.setTextColor(R.id.widget_add_button, addTextColor)
 
         // Configurar botón +1
         val addIntent = Intent(context, CBDWidgetProvider::class.java).apply {

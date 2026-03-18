@@ -3,10 +3,10 @@
     android:description="@string/widget_description"
     android:initialLayout="@layout/cbd_widget"
     android:minWidth="110dp"
-    android:minHeight="110dp"
-    android:previewImage="@drawable/widget_background"
+    android:minHeight="180dp"
+    android:previewImage="@drawable/widget_bg_me3"
     android:resizeMode="horizontal|vertical"
     android:targetCellWidth="2"
-    android:targetCellHeight="2"
+    android:targetCellHeight="3"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen" />
