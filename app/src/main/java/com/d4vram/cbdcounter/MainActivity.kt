@@ -60,6 +60,10 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
     // Botón para cambiar el tema
     private lateinit var themeButton: ImageButton
 
+    // CSV import/export
+    private lateinit var exportCsvButton: MaterialButton
+    private lateinit var importCsvButton: MaterialButton
+
     // Views del historial mejorado
     private lateinit var historyRecyclerView: RecyclerView
     private lateinit var historyAdapter: ImprovedHistoryAdapter
@@ -214,6 +218,8 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
         resetButton = findViewById(R.id.resetButton)
         settingsButton = findViewById(R.id.settingsButton)
         themeButton = findViewById(R.id.themeButton)
+        exportCsvButton = findViewById(R.id.exportCsvButton)
+        importCsvButton = findViewById(R.id.importCsvButton)
 
         themeButton.setOnClickListener {
             val currentMode = AppCompatDelegate.getDefaultNightMode()
@@ -478,6 +484,9 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
     private fun getEmoji(count: Int): String = EmojiUtils.emojiForCount(count, this)
 
     private fun setupClickListeners() {
+        exportCsvButton.setOnClickListener { exportCsv() }
+        importCsvButton.setOnClickListener { importCsvLauncher.launch(importMimeTypes) }
+
         addButton.setOnClickListener { registerStandardIntake() }
         addInfusedButton.setOnClickListener {
             InfusionChoiceBottomSheet.new()

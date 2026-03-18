@@ -254,6 +254,46 @@
                 android:textColor="@color/m3_on_surface_variant" />
         </LinearLayout>
 
+        <!-- Fila de acción CSV: exportar / importar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="8dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/exportCsvButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="Exportar CSV"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                android:layout_marginEnd="6dp"
+                app:icon="@drawable/ic_csv_export"
+                app:iconSize="16dp"
+                app:iconGravity="textStart"
+                app:cornerRadius="18dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/importCsvButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="Importar CSV"
+                android:textSize="12sp"
+                android:textAllCaps="false"
+                android:layout_marginStart="6dp"
+                app:icon="@drawable/ic_csv_import"
+                app:iconSize="16dp"
+                app:iconGravity="textStart"
+                app:cornerRadius="18dp" />
+
+        </LinearLayout>
+
         <!-- Botones de control -->
         <LinearLayout
             android:id="@+id/buttonContainer"
