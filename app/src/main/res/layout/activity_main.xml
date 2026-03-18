@@ -89,6 +89,15 @@
                     android:src="@drawable/ic_csv_import"
                     android:tint="@color/m3_on_surface" />
 
+                <ImageButton
+                    android:id="@+id/themeToggleButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Cambiar tema"
+                    android:src="@drawable/ic_sun"
+                    android:tint="@color/m3_on_surface" />
+
             </LinearLayout>
         </LinearLayout>
 

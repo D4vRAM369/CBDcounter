@@ -64,6 +64,9 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
     // Chip estadísticas
     private lateinit var statsChip: com.google.android.material.chip.Chip
 
+    // Botón toggle tema claro/oscuro
+    private lateinit var themeToggleButton: ImageButton
+
     // Views del historial mejorado
     private lateinit var historyRecyclerView: RecyclerView
     private lateinit var historyAdapter: ImprovedHistoryAdapter
@@ -140,8 +143,10 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
         // Hacer que el contenido se dibuje detrás de la barra de estado
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.setDecorFitsSystemWindows(false)
+            // Iconos de barra de estado: oscuros en light mode, claros en dark mode
+            val isDark = isDarkModeEnabled()
             window.insetsController?.setSystemBarsAppearance(
-                0,
+                if (isDark) 0 else WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
                 WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
             )
         } else {
@@ -220,6 +225,8 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
         exportCsvIconButton = findViewById(R.id.exportCsvIconButton)
         importCsvIconButton = findViewById(R.id.importCsvIconButton)
         statsChip = findViewById(R.id.statsChip)
+        themeToggleButton = findViewById(R.id.themeToggleButton)
+        updateThemeIcon()
 
         // Historial
         historyRecyclerView = findViewById(R.id.historyRecyclerView)
@@ -385,6 +392,21 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
         )
     }
 
+    private fun updateThemeIcon() {
+        val isDark = isDarkModeEnabled()
+        // En oscuro → mostramos Sol (para pasar a claro); en claro → Luna (para pasar a oscuro)
+        themeToggleButton.setImageResource(
+            if (isDark) R.drawable.ic_sun else R.drawable.ic_moon
+        )
+        // Ajustar iconos de barra de estado: claros en dark mode, oscuros en light mode
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.setSystemBarsAppearance(
+                if (isDark) 0 else WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            )
+        }
+    }
+
     private fun applyStoredTheme() {
         val enabled = isDarkModeEnabled()
         val targetMode = if (enabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
@@ -481,6 +503,9 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
         exportCsvIconButton.setOnClickListener { exportCsv() }
         importCsvIconButton.setOnClickListener { importCsvLauncher.launch(importMimeTypes) }
         statsChip.setOnClickListener { startActivity(Intent(this, DashboardActivity::class.java)) }
+        themeToggleButton.setOnClickListener {
+            setDarkMode(!isDarkModeEnabled())
+        }
 
         addButton.setOnClickListener { registerStandardIntake() }
         addInfusedButton.setOnClickListener {

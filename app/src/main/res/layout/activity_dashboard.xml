@@ -47,143 +47,159 @@
                 android:columnOrderPreserved="false"
                 android:useDefaultMargins="true">
 
-                <!-- Card 1: Today -->
+                <!-- Card 1: Today — azul ME3 Expressive -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="@color/m3_secondary_container">
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp"
+                    app:cardBackgroundColor="@color/card_today_bg">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="20dp"
                         android:gravity="center">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/card_today"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_secondary"/>
+                            android:textSize="13sp"
+                            android:letterSpacing="0.04"
+                            android:textColor="@color/card_today_value"
+                            android:alpha="0.75"/>
 
                         <TextView
                             android:id="@+id/tvTodayCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
-                            android:textSize="24sp"
+                            android:textSize="32sp"
                             android:textStyle="bold"
-                            android:textColor="@color/m3_on_secondary_container"/>
+                            android:textColor="@color/card_today_value"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Card 2: Week -->
+                <!-- Card 2: Week — naranja cálido ME3 -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="?attr/colorSurfaceVariant">
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp"
+                    app:cardBackgroundColor="@color/card_week_bg">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="20dp"
                         android:gravity="center">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/card_week"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_secondary"/>
+                            android:textSize="13sp"
+                            android:letterSpacing="0.04"
+                            android:textColor="@color/card_week_value"
+                            android:alpha="0.75"/>
 
                         <TextView
                             android:id="@+id/tvWeekCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
-                            android:textSize="24sp"
+                            android:textSize="32sp"
                             android:textStyle="bold"
-                            android:textColor="@color/text_primary"/>
+                            android:textColor="@color/card_week_value"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Card 3: Average -->
+                <!-- Card 3: Average — verde lima ME3 -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="?attr/colorSurfaceVariant">
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp"
+                    app:cardBackgroundColor="@color/card_avg_bg">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="20dp"
                         android:gravity="center">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/card_avg"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_secondary"/>
+                            android:textSize="13sp"
+                            android:letterSpacing="0.04"
+                            android:textColor="@color/card_avg_value"
+                            android:alpha="0.75"/>
 
                         <TextView
                             android:id="@+id/tvAvgCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0.0"
-                            android:textSize="24sp"
+                            android:textSize="32sp"
                             android:textStyle="bold"
-                            android:textColor="@color/text_primary"/>
+                            android:textColor="@color/card_avg_value"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Card 4: Streak -->
+                <!-- Card 4: Streak — lavanda ME3 -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="8dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="@color/m3_tertiary_container">
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="0dp"
+                    app:cardBackgroundColor="@color/card_streak_bg">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="20dp"
                         android:gravity="center">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/card_streak"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_secondary"/>
+                            android:textSize="13sp"
+                            android:letterSpacing="0.04"
+                            android:textColor="@color/card_streak_value"
+                            android:alpha="0.75"/>
 
                         <TextView
                             android:id="@+id/tvStreakCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
-                            android:textSize="24sp"
+                            android:textSize="32sp"
                             android:textStyle="bold"
-                            android:textColor="@color/m3_on_tertiary_container"/>
+                            android:textColor="@color/card_streak_value"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -210,7 +226,7 @@
                         android:text="Evolución"
                         android:textStyle="bold"
                         android:textSize="18sp"
-                        android:textColor="@color/text_primary"/>
+                        android:textColor="?attr/colorOnSurface"/>
 
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/rangeChipGroup"
@@ -276,7 +292,7 @@
                         android:text="@string/patterns_title"
                         android:textStyle="bold"
                         android:textSize="18sp"
-                        android:textColor="@color/text_primary"/>
+                        android:textColor="?attr/colorOnSurface"/>
 
                     <TextView
                         android:id="@+id/tvBusiestDay"
@@ -284,7 +300,7 @@
                         android:layout_height="wrap_content"
                         android:text="Día más activo: -"
                         android:layout_marginTop="8dp"
-                        android:textColor="@color/text_secondary"/>
+                        android:textColor="?attr/colorOnSurfaceVariant"/>
 
                 </LinearLayout>
              </com.google.android.material.card.MaterialCardView>

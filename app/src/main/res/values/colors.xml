@@ -42,7 +42,7 @@
     <color name="io_action_icon_tint">@color/text_primary</color>
 
     <!-- Colores para el gradient_header -->
-    <color name="gradient_start">#6B46C1</color>  <!-- antes  este morado en la v1.0-->
+    <color name="gradient_start">#6750A4</color>  <!-- M3 Primary light -->
     <color name="gradient_end">#9F7AEA</color>
 
     <!-- Colores para el modal 420 y el chip aliñado -->
@@ -72,8 +72,8 @@
     <color name="cbd_chip_background">#E3F2FD</color>
     <color name="cbd_text">#1565C0</color>
 
-    <!-- ===== M3 Semantic tokens ===== -->
-    <!-- Primary: violeta M3 neutro -->
+    <!-- ===== M3 Semantic tokens — LIGHT (día) ===== -->
+    <!-- Primary: violeta M3 -->
     <color name="m3_primary">#6750A4</color>
     <color name="m3_on_primary">#FFFFFF</color>
     <color name="m3_primary_container">#EADDFF</color>
@@ -91,12 +91,26 @@
     <color name="m3_tertiary_container">#E1BEE7</color>
     <color name="m3_on_tertiary_container">#4A148C</color>
 
-    <!-- Surface dark -->
-    <color name="m3_surface">#141218</color>
-    <color name="m3_surface_variant">#2B2930</color>
-    <color name="m3_on_surface">#E6E1E5</color>
-    <color name="m3_on_surface_variant">#CAC4D0</color>
-    <color name="m3_outline">#938F99</color>
+    <!-- Surface LIGHT (valores correctos para modo día) -->
+    <color name="m3_surface">#FFFBFE</color>
+    <color name="m3_surface_variant">#E7E0EC</color>
+    <color name="m3_on_surface">#1C1B1F</color>
+    <color name="m3_on_surface_variant">#49454F</color>
+    <color name="m3_outline">#79747E</color>
+
+    <!-- ===== Dashboard cards — ME3 Expressive LIGHT ===== -->
+    <!-- Hoy: azul cielo -->
+    <color name="card_today_bg">#DBEAFE</color>
+    <color name="card_today_value">#1D4ED8</color>
+    <!-- Semana: naranja cálido -->
+    <color name="card_week_bg">#FFEDD5</color>
+    <color name="card_week_value">#C2410C</color>
+    <!-- Promedio: verde lima -->
+    <color name="card_avg_bg">#D1FAE5</color>
+    <color name="card_avg_value">#065F46</color>
+    <!-- Racha: lavanda suave -->
+    <color name="card_streak_bg">#EDE9FE</color>
+    <color name="card_streak_value">#6D28D9</color>
 
     <!-- Polen ámbar -->
     <color name="polen_amber">#FF8F00</color>
