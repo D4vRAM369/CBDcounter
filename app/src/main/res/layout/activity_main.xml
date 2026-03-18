@@ -46,7 +46,7 @@
                     android:textColor="@color/m3_on_surface" />
             </LinearLayout>
 
-            <!-- 3 IconButtons verticales -->
+            <!-- 4 IconButtons verticales -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -63,22 +63,32 @@
                     android:tint="@color/m3_on_surface" />
 
                 <ImageButton
-                    android:id="@+id/statsButton"
+                    android:id="@+id/calendarButton"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Estadísticas"
-                    android:src="@android:drawable/ic_menu_info_details"
+                    android:contentDescription="Calendario"
+                    android:src="@drawable/ic_calendar"
                     android:tint="@color/m3_on_surface" />
 
                 <ImageButton
-                    android:id="@+id/themeButton"
+                    android:id="@+id/exportCsvIconButton"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Cambiar tema"
-                    android:src="@android:drawable/ic_menu_day"
+                    android:contentDescription="Exportar CSV"
+                    android:src="@drawable/ic_csv_export"
                     android:tint="@color/m3_on_surface" />
+
+                <ImageButton
+                    android:id="@+id/importCsvIconButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Importar CSV"
+                    android:src="@drawable/ic_csv_import"
+                    android:tint="@color/m3_on_surface" />
+
             </LinearLayout>
         </LinearLayout>
 
@@ -252,46 +262,6 @@
                 android:text="Racha: 0d"
                 android:textSize="12sp"
                 android:textColor="@color/m3_on_surface_variant" />
-        </LinearLayout>
-
-        <!-- Fila de acción CSV: exportar / importar -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingHorizontal="16dp"
-            android:paddingBottom="8dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/exportCsvButton"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_weight="1"
-                android:text="Exportar CSV"
-                android:textSize="12sp"
-                android:textAllCaps="false"
-                android:layout_marginEnd="6dp"
-                app:icon="@drawable/ic_csv_export"
-                app:iconSize="16dp"
-                app:iconGravity="textStart"
-                app:cornerRadius="18dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/importCsvButton"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_weight="1"
-                android:text="Importar CSV"
-                android:textSize="12sp"
-                android:textAllCaps="false"
-                android:layout_marginStart="6dp"
-                app:icon="@drawable/ic_csv_import"
-                app:iconSize="16dp"
-                app:iconGravity="textStart"
-                app:cornerRadius="18dp" />
-
         </LinearLayout>
 
         <!-- Botones de control -->

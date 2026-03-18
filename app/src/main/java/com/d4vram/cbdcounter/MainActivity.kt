@@ -52,17 +52,14 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
     private lateinit var emojiText: TextView
     private lateinit var addButton: Button
     private lateinit var addInfusedButton: MaterialButton
-    private lateinit var statsButton: ImageButton
     private lateinit var subtractButton: Button
     private lateinit var resetButton: Button
     private lateinit var settingsButton: ImageButton
 
-    // Botón para cambiar el tema
-    private lateinit var themeButton: ImageButton
-
-    // CSV import/export
-    private lateinit var exportCsvButton: MaterialButton
-    private lateinit var importCsvButton: MaterialButton
+    // Iconos top-right
+    private lateinit var calendarButton: ImageButton
+    private lateinit var exportCsvIconButton: ImageButton
+    private lateinit var importCsvIconButton: ImageButton
 
     // Views del historial mejorado
     private lateinit var historyRecyclerView: RecyclerView
@@ -213,22 +210,12 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
         emojiText = findViewById(R.id.emojiText)
         addButton = findViewById(R.id.addButton)
         addInfusedButton = findViewById(R.id.addInfusedButton)
-        statsButton = findViewById(R.id.statsButton)
         subtractButton = findViewById(R.id.subtractButton)
         resetButton = findViewById(R.id.resetButton)
         settingsButton = findViewById(R.id.settingsButton)
-        themeButton = findViewById(R.id.themeButton)
-        exportCsvButton = findViewById(R.id.exportCsvButton)
-        importCsvButton = findViewById(R.id.importCsvButton)
-
-        themeButton.setOnClickListener {
-            val currentMode = AppCompatDelegate.getDefaultNightMode()
-            if (currentMode == AppCompatDelegate.MODE_NIGHT_YES) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }
-        }
+        calendarButton = findViewById(R.id.calendarButton)
+        exportCsvIconButton = findViewById(R.id.exportCsvIconButton)
+        importCsvIconButton = findViewById(R.id.importCsvIconButton)
 
         // Historial
         historyRecyclerView = findViewById(R.id.historyRecyclerView)
@@ -484,16 +471,16 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
     private fun getEmoji(count: Int): String = EmojiUtils.emojiForCount(count, this)
 
     private fun setupClickListeners() {
-        exportCsvButton.setOnClickListener { exportCsv() }
-        importCsvButton.setOnClickListener { importCsvLauncher.launch(importMimeTypes) }
+        calendarButton.setOnClickListener {
+            startActivity(Intent(this, CalendarActivity::class.java))
+        }
+        exportCsvIconButton.setOnClickListener { exportCsv() }
+        importCsvIconButton.setOnClickListener { importCsvLauncher.launch(importMimeTypes) }
 
         addButton.setOnClickListener { registerStandardIntake() }
         addInfusedButton.setOnClickListener {
             InfusionChoiceBottomSheet.new()
                 .show(supportFragmentManager, "infusion_choice")
-        }
-        statsButton.setOnClickListener {
-            startActivity(Intent(this, StatsActivity::class.java))
         }
         settingsButton.setOnClickListener {
             // Abrir pantalla de ajustes generales

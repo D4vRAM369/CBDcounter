@@ -131,7 +131,11 @@ object Prefs {
     // ---- Helpers para NOTAS DE VOZ ----
     fun getVoiceNotePath(context: Context, date: String): String {
         val dir = java.io.File(context.filesDir, "voice_notes").also { it.mkdirs() }
-        return java.io.File(dir, "$date.m4a").absolutePath
+        // Las fechas usan formato "dd/MM/yyyy" — las barras "/" se interpretarían como
+        // separadores de directorio en File(), creando subdirectorios inexistentes.
+        // Se sanitizan a "dd-MM-yyyy" para que quede como un nombre de archivo plano.
+        val safeName = date.replace("/", "-")
+        return java.io.File(dir, "$safeName.m4a").absolutePath
     }
 
     fun hasVoiceNote(context: Context, date: String): Boolean {
