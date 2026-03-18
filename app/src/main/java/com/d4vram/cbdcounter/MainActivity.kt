@@ -267,9 +267,9 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
     }
 
     private fun setupTabLayout() {
-        tabLayout.addTab(tabLayout.newTab().setText("Semana"))
-        tabLayout.addTab(tabLayout.newTab().setText("Mes"))
-        tabLayout.addTab(tabLayout.newTab().setText("Todo"))
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_week)))
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_month)))
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_all)))
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -351,17 +351,17 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
 
     private fun updateStats() {
         if (displayedHistoryData.isEmpty()) {
-            avgText.text = "Promedio: 0"
-            totalText.text = "Total: 0"
-            streakText.text = "Racha: 0 días"
+            avgText.text = getString(R.string.avg_placeholder)
+            totalText.text = getString(R.string.total_placeholder)
+            streakText.text = getString(R.string.streak_reset)
             return
         }
         val average = displayedHistoryData.map { it.totalCount }.average()
-        avgText.text = "Promedio: %.1f".format(average)
+        avgText.text = getString(R.string.avg_format).format(average)
         val total = displayedHistoryData.sumOf { it.totalCount }
-        totalText.text = "Total: $total"
+        totalText.text = getString(R.string.total_format, total)
         val streak = calculateCleanStreak()
-        streakText.text = "Racha limpia: $streak días"
+        streakText.text = getString(R.string.streak_format, streak)
     }
 
     private fun calculateCleanStreak(): Int {

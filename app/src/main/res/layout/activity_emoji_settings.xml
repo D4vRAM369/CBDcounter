@@ -166,7 +166,7 @@
              <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Personalizar Emojis"
+                android:text="@string/settings_emoji_title"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
@@ -175,7 +175,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Toca un emoji para cambiarlo. Se actualizará en la pantalla principal y en el widget."
+                android:text="@string/settings_emoji_subtitle"
                 android:textSize="14sp"
                 android:textColor="@color/text_secondary"
                 android:layout_marginBottom="16dp"/>
@@ -192,7 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Restaurar valores por defecto"
+                android:text="@string/settings_reset_emoji"
                 android:textColor="@color/red_light"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="32dp"/>

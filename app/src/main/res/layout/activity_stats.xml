@@ -83,7 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="L"
+            android:text="@string/cal_day_mon"
             android:textColor="@color/calendar_header_text"
             android:textStyle="bold" />
 
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="M"
+            android:text="@string/cal_day_tue"
             android:textColor="@color/calendar_header_text"
             android:textStyle="bold" />
 
@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="X"
+            android:text="@string/cal_day_wed"
             android:textColor="@color/calendar_header_text"
             android:textStyle="bold" />
 
@@ -113,7 +113,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="J"
+            android:text="@string/cal_day_thu"
             android:textColor="@color/calendar_header_text"
             android:textStyle="bold" />
 
@@ -123,7 +123,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="V"
+            android:text="@string/cal_day_fri"
             android:textColor="@color/calendar_header_text"
             android:textStyle="bold" />
 
@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="S"
+            android:text="@string/cal_day_sat"
             android:textColor="@color/calendar_header_text"
             android:textStyle="bold" />
 
@@ -143,7 +143,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="D"
+            android:text="@string/cal_day_sun"
             android:textColor="@color/calendar_header_text"
             android:textStyle="bold" />
     </LinearLayout>
@@ -178,7 +178,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Leyenda"
+            android:text="@string/legend_title"
             android:textSize="12sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
@@ -189,7 +189,7 @@
             android:id="@+id/btnEvolution"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ver Evolución 📈"
+            android:text="@string/view_evolution"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="8dp"
             style="@style/Widget.MaterialComponents.Chip.Action"

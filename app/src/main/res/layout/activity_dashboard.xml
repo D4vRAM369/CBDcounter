@@ -223,7 +223,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Evolución"
+                        android:text="@string/evolution_section_title"
                         android:textStyle="bold"
                         android:textSize="18sp"
                         android:textColor="?attr/colorOnSurface"/>
@@ -240,7 +240,7 @@
                             android:id="@+id/chip7Days"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="7D"
+                            android:text="@string/chip_7d"
                             android:checkable="true"
                             android:checked="true"
                             style="@style/Widget.MaterialComponents.Chip.Choice"/>
@@ -249,7 +249,7 @@
                             android:id="@+id/chip14Days"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="14D"
+                            android:text="@string/chip_14d"
                             android:checkable="true"
                             style="@style/Widget.MaterialComponents.Chip.Choice"/>
 
@@ -257,7 +257,7 @@
                             android:id="@+id/chip30Days"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="30D"
+                            android:text="@string/chip_30d"
                             android:checkable="true"
                             style="@style/Widget.MaterialComponents.Chip.Choice"/>
 
@@ -298,7 +298,7 @@
                         android:id="@+id/tvBusiestDay"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Día más activo: -"
+                        android:text="@string/busiest_day_default"
                         android:layout_marginTop="8dp"
                         android:textColor="?attr/colorOnSurfaceVariant"/>
 

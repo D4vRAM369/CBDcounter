@@ -138,7 +138,7 @@ class DashboardActivity : AppCompatActivity() {
         tvAvg.text = String.format("%.1f", avg)
 
         // 3. Streak
-        tvStreak.text = "${calculateCleanStreak()} días"
+        tvStreak.text = getString(R.string.streak_format, calculateCleanStreak())
 
         // 4. Patterns
         calculatePatterns()
@@ -214,9 +214,9 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
-        val daysOfWeek = arrayOf("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado")
-        
-        val busiestDayStr = if (busiestDayIndex != -1) "${daysOfWeek[busiestDayIndex]} (${String.format("%.1f", maxAvg)})" else "Sin datos"
+        val daysOfWeek = resources.getStringArray(R.array.days_of_week)
+
+        val busiestDayStr = if (busiestDayIndex != -1) "${daysOfWeek[busiestDayIndex]} (${String.format("%.1f", maxAvg)})" else getString(R.string.no_data)
         tvBusiestDay.text = getString(R.string.pattern_busiest_day, busiestDayStr)
     }
 

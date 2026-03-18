@@ -62,7 +62,10 @@ class EvolutionActivity : AppCompatActivity() {
     }
 
     private fun loadData(days: Int, offset: Int) {
-        evolutionTitle.text = if (offset == 0) "Últimos $days días" else "Hace $offset–${offset + days} días"
+        evolutionTitle.text = if (offset == 0)
+            getString(R.string.evolution_last_n_days, days)
+        else
+            getString(R.string.evolution_ago_range, offset, offset + days)
         val dataPoints = mutableListOf<Pair<String, Int>>()
         val calendar = Calendar.getInstance()
         // Move back 'offset' days from today

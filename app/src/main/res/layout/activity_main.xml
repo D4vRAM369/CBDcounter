@@ -58,7 +58,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Ajustes"
+                    android:contentDescription="@string/content_desc_settings"
                     android:src="@android:drawable/ic_menu_manage"
                     android:tint="@color/m3_on_surface" />
 
@@ -67,7 +67,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Calendario"
+                    android:contentDescription="@string/content_desc_calendar"
                     android:src="@drawable/ic_calendar"
                     android:tint="@color/m3_on_surface" />
 
@@ -76,7 +76,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Exportar CSV"
+                    android:contentDescription="@string/export_csv"
                     android:src="@drawable/ic_csv_export"
                     android:tint="@color/m3_on_surface" />
 
@@ -85,7 +85,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Importar CSV"
+                    android:contentDescription="@string/import_csv"
                     android:src="@drawable/ic_csv_import"
                     android:tint="@color/m3_on_surface" />
 
@@ -94,7 +94,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Cambiar tema"
+                    android:contentDescription="@string/content_desc_theme_toggle"
                     android:src="@drawable/ic_sun"
                     android:tint="@color/m3_on_surface" />
 
@@ -187,7 +187,7 @@
             android:layout_marginBottom="16dp"
             android:src="@android:drawable/ic_menu_search"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Buscar en notas"
+            android:contentDescription="@string/content_desc_search"
             android:tint="@color/m3_on_surface_variant" />
 
         <!-- TextView oculto para compatibilidad -->
@@ -226,7 +226,7 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginHorizontal="16dp"
-            android:text="🌿 + Añadir aliñado"
+            android:text="@string/add_infused_label"
             android:textSize="15sp"
             android:textAllCaps="false"
             app:cornerRadius="26dp"
@@ -241,7 +241,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="4dp"
-            android:text="📊 Estadísticas"
+            android:text="@string/stats_chip_label"
             android:textSize="14sp"
             android:textAllCaps="false" />
 
@@ -261,7 +261,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Promedio: 0"
+                android:text="@string/avg_placeholder"
                 android:textSize="12sp"
                 android:textColor="@color/m3_on_surface_variant" />
 
@@ -271,7 +271,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Total: 0"
+                android:text="@string/total_placeholder"
                 android:textSize="12sp"
                 android:textColor="@color/m3_on_surface_variant" />
 
@@ -281,7 +281,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Racha: 0d"
+                android:text="@string/streak_placeholder"
                 android:textSize="12sp"
                 android:textColor="@color/m3_on_surface_variant" />
         </LinearLayout>
@@ -302,7 +302,7 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:text="-1"
+                android:text="@string/subtract_button_label"
                 android:layout_marginEnd="8dp" />
 
             <Button
@@ -311,7 +311,7 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:text="🍁 +THC"
+                android:text="@string/add_thc_label"
                 android:textAllCaps="false"
                 android:layout_marginHorizontal="8dp"
                 app:backgroundTint="@color/m3_tertiary" />
@@ -322,7 +322,7 @@
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:text="Reset"
+                android:text="@string/reset_button_label"
                 android:layout_marginStart="8dp" />
         </LinearLayout>
 
