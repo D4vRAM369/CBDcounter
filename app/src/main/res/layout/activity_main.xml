@@ -207,7 +207,7 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginHorizontal="16dp"
-            android:text="🌿 + Añadir infusión CBD"
+            android:text="🌿 + Añadir aliñado"
             android:textSize="15sp"
             android:textAllCaps="false"
             app:cornerRadius="26dp"
@@ -215,6 +215,7 @@
 
         <!-- Fila stats -->
         <LinearLayout
+            android:id="@+id/statsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

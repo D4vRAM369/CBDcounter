@@ -26,11 +26,13 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRecord"
         style="@style/Widget.Material3.Button"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:text="🎙️"
-        android:textSize="28sp"
-        app:cornerRadius="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:paddingHorizontal="24dp"
+        android:text="🎙️ Grabar"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        app:cornerRadius="24dp"
         app:backgroundTint="@color/m3_tertiary"
         android:layout_marginBottom="16dp" />
 

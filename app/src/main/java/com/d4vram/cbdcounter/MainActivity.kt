@@ -533,6 +533,9 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
             // Mostrar con fondo transparente para que se vea bien el card
             dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
             dialog.show()
+        } else {
+            val substance = if (isThc) "THC" else "CBD"
+            showFeedback("No hay $substance que restar", false)
         }
     }
         resetButton.setOnClickListener {
@@ -825,23 +828,24 @@ class MainActivity : AppCompatActivity(), InfusionChoiceBottomSheet.Listener, Vo
     private fun showDisclaimerIfNeeded() {
         val disclaimerAccepted = sharedPrefs.getBoolean("disclaimer_accepted", false)
         if (!disclaimerAccepted) {
-            MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.disclaimer_title)
-                .setMessage(R.string.disclaimer_message)
-                .setPositiveButton(R.string.disclaimer_accept) { _, _ ->
+            val v = LayoutInflater.from(this).inflate(R.layout.dialog_disclaimer, null)
+            val dialog = MaterialAlertDialogBuilder(this)
+                .setView(v)
+                .setCancelable(false)
+                .create()
+
+            v.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnDisclaimerAccept)
+                .setOnClickListener {
                     sharedPrefs.edit().putBoolean("disclaimer_accepted", true).apply()
+                    dialog.dismiss()
                 }
-                .setNegativeButton(R.string.disclaimer_decline) { _, _ ->
-                    // Si el usuario no acepta, cerrar la app
-                    Toast.makeText(
-                        this,
-                        "Debes aceptar el aviso para usar la aplicación",
-                        Toast.LENGTH_LONG
-                    ).show()
+            v.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnDisclaimerDecline)
+                .setOnClickListener {
+                    Toast.makeText(this, "Debes aceptar el aviso para usar la aplicación", Toast.LENGTH_LONG).show()
                     finish()
                 }
-                .setCancelable(false) // No puede cancelar con el botón atrás
-                .show()
+
+            dialog.show()
         }
     }
 
