@@ -15,7 +15,9 @@
 
 CBD & THC Counter is a **private, offline-first** personal tracking app. No account required, no data leaves your device. It helps you monitor your daily CBD and THC intake with a clean, expressive UI — so you can make informed, mindful decisions about your consumption.
 
-> ⚠️ This app is **not a medical device**. It does not provide medical advice and does not promote substance use. Use responsibly and always consult a healthcare professional for health-related decisions.
+> ⚠️ This app **doesn't work as a medical device**. It does not provide medical advice and does not promote substance use. Use responsibly and always consult a healthcare professional for health-related decisions, **and DYOR** *(DoYourOwnResearch)* **ALWAYS**.
+
+This app does not promote substance use at all, but here is a message: everybody is free to do whatever they want with their body and mind (as long as their actions don't cause harm to others), and getting real information about it without political bias, and promoting to you and others **harm reduction and responsible use**. Everyone is free, as long as their actions don't cause harm to others: **"Non-Aggression Principle: Libertarian Foundation"**
 
 ---
 
@@ -23,9 +25,9 @@ CBD & THC Counter is a **private, offline-first** personal tracking app. No acco
 
 ### 🔢 Dual Counter
 - Separate **CBD** and **THC** counters for the same day
-- Quick **+1** button for the active substance
+- Quick **+1** button to count CBD.
 - **Infused add** — log a session tagged as *weed* 🌿 or *pollen* 🍫 (always counts as THC)
-- **−1** correction with confirmation dialog; feedback shown if counter is already at 0
+- **−1** correction with confirmation dialog and chance to delete or keep the note linked to it, if there is any; feedback shown if counter is already at 0
 - **Reset** with confirmation — resets only the active substance for today
 
 ### 📅 Calendar View
@@ -53,10 +55,10 @@ CBD & THC Counter is a **private, offline-first** personal tracking app. No acco
 ### 📤 Import / Export CSV
 - Export all history as a `.csv` file (shareable with any spreadsheet app)
 - Import from a `.csv` — restores or merges per-day data
-- Access from top-right icons (↑ export · ↓ import)
+- Access from top-right icons (↑ export · ↓ import, and yeah is reversed as usual icons are about this, but I don't agree seeing it as contradictory when it's actually inverted)
 
 ### ☀️ Light / Dark Theme Toggle
-- Full **Material Expressive 3** day/night theme
+- Full redesigned **Material Expressive 3** day/night theme, till v1.5
 - Toggle ☀️/🌙 button always visible in the top-right icon column
 - Status bar icons adapt automatically (dark in light mode, light in dark mode)
 - Preference persisted across sessions
@@ -68,7 +70,7 @@ CBD & THC Counter is a **private, offline-first** personal tracking app. No acco
 - Midnight auto-refresh via AlarmManager
 
 ### ⚙️ Settings
-- Switch default tracking mode: **CBD ↔ THC**
+- Switch default tracking mode: **CBD ↔ THC** *(this part of the app need to be improved to offer a proper design if only THC is selected)*
 - **Customize emojis** for each intake level (reflected on counter, calendar, widget)
 - CSV export/import for backup & restore
 
@@ -148,7 +150,7 @@ Pre-built APKs available on the [Releases page](https://github.com/d4vram/CBDcou
 
 - ✅ **100% offline** — no internet permission declared
 - ✅ No analytics, no crash reporting, no tracking
-- ✅ All data lives in `SharedPreferences` and private app storage
+- ✅ All data lives in `SharedPreferences` and private app storage. Working on SAF *(Storage Access Framework)* to be able to save the data in the folder you want to choose, and not in android/data/ by default (not accessible without root permission in phone)
 - ✅ Voice notes stored in private internal storage — inaccessible to other apps
 
 ---
@@ -170,4 +172,6 @@ MIT License — see [LICENSE](LICENSE).
 
 ## Medical Disclaimer
 
-This application is a personal tracking tool only. It is **not a medical device**, does not provide medical advice, and does not promote or facilitate the purchase or sale of any substance. Always consult a qualified healthcare professional for health-related decisions.
+This application is a personal tracking tool only, as I stated at the beginning of the doc. It is **not a medical device**, does not provide medical advice and does not promote or facilitate the purchase or sale of any substance. Always consult a qualified healthcare professional for health-related decisions, and take good decisions by your own with the correct information and measure.
+
+```If you don't use your mind, no worries: other people will use it for you```
