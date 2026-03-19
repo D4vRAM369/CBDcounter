@@ -5,7 +5,13 @@
 [![Version](https://img.shields.io/badge/version-1.5-6750A4?style=flat-square)](https://github.com/d4vram/CBDcounter2/releases/tag/v1.5)
 [![Android](https://img.shields.io/badge/Android-8.0%2B-green?style=flat-square&logo=android)](https://developer.android.com)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0-7B68EE?style=flat-square&logo=kotlin)](https://kotlinlang.org)
-[![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![license](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
+![minSdk](https://img.shields.io/badge/minSdk-24+-informational)
+![targetSdk](https://img.shields.io/badge/targetSdk-35-informational)
+<img src="https://img.shields.io/badge/ClaudeCode_&_PBL-powered-4B0082?style=flat-square&logo=anthropic&logoColor=white"/>
+<img src="https://img.shields.io/badge/Project--Based_Learning-driven-orange?style=flat-square"/>
+<img src="https://img.shields.io/badge/ABP-metodología-blue?style=flat-square"/>
+![privacy](https://img.shields.io/badge/privacy-100%25%20local-success)
 
 **[🇪🇸 Versión en español](README_spanish-version.md)**
 
@@ -166,7 +172,7 @@ Pre-built APKs available on the [Releases page](https://github.com/d4vram/CBDcou
 
 ## License
 
-MIT License — see [LICENSE](LICENSE).
+GPL-3 — see [LICENSE](LICENSE).
 
 ---
 
