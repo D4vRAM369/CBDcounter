@@ -2,6 +2,8 @@
 
 > Personal harm-reduction tracker for CBD and THC intake — built with Kotlin & Material Expressive 3.
 
+<img width="512" height="512" alt="icono_cbdcounter2_cleaned" src="https://github.com/user-attachments/assets/0d6eff86-af54-4a67-a132-9e63a87eef40" />
+
 [![Version](https://img.shields.io/badge/version-1.5-6750A4?style=flat-square)](https://github.com/d4vram/CBDcounter2/releases/tag/v1.5)
 [![Android](https://img.shields.io/badge/Android-8.0%2B-green?style=flat-square&logo=android)](https://developer.android.com)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0-7B68EE?style=flat-square&logo=kotlin)](https://kotlinlang.org)
@@ -26,6 +28,9 @@ CBD & THC Counter is a **private, offline-first** personal tracking app. No acco
 This app does not promote substance use at all, but here is a message: everybody is free to do whatever they want with their body and mind (as long as their actions don't cause harm to others), and getting real information about it without political bias, and promoting to you and others **harm reduction and responsible use**. Everyone is free, as long as their actions don't cause harm to others: **"Non-Aggression Principle: Libertarian Foundation"**
 
 ---
+## Screenshoots
+
+**Comming soon!**
 
 ## Features
 
@@ -172,7 +177,7 @@ Pre-built APKs available on the [Releases page](https://github.com/d4vram/CBDcou
 
 ## License
 
-GPL-3 — see [LICENSE](LICENSE).
+GPL-3.0 — see [LICENSE](LICENSE).
 
 ---
 
@@ -180,4 +185,4 @@ GPL-3 — see [LICENSE](LICENSE).
 
 This application is a personal tracking tool only, as I stated at the beginning of the doc. It is **not a medical device**, does not provide medical advice and does not promote or facilitate the purchase or sale of any substance. Always consult a qualified healthcare professional for health-related decisions, and take good decisions by your own with the correct information and measure.
 
-```If you don't use your mind, no worries: other people will use it for you```
+_**''If you don't use your mind, no worries: other people will use it for you''**_

@@ -2,6 +2,8 @@
 
 > Tracker personal de reducción de daños para CBD y THC — desarrollado con Kotlin y Material Expressive 3.
 
+<img width="512" height="512" alt="icono_cbdcounter2_cleaned" src="https://github.com/user-attachments/assets/0d6eff86-af54-4a67-a132-9e63a87eef40" />
+
 [![Version](https://img.shields.io/badge/version-1.5-6750A4?style=flat-square)](https://github.com/d4vram/CBDcounter2/releases/tag/v1.5)
 [![Android](https://img.shields.io/badge/Android-8.0%2B-green?style=flat-square&logo=android)](https://developer.android.com)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.0-7B68EE?style=flat-square&logo=kotlin)](https://kotlinlang.org)
@@ -180,4 +182,4 @@ GPL-3.0 License — ver [LICENSE](LICENSE).
 
 Esta aplicación es únicamente una herramienta de tracking personal, como ya quedó dicho al principio. **No es un dispositivo médico**, no proporciona consejo médico y no promueve ni facilita la compra ni venta de ninguna sustancia. Consulta siempre a un profesional de la salud cualificado para decisiones relacionadas con tu bienestar, y toma buenas decisiones por tu cuenta con la información correcta y con cabeza.
 
-```Si no usas tu mente, no te preocupes: otras personas lo harán por ti```
+_**''Si no usas tu mente, no te preocupes: otras personas lo harán por ti''**_
